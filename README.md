@@ -2,7 +2,7 @@
 
 **Team Members:** _Fill this in!_
 
-**Team Strengths and Weaknesses:** _Fill this in!_
+**Team Strengths and Weaknesses:** HELLOOOOOO
 
 **Project Idea(s):** _Fill this in!_
 
