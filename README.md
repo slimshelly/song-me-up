@@ -7,7 +7,9 @@ Shell Yang
 Thomas Vandermillen
 
 **Team Strengths and Weaknesses:** 
+
 Strengths: Systems programming, OOP, HTML, CSS, Humor
+
 Weaknesses: Javascript, using libraries, connecting backend to frontend efficiently
 
 **Project Idea(s):**
