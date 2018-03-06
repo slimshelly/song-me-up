@@ -1,10 +1,7 @@
 # cs0320 Term Project 2018
 
 **Team Members:**
-Maddie Becker
-Sam Oliphant
-Shell Yang
-Thomas Vandermillen
+Maddie Becker, Sam Oliphant, Shell Yang, and Thomas Vandermillen
 
 **Team Strengths and Weaknesses:** 
 
