@@ -17,6 +17,7 @@ Questions:
 3) What critical features you will need to develop, why are those features are being included, and what will you expect to be the most challenging about each feature?
 
 Ideas:
+
 💻 Gui for gui's 💻 
 1) Attempts to overcome tedious gui-making processes by creating an intuitive and clean gui-generator.
 2) The gui-generator will provide an experience that is somewhere in between interacting with the HTML/CSS code by hand and using a template-driven service like Squarespace. For example, users will be able to drag and drop their own website elements, and corresponding code will automatically generate for users to copy and paste into a code document.
