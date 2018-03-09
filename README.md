@@ -1,5 +1,7 @@
 # cs0320 Term Project 2018
 
+**all ideas approved** however given that javascript is a group weakness, project one might be a mistake. I would also add features to your dj application, but it's a solid idea. -adehovit
+
 **Team Members:**
 Maddie Becker, Sam Oliphant, Shell Yang, and Thomas Vandermillen
 
