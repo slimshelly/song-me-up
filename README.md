@@ -44,6 +44,9 @@ Ideas:
 _On your first meeting with your mentor TA, you should plan dates for at least the following meetings:_
 
 **Specs, Mockup, and Design Meeting:** _(Schedule for on or before March 16)_
+https://wireframepro.mockflow.com/view/D4ac32b3e48f2ea059a4072c1cc985cf8#/page/a069862d6fb54fc9bbf934ef759f1911
+https://docs.google.com/presentation/d/1VUB4MGLDvUJm22FoK3_i4An-As9YGxBhaWuYWOicpQo/edit?usp=sharing
+https://docs.google.com/document/d/1GdvFD0OIzGPmfBUD5MkZBT0jESWok8TTp3pBFX--Qxs/edit?usp=sharing
 
 **4-Way Checkpoint:** _(Schedule for on or before April 23)_
 
