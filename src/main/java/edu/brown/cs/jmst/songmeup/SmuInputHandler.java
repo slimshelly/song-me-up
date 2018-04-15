@@ -40,13 +40,13 @@ public class SmuInputHandler implements Commander {
   private class MarcoPoloCommand extends Command {
 
     public MarcoPoloCommand() {
-      super("(marco) " + General.REG_POSINT + "$");
+      super("marco " + General.REG_POSINT + "$");
     }
 
     @Override
     public void execute(List<String> toks) throws Exception {
-      assert toks.size() == 2;
-      int numPolos = Integer.parseInt(toks.get(1));
+      assert toks.size() == 1;
+      int numPolos = Integer.parseInt(toks.get(0));
       state.setListMessage(SmuExecutor.getPolos(numPolos));
     }
 
