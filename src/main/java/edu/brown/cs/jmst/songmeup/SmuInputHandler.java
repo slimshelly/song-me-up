@@ -25,6 +25,7 @@ public class SmuInputHandler implements Commander {
   public List<Command> getCommands() {
     List<Command> commands = new ArrayList<>();
     commands.add(new MarcoPoloCommand());
+    commands.add(new CapsCommand());
     return commands;
   }
 
@@ -60,23 +61,20 @@ public class SmuInputHandler implements Commander {
   
   private class CapsCommand extends Command {
 
-	    public CapsCommand() {
-	      super("(caps) " + General.REG_POSINT + "$");
-	    }
+    public CapsCommand() {
+      super("caps " + "(.+)" + "$");
+    }
 
-	    @Override
-	    public void execute(List<String> toks) throws Exception {
-	      assert toks.size() == 2;
-	      int numPolos = Integer.parseInt(toks.get(1));
-	      state.setListMessage(SmuExecutor.getPolos(numPolos));
-	    }
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      state.setMessage(SmuExecutor.toCaps(toks.get(0)));
+    }
 
-	    @Override
-	    public void print() {
-	      for (String p : state.getListMessage()) {
-	        General.printInfo(p);
-	      }
-	    }
-  	}
+    @Override
+    public void print() {
+        General.printInfo(state.getMessage());
+    }
+  }
 
 }
