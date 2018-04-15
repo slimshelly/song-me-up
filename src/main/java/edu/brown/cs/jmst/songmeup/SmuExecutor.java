@@ -15,5 +15,12 @@ public class SmuExecutor {
     }
     return polos;
   }
+  
+  public static String toCaps(String phrase) {
+	  if (phrase.toLowerCase().equals(phrase)) {
+		  throw new IllegalArgumentException("Phrase is all lowercase!");
+	  }
+	  return phrase.toUpperCase();
+  }
 
 }

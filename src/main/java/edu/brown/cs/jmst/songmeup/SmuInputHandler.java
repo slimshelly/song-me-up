@@ -57,5 +57,26 @@ public class SmuInputHandler implements Commander {
       }
     }
   }
+  
+  private class CapsCommand extends Command {
+
+	    public CapsCommand() {
+	      super("(caps) " + General.REG_POSINT + "$");
+	    }
+
+	    @Override
+	    public void execute(List<String> toks) throws Exception {
+	      assert toks.size() == 2;
+	      int numPolos = Integer.parseInt(toks.get(1));
+	      state.setListMessage(SmuExecutor.getPolos(numPolos));
+	    }
+
+	    @Override
+	    public void print() {
+	      for (String p : state.getListMessage()) {
+	        General.printInfo(p);
+	      }
+	    }
+  	}
 
 }
