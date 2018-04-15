@@ -40,21 +40,14 @@ public class SmuInputHandler implements Commander {
   private class MarcoPoloCommand extends Command {
 
     public MarcoPoloCommand() {
-      super("(marco) " + General.REG_POSINT);
+      super("(marco) " + General.REG_POSINT + "$");
     }
 
     @Override
     public void execute(List<String> toks) throws Exception {
       assert toks.size() == 2;
       int numPolos = Integer.parseInt(toks.get(1));
-      if (numPolos > 10) {
-        throw new IllegalArgumentException("Too many polos! 10 is the max.");
-      }
-      List<String> polos = new ArrayList<>();
-      for (int i = 1; i <= numPolos; i++) {
-        polos.add("polo " + Integer.toString(i));
-      }
-      state.setListMessage(polos);
+      state.setListMessage(SmuExecutor.getPolos(numPolos));
     }
 
     @Override
@@ -63,7 +56,6 @@ public class SmuInputHandler implements Commander {
         General.printInfo(p);
       }
     }
-
   }
 
 }
