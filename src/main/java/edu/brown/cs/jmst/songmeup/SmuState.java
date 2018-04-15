@@ -1,6 +1,9 @@
 package edu.brown.cs.jmst.songmeup;
 
 import java.util.List;
+import java.util.Set;
+
+import edu.brown.cs.jmst.party.Party;
 
 /**
  * Storage class for references to all active parties, party hosts, etc.
@@ -12,6 +15,17 @@ public class SmuState {
 
   private List<String> listMessage;
   private String message;
+  private Set<Party> parties;
+
+  /**
+   * Add a party to the set.
+   *
+   * @param party
+   *          party to add
+   */
+  public void addParty(Party party) {
+    parties.add(party);
+  }
 
   /**
    * @return the listMessage
