@@ -20,6 +20,7 @@ public class SigninPage implements TemplateViewRoute {
   public ModelAndView handle(Request arg0, Response arg1) throws Exception {
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("title", "SongMeUp").build();
-    return new ModelAndView(variables, "songmeup/signin.ftl");
+    // return new ModelAndView(variables, "songmeup/signin.ftl");
+    return new ModelAndView(variables, "songmeup/spotifyplayer.ftl");
   }
 }
