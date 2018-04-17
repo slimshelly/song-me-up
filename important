@@ -1,0 +1,39 @@
+
+MEETING! Wednesday, April 18th @10pm, CIT lobby
+
+Shell
+- Backend SKELETON (necessary classes below)
+- song class
+	- up and down vote fields
+- party class
+	- knowledge of current playlist
+	- knowledge of requested songs?
+- potential other class to direct songs to ranking algo?
+	- knowledge of requested songs
+- once we have authentication, using spotify API to get songs
+
+
+Tom
+- ranking algorithm
+	- depends on up and down votes of songs
+	- picking what song comes next with a list of suggestions
+
+
+Maddie
+- SOME DATA STRUCTURE to hold song suggestions
+	- kd tree? for multidimensional data	
+	- or weighted graph, because some fields might be more important than others for a given party
+	- other options?
+- HTML/CSS for main pages
+- mobile friendly (bootstrap)
+
+
+Sam
+- Authentication to Spotify 
+- Handlers for authentication
+- Talking to Shelley ASAP
+
+
+
+
+	
