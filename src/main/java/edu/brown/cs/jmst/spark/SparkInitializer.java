@@ -13,6 +13,7 @@ public class SparkInitializer {
 
   public static void setHandlers(FreeMarkerEngine freeMarker) {
     Spark.get("/login", new SigninPage(), freeMarker);
+
   }
 
 }
