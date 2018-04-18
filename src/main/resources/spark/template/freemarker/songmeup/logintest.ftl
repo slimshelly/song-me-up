@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
   <head>
-    <title>${title}</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <title>Example of the Authorization Code flow with Spotify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <style type="text/css">
       #login, #loggedin {
         display: none;

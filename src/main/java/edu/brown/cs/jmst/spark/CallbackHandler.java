@@ -1,16 +1,23 @@
 package edu.brown.cs.jmst.spark;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -24,42 +31,62 @@ public class CallbackHandler implements TemplateViewRoute {
   public ModelAndView handle(Request req, Response res) throws Exception {
     QueryParamsMap qm = req.queryMap();
     String code = qm.value("code");
+    // General.printInfo("Code: " + code);
     String state = qm.value("state");
-    String storedState = req.cookies().get("stateKey");
-    if (state == null || state != storedState) {
+    // General.printInfo("State: " + state);
+    String storedState = req.cookies().get("spotify_auth_state");
+    // General.printInfo("Stored state: " + storedState);
+    if (state == null || !state.equals(storedState)) {
+      // General.printInfo("Failed!");
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("error", "state_mismatch"));
       res.redirect("/#" + URLEncodedUtils.format(pairs, "UTF-8"));
     } else {
-      res.removeCookie("stateKey");
+      // General.printInfo("Success!");
+      res.removeCookie("spotify_auth_state");
 
-      JsonObject form = new JsonObject();
-      form.addProperty("code", code);
-      form.addProperty("redirect_uri", SpotifyAuthentication.REDIRECT_URI);
-      form.addProperty("grant_type", "authorization_code");
+      try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+        HttpPost post = new HttpPost("https://accounts.spotify.com/api/token");
+        post.setHeader("Authorization",
+            "Basic " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
+        General.printInfo(
+            "Encoded key: " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
+        List<BasicNameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("code", code));
+        pairs.add(new BasicNameValuePair("redirect_uri",
+            SpotifyAuthentication.REDIRECT_URI));
+        pairs.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        UrlEncodedFormEntity urlentity =
+            new UrlEncodedFormEntity(pairs, "UTF-8");
+        urlentity.setContentEncoding("application/json");
+        General.printInfo("Try no. 2: " + urlentity.toString());
+        post.setEntity(urlentity);
+        General.printInfo("Post entity: " + post.getEntity().toString());
+        HttpResponse response = client.execute(post);
+        if (response.getStatusLine().getStatusCode() == 200) {
+          String json_string = EntityUtils.toString(response.getEntity());
+          JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+          String access_token = jo.get("access_token").getAsString();
+          String refresh_token = jo.get("refresh_token").getAsString();
 
-      JsonObject headers = new JsonObject();
-      String temp = SpotifyAuthentication.CLIENT_ID + ":"
-          + SpotifyAuthentication.CLIENT_SECRET;
-      String encoded = Base64.getEncoder().encodeToString(temp.getBytes());
-      headers.addProperty("Authorization", "Basic " + encoded);
-
-      JsonObject authOptions = new JsonObject();
-      authOptions.addProperty("url", "https://accounts.spotify.com/api/token");
-      authOptions.add("form", form);
-      authOptions.add("headers", headers);
-      authOptions.addProperty("json", true);
-
-      HttpClient httpclient = HttpClients.createDefault();
-
-      // HttpClient httpclient = HttpClients.createDefault();
-      // HttpPost httppost = new
-      // HttpPost("https://accounts.spotify.com/api/token");
-      // List<BasicNameValuePair> pairs = new ArrayList<>();
-      // pairs.add(new BasicNameValuePair("error", "state_mismatch"));
+          HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
+          get.setHeader("Authorization", "Bearer " + access_token);
+          HttpResponse getResponse = client.execute(get);
+          // General.printInfo(getResponse contents);
+          List<BasicNameValuePair> pairs2 = new ArrayList<>();
+          pairs2.add(new BasicNameValuePair("access_token", access_token));
+          pairs2.add(new BasicNameValuePair("refresh_token", refresh_token));
+          res.redirect("/#" + URLEncodedUtils.format(pairs2, "UTF-8"));
+        } else {
+          List<BasicNameValuePair> pairs3 = new ArrayList<>();
+          pairs3.add(new BasicNameValuePair("error", "invalid_token"));
+          res.redirect("/#" + URLEncodedUtils.format(pairs3, "UTF-8"));
+        }
+      }
     }
 
-    return null;
+    return new ModelAndView(new ImmutableMap.Builder<String, Object>().build(),
+        "songmeup/logintest.ftl");
   }
 
 }
