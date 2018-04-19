@@ -1,10 +1,18 @@
 package edu.brown.cs.jmst.music;
 
+import java.util.List;
+
 import edu.brown.cs.jmst.beans.Entity;
 
 public class Track extends Entity {
-  //TODO: add fields for every field accessible from Spotify API
+  
+  Album album;
+  List<Artist> artists;
+  Boolean explicit;
+  String id;
+  Boolean playable;
+  int popularity;
+  
+  String name;
+  String url;
 }
-
-//pay to vote???? (not allowed??)
-//picking which song comes next, out of a pool of suggestions
