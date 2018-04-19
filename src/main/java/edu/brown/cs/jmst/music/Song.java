@@ -1,6 +1,8 @@
 package edu.brown.cs.jmst.music;
 
-public class Song {
+import edu.brown.cs.jmst.beans.Entity;
+
+public class Song extends Entity {
   //TODO: add fields for every field accessible from Spotify API
 }
 
