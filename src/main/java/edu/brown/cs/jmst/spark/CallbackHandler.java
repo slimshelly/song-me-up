@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -40,7 +39,7 @@ public class CallbackHandler implements TemplateViewRoute {
       // General.printInfo("Failed!");
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("error", "state_mismatch"));
-      res.redirect("/#" + URLEncodedUtils.format(pairs, "UTF-8"));
+      res.redirect("/loggedin#" + URLEncodedUtils.format(pairs, "UTF-8"));
     } else {
       // General.printInfo("Success!");
       res.removeCookie("spotify_auth_state");
@@ -49,8 +48,8 @@ public class CallbackHandler implements TemplateViewRoute {
         HttpPost post = new HttpPost("https://accounts.spotify.com/api/token");
         post.setHeader("Authorization",
             "Basic " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
-        General.printInfo(
-            "Encoded key: " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
+        // General.printInfo(
+        // "Encoded key: " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
         List<BasicNameValuePair> pairs = new ArrayList<>();
         pairs.add(new BasicNameValuePair("code", code));
         pairs.add(new BasicNameValuePair("redirect_uri",
@@ -59,9 +58,9 @@ public class CallbackHandler implements TemplateViewRoute {
         UrlEncodedFormEntity urlentity =
             new UrlEncodedFormEntity(pairs, "UTF-8");
         urlentity.setContentEncoding("application/json");
-        General.printInfo("Try no. 2: " + urlentity.toString());
+        // General.printInfo("Try no. 2: " + urlentity.toString());
         post.setEntity(urlentity);
-        General.printInfo("Post entity: " + post.getEntity().toString());
+        // General.printInfo("Post entity: " + post.getEntity().toString());
         HttpResponse response = client.execute(post);
         if (response.getStatusLine().getStatusCode() == 200) {
           String json_string = EntityUtils.toString(response.getEntity());
@@ -72,15 +71,15 @@ public class CallbackHandler implements TemplateViewRoute {
           HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
           get.setHeader("Authorization", "Bearer " + access_token);
           HttpResponse getResponse = client.execute(get);
-          // General.printInfo(getResponse contents);
+
           List<BasicNameValuePair> pairs2 = new ArrayList<>();
           pairs2.add(new BasicNameValuePair("access_token", access_token));
           pairs2.add(new BasicNameValuePair("refresh_token", refresh_token));
-          res.redirect("/#" + URLEncodedUtils.format(pairs2, "UTF-8"));
+          res.redirect("/loggedin#" + URLEncodedUtils.format(pairs2, "UTF-8"));
         } else {
           List<BasicNameValuePair> pairs3 = new ArrayList<>();
           pairs3.add(new BasicNameValuePair("error", "invalid_token"));
-          res.redirect("/#" + URLEncodedUtils.format(pairs3, "UTF-8"));
+          res.redirect("/loggedin#" + URLEncodedUtils.format(pairs3, "UTF-8"));
         }
       }
     }

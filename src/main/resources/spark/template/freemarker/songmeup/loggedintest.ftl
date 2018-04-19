@@ -113,18 +113,17 @@
               $('#loggedin').hide();
           }
           document.getElementById('obtain-new-token').addEventListener('click', function() {
-            $.ajax({
-              url: '/refresh_token',
-              data: {
-                'refresh_token': refresh_token
-              }
-            }).done(function(data) {
-              access_token = data.access_token;
-              oauthPlaceholder.innerHTML = oauthTemplate({
-                access_token: access_token,
-                refresh_token: refresh_token
-              });
-            });
+			const postParameters = {"refresh_token": refresh_token};
+			$.post("/refresh_token", postParameters, responseJSON => {
+
+                const responseObject = JSON.parse(responseJSON);
+				access_token = responseObject.access_token;
+				refresh_token = responseObject.refresh_token;
+				oauthPlaceholder.innerHTML = oauthTemplate({
+					access_token: access_token,
+					refresh_token: refresh_token
+				});
+			});
           }, false);
         }
       })();

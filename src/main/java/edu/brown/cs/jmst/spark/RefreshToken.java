@@ -16,36 +16,26 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-public class RefreshToken implements TemplateViewRoute {
+public class RefreshToken implements Route {
 
   @Override
-  public ModelAndView handle(Request req, Response res) throws Exception {
-    General.printInfo("Refreshing...");
+  public Object handle(Request req, Response res) throws Exception {
+
+    // General.printInfo("Refreshing...");
     QueryParamsMap qm = req.queryMap();
     String refresh_token = qm.value("refresh_token");
-    General.printInfo("Refresh token: " + refresh_token);
-    // JsonObject form = new JsonObject();
-    // form.addProperty("grant_type", "authorization_code");
-    // form.addProperty("refresh_token", refresh_token);
-    //
-    // JsonObject authOptions = new JsonObject();
-    // authOptions.add("form", form);
-    // authOptions.addProperty("json", true);
+    // General.printInfo("Refresh token: " + refresh_token);
 
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost post = new HttpPost("https://accounts.spotify.com/api/token");
       post.setHeader("Authorization",
           "Basic " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
-      General.printInfo("Authorization header: " + "Authorization: " + "Basic "
-          + SpotifyAuthentication.ENCODED_CLIENT_KEY);
 
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("refresh_token", refresh_token));
@@ -57,18 +47,18 @@ public class RefreshToken implements TemplateViewRoute {
       HttpResponse response = client.execute(post);
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
-        General.printInfo("Json string: " + json_string);
+        // General.printInfo("Json string: " + json_string);
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
         String access_token = jo.get("access_token").getAsString();
-        General.printInfo("Access token: " + access_token);
-        Map<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>()
-                .put("access_token", access_token).build();
-        return new ModelAndView(variables, "songmeup/logintest.ftl");
+        // General.printInfo("Access token: " + access_token);
+        Map<String,
+            Object> variables = new ImmutableMap.Builder<String, Object>()
+                .put("access_token", access_token)
+                .put("refresh_token", refresh_token).build();
+        return SparkInitializer.GSON.toJson(variables);
       }
     }
-    return new ModelAndView(new ImmutableMap.Builder<String, Object>().build(),
-        "songmeup/logintest.ftl");
+    return null;
   }
 
 }
