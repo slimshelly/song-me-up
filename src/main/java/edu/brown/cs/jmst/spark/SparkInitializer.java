@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.spark;
 
+import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -12,7 +13,11 @@ import spark.template.freemarker.FreeMarkerEngine;
 public class SparkInitializer {
 
   public static void setHandlers(FreeMarkerEngine freeMarker) {
-    Spark.get("/login", new SigninPage(), freeMarker);
+    Spark.get("/test", new SigninPage(), freeMarker);
+    Spark.get("/login", new LoginHandler(), freeMarker);
+    Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(),
+        freeMarker);
+    Spark.get("/refresh_token", new RefreshToken(), freeMarker);
   }
 
 }

@@ -118,7 +118,29 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.20.1</version>
     </dependency>
+	
+	<!--
+		Library for formatting http requests.
+		http://hc.apache.org/
+	-->
+	<dependency>
+	  <groupId>org.apache.httpcomponents</groupId>
+	  <artifactId>httpcore</artifactId>
+	  <version>4.4.9</version>
+	</dependency>
+	
+	<!--
+		Same as above.
+		http://hc.apache.org/
+	-->
+	<dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.5</version>
+	</dependency>
   </dependencies>
+  
+  
 
   <!-- Build section -->
   <build>
