@@ -1,29 +1,30 @@
 package edu.brown.cs.jmst.music;
 
+import java.util.List;
+
 import edu.brown.cs.jmst.beans.EntityProxy;
 import edu.brown.cs.jmst.beans.FillBean;
-
-import java.util.List;
 
 public class TrackProxy extends EntityProxy<TrackBean> implements Track {
 
   /**
-   * @param id the ID of a Track
-   * @param filler the method used to fill the bean. May throw exceptions
+   * @param id
+   *          the ID of a Track
+   * @param filler
+   *          the method used to fill the bean. May throw exceptions
    */
-  TrackProxy(String id,
-               FillBean<EntityProxy<TrackBean>, TrackBean> filler) {
+  TrackProxy(String id, FillBean<EntityProxy<TrackBean>, TrackBean> filler) {
     this.id = id;
     this.filler = filler;
     this.bean = null;
   }
 
   @Override
-  public Album getAlbum() throws Exception {
+  public String getAlbumId() throws Exception {
     if (this.bean == null) {
       this.fill();
     }
-    return bean.getAlbum();
+    return bean.getAlbumId();
   }
 
   @Override
@@ -35,7 +36,7 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
   }
 
   @Override
-  public Boolean isExplicit() throws Exception {
+  public boolean isExplicit() throws Exception {
     if (this.bean == null) {
       this.fill();
     }
@@ -43,7 +44,7 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
   }
 
   @Override
-  public Boolean isPlayable() throws Exception {
+  public boolean isPlayable() throws Exception {
     if (this.bean == null) {
       this.fill();
     }

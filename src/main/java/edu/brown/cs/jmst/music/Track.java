@@ -3,13 +3,22 @@ package edu.brown.cs.jmst.music;
 import java.util.List;
 
 public interface Track {
-  Album getAlbum() throws Exception;
+  String getAlbumId() throws Exception;
+
   List<String> getArtistIds() throws Exception;
-  Boolean isExplicit() throws Exception;
+
+  boolean isExplicit() throws Exception;
+
   String getId();
-  Boolean isPlayable() throws Exception;
+
+  boolean isPlayable() throws Exception;
+
   int getPopularity() throws Exception;
+
   int getDuration_ms() throws Exception;
+
   String getName() throws Exception;
+
   String getUrl() throws Exception;
+
 }
