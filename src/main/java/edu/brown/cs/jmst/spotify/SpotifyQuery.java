@@ -51,6 +51,7 @@ public class SpotifyQuery {
           boolean explicit = trackjo.get("explicit").getAsBoolean();
           int popularity = trackjo.get("popularity").getAsInt();
           int duration_ms = trackjo.get("duration_ms").getAsInt();
+
           JsonArray artists = trackjo.get("artists").getAsJsonArray();
           List<String> artist_ids = new ArrayList<>();
           Iterator<JsonElement> iterator2 = artists.iterator();
@@ -58,6 +59,7 @@ public class SpotifyQuery {
             artist_ids
                 .add(iterator.next().getAsJsonObject().get("id").getAsString());
           }
+
           String album_id =
               trackjo.get("album").getAsJsonObject().get("id").getAsString();
         }
