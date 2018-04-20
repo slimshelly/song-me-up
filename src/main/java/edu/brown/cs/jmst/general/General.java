@@ -86,6 +86,16 @@ public final class General {
     }
   }
 
+  public static void printVal(String name, String val) {
+    if (val != null && !val.equals("")) {
+      if (name != null && !name.equals("")) {
+        System.out.println(name + ": '" + val + "'");
+      } else {
+        System.out.println(val);
+      }
+    }
+  }
+
   /**
    * Takes in a string, type, and variable name. If the string can be parsed as
    * the given type, true is returned. If not, an informative error message is

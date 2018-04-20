@@ -26,18 +26,20 @@ import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
-  public static List<Track> searchSong(String keywords) throws Exception {
+  public static List<Track> searchSong(String keywords, String access_token)
+      throws Exception {
+    General.printVal("Keywords", keywords);
     List<Track> songs = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
-      get.setHeader("Authorization",
-          "Basic " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
+      get.setHeader("Authorization", "Bearer " + access_token);
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "track"));
       UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
       urlentity.setContentEncoding("application/json");
       get.setEntity(urlentity);
+
       HttpResponse response = client.execute(get);
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
@@ -70,8 +72,9 @@ public class SpotifyQuery {
               artist_ids, playable, album_id));
         }
       } else {
-        throw new ClientProtocolException("Failed to get tracks: "
-            + response.getStatusLine().getStatusCode());
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
       }
     } catch (UnsupportedEncodingException e) {
       throw e;
