@@ -4,15 +4,19 @@ import java.util.List;
 
 import edu.brown.cs.jmst.beans.Entity;
 
-public class Track extends Entity {
+public abstract class Track extends Entity {
   
   Album album;
   List<Artist> artists;
   Boolean explicit;
   String id;
   Boolean playable;
-  int popularity;
+  Integer popularity;
+  Integer duration_ms;
+
   
   String name;
   String url;
+
+
 }
