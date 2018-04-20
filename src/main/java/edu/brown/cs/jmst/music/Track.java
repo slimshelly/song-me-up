@@ -14,9 +14,6 @@ public abstract class Track extends Entity {
   private Integer popularity;
   private Integer duration_ms;
 
-  
   private String name;
   private String url;
-
-
 }
