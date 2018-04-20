@@ -7,16 +7,17 @@ import edu.brown.cs.jmst.beans.Entity;
 public abstract class Track extends Entity {
   
   private Album album;
-  private List<Artist> artists;
+  private List<String> artistIds;
   private Boolean explicit;
   private String id;
   private Boolean playable;
-  private Integer popularity;
-  private Integer duration_ms;
+  private int popularity;
+  private int duration_ms;
 
-  
   private String name;
-  private String url;
-
+  
+  public Track(String id, Boolean explicit, int popularity, int duration_ms, List<String> artistIds, Boolean playable ) {
+    this.id = id;
+  }
 
 }
