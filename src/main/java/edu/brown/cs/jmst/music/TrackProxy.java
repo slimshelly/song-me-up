@@ -82,4 +82,16 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
     }
     return bean.getUrl();
   }
+
+  @Override
+  public String toString() {
+    if (this.bean == null) {
+      try {
+        this.fill();
+      } catch (Exception e) {
+        return "ERROR: " + e.getMessage();
+      }
+    }
+    return bean.toString();
+  }
 }

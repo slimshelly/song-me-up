@@ -20,11 +20,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
-  public static List<Track> searchSong(String keywords) {
+  public static List<Track> searchSong(String keywords) throws Exception {
     List<Track> songs = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
@@ -48,10 +50,11 @@ public class SpotifyQuery {
           // String id, Boolean explicit, int popularity, int duration_ms,
           // List<String> artistIds, Boolean playable
           String id = trackjo.get("id").getAsString();
+          String name = trackjo.get("name").getAsString();
           boolean explicit = trackjo.get("explicit").getAsBoolean();
           int popularity = trackjo.get("popularity").getAsInt();
           int duration_ms = trackjo.get("duration_ms").getAsInt();
-
+          boolean playable = trackjo.get("is_playable").getAsBoolean();
           JsonArray artists = trackjo.get("artists").getAsJsonArray();
           List<String> artist_ids = new ArrayList<>();
           Iterator<JsonElement> iterator2 = artists.iterator();
@@ -62,19 +65,22 @@ public class SpotifyQuery {
 
           String album_id =
               trackjo.get("album").getAsJsonObject().get("id").getAsString();
+
+          songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
+              artist_ids, playable, album_id));
         }
       } else {
         throw new ClientProtocolException("Failed to get tracks.");
       }
     } catch (UnsupportedEncodingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw e;
     } catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw e;
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw e;
+    }
+    for (Track t : songs) {
+      General.printInfo(t.toString());
     }
     return songs;
   }

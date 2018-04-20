@@ -71,4 +71,9 @@ public class TrackBean extends EntityBean implements Track {
   public String getUrl() throws Exception {
     return "https://api.spotify.com" + "/tracks/" + this.id;
   }
+
+  @Override
+  public String toString() {
+    return "Name: " + "'" + name + "', " + "Id: " + "'" + id + "'";
+  }
 }
