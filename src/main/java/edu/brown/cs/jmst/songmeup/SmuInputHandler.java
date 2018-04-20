@@ -41,7 +41,7 @@ public class SmuInputHandler implements Commander {
     @Override
     public void execute(List<String> toks) throws Exception {
       assert toks.size() == 1;
-      List<Track> tracks = SpotifyQuery.searchSong(toks.get(0));
+      List<Track> tracks = SpotifyQuery.searchSong(toks.get(0), "");
       List<String> trackinfo = new ArrayList<>();
       for (Track t : tracks) {
         trackinfo.add(t.toString());
