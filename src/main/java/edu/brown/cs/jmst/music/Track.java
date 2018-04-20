@@ -19,5 +19,6 @@ public abstract class Track extends Entity {
   public Track(String id, Boolean explicit, int popularity, int duration_ms, List<String> artistIds, Boolean playable ) {
     this.id = id;
   }
-
+  
+  private String url;
 }
