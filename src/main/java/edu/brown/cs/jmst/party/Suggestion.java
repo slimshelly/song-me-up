@@ -2,6 +2,9 @@ package edu.brown.cs.jmst.party;
 
 import edu.brown.cs.jmst.music.Track;
 
+/**
+ * @author tvanderm
+ */
 public class Suggestion implements Comparable<Suggestion> {
 
   private Track song;

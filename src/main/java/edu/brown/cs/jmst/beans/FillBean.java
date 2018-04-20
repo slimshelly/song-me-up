@@ -2,6 +2,7 @@ package edu.brown.cs.jmst.beans;
 
 /**
  * May throw an exception.
+ * @author tvanderm
  * @param <P> a EntityProxy subclass for the given EntityBean class
  * @param <B> a EntityBean class that this will be a proxy of
  */

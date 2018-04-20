@@ -2,6 +2,9 @@ package edu.brown.cs.jmst.party;
 
 import java.util.PriorityQueue;
 
+/**
+ * @author tvanderm
+ */
 public class SongQueue {
   //TODO: ordered collection of Suggestions (most basic version, ordered only on number of votes)
   private PriorityQueue<Suggestion> queue;
@@ -15,4 +18,7 @@ public class SongQueue {
   }
 
   //TODO: get next suggestion (pop from queue)
+
+
+  //TODO: make this more sophisticated:
 }

@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * An Entity is an object that defines its equality based on a field called id.
+ * @author tvanderm
  */
 public abstract class Entity {
   protected String id;
