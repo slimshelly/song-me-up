@@ -70,7 +70,8 @@ public class SpotifyQuery {
               artist_ids, playable, album_id));
         }
       } else {
-        throw new ClientProtocolException("Failed to get tracks.");
+        throw new ClientProtocolException("Failed to get tracks: "
+            + response.getStatusLine().getStatusCode());
       }
     } catch (UnsupportedEncodingException e) {
       throw e;
