@@ -3,13 +3,12 @@ package edu.brown.cs.jmst.music;
 import java.util.List;
 
 public class Artist {
-    List<String> genres;
-    String id;
-    List<Image> images;
+    private List<String> genres;
+    private String id;
     
-    String name;
-    int popularity;
-    String type;
-    String url;
+    private String name;
+    private int popularity;
+    private String type;
+    private String url;
     
 }

@@ -6,17 +6,14 @@ import edu.brown.cs.jmst.beans.Entity;
 
 public abstract class Track extends Entity {
   
-  Album album;
-  List<Artist> artists;
-  Boolean explicit;
-  String id;
-  Boolean playable;
-  Integer popularity;
-  Integer duration_ms;
+  private Album album;
+  private List<Artist> artists;
+  private Boolean explicit;
+  private String id;
+  private Boolean playable;
+  private Integer popularity;
+  private Integer duration_ms;
 
-  
-  String name;
-  String url;
-
-
+  private String name;
+  private String url;
 }

@@ -1,5 +1,8 @@
 package edu.brown.cs.jmst.music;
 
+/**
+ * @author tvanderm
+ */
 public class AudioFeatures {
 
   //0.0 - 1.0 confidence track is acoustic. 1.0 is high confidence

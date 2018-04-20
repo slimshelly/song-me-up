@@ -3,6 +3,7 @@ package edu.brown.cs.jmst.beans;
 import java.util.Objects;
 
 /**
+ * @author tvanderm
  * @param <B> The type of EntityBean a child class will be a proxy for.
  * The creator of a concrete proxy instance will provide the means
  *           of filling the bean through the functional interface
