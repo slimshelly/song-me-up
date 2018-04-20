@@ -21,4 +21,15 @@ public class SongQueue {
 
 
   //TODO: make this more sophisticated:
+  // determine the importance of the various audio features in terms of similarness between songs
+
+  //MOSTLY ignore:
+  // acousticness
+  // liveness
+  // duration
+  //
+
+  //Important!
+  // valence, danceability, loudness (possibly?)
+
 }
