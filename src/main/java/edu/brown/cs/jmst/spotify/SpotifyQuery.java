@@ -43,8 +43,23 @@ public class SpotifyQuery {
         JsonArray tracks = jo.get("tracks").getAsJsonArray();
         Iterator<JsonElement> iterator = tracks.iterator();
         while (iterator.hasNext()) {
-          JsonElement je = iterator.next();
-          // make song class
+          JsonObject trackjo = iterator.next().getAsJsonObject();
+          // make track class
+          // String id, Boolean explicit, int popularity, int duration_ms,
+          // List<String> artistIds, Boolean playable
+          String id = trackjo.get("id").getAsString();
+          boolean explicit = trackjo.get("explicit").getAsBoolean();
+          int popularity = trackjo.get("popularity").getAsInt();
+          int duration_ms = trackjo.get("duration_ms").getAsInt();
+          JsonArray artists = trackjo.get("artists").getAsJsonArray();
+          List<String> artist_ids = new ArrayList<>();
+          Iterator<JsonElement> iterator2 = artists.iterator();
+          while (iterator2.hasNext()) {
+            artist_ids
+                .add(iterator.next().getAsJsonObject().get("id").getAsString());
+          }
+          String album_id =
+              trackjo.get("album").getAsJsonObject().get("id").getAsString();
         }
       } else {
         throw new ClientProtocolException("Failed to get tracks.");
