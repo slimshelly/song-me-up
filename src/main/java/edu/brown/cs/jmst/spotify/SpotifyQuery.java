@@ -20,12 +20,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import edu.brown.cs.jmst.music.Song;
+import edu.brown.cs.jmst.music.Track;
 
 public class SpotifyQuery {
 
-  public static List<Song> searchSong(String keywords) {
-    List<Song> songs = new ArrayList<>();
+  public static List<Track> searchSong(String keywords) {
+    List<Track> songs = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
       get.setHeader("Authorization",
@@ -44,9 +44,10 @@ public class SpotifyQuery {
         Iterator<JsonElement> iterator = tracks.iterator();
         while (iterator.hasNext()) {
           JsonElement je = iterator.next();
-
+          // make song class
         }
       } else {
+        throw new ClientProtocolException("Failed to get tracks.");
       }
     } catch (UnsupportedEncodingException e) {
       // TODO Auto-generated catch block
