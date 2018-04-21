@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
@@ -77,7 +76,8 @@ public class CallbackHandler implements TemplateViewRoute {
 
           List<Track> tracks = SpotifyQuery.searchSong("hello", access_token);
           for (Track t : tracks) {
-            General.printInfo(t.toString());
+            // can uncommment to see results.
+            // General.printInfo(t.toString());
           }
 
           List<BasicNameValuePair> pairs2 = new ArrayList<>();
