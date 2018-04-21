@@ -6,6 +6,8 @@ import java.util.List;
 import edu.brown.cs.jmst.command.Command;
 import edu.brown.cs.jmst.command.Commander;
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
 /**
  * Handles REPL input
@@ -24,9 +26,37 @@ public class SmuInputHandler implements Commander {
   @Override
   public List<Command> getCommands() {
     List<Command> commands = new ArrayList<>();
+    commands.add(new SongSearch());
     commands.add(new MarcoPoloCommand());
     commands.add(new CapsCommand());
     return commands;
+  }
+
+  private class SongSearch extends Command {
+
+    public SongSearch() {
+      super("song " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      List<Track> tracks = SpotifyQuery.searchSong(toks.get(0), "");
+      List<String> trackinfo = new ArrayList<>();
+      for (Track t : tracks) {
+        trackinfo.add(t.toString());
+      }
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
   }
 
   /**
@@ -58,7 +88,7 @@ public class SmuInputHandler implements Commander {
       }
     }
   }
-  
+
   private class CapsCommand extends Command {
 
     public CapsCommand() {
@@ -73,7 +103,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-        General.printInfo(state.getMessage());
+      General.printInfo(state.getMessage());
     }
   }
 
