@@ -28,7 +28,7 @@ public class SpotifyQuery {
 
   public static List<Track> searchSong(String keywords, String access_token)
       throws Exception {
-    General.printVal("Keywords", keywords);
+    // General.printVal("Keywords", keywords);
     List<Track> songs = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       List<BasicNameValuePair> pairs = new ArrayList<>();
@@ -56,7 +56,7 @@ public class SpotifyQuery {
           int popularity = trackjo.get("popularity").getAsInt();
           int duration_ms = trackjo.get("duration_ms").getAsInt();
           JsonArray artists = trackjo.get("artists").getAsJsonArray();
-          General.printInfo(artists.toString());
+          // General.printInfo(artists.toString());
           List<String> artist_ids = new ArrayList<>();
           Iterator<JsonElement> iterator2 = artists.iterator();
           while (iterator2.hasNext()) {
