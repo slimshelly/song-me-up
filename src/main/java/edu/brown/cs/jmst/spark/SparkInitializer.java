@@ -20,7 +20,6 @@ public class SparkInitializer {
   public static void setHandlers(FreeMarkerEngine freeMarker, SmuState state) {
     Spark.get("/main", new MainPage(state), freeMarker);
 
-    // Spark.get("/test", new SigninPage(), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
         freeMarker);

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
@@ -53,7 +52,7 @@ public class SmuState {
   }
 
   public User getUser(String id) {
-    General.printVal("Users", Integer.toString(users.size()));
+    // General.printVal("Users", Integer.toString(users.size()));
     if (users.containsKey(id)) {
       return users.get(id);
     } else {

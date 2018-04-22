@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/main_jscript.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/main_style.css">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
-		<script src="js/main_jscript.js"></script>
-		<script src="js/jquery-3.1.1.js"></script>
+		
+		
 	</head>
 	<body>
 		<div class="nav-bar">
