@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 
@@ -86,6 +89,69 @@ public class SpotifyQuery {
       General.printInfo(t.toString());
     }
     return songs;
+  }
+  
+  /**
+   * Requires an ID.
+   * 
+   */
+  public static AudioFeatures searchAudioFeatures(String keywords, String access_token)
+      throws Exception {
+    General.printVal("Keywords", keywords);
+    AudioFeatures audioFeature = new AudioFeatures();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
+      get.setHeader("Authorization", "Bearer " + access_token);
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("q", keywords));
+      pairs.add(new BasicNameValuePair("type", "track"));
+      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
+      urlentity.setContentEncoding("application/json");
+      get.setEntity(urlentity);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        JsonArray tracks = jo.get("tracks").getAsJsonArray();
+        Iterator<JsonElement> iterator = tracks.iterator();
+        while (iterator.hasNext()) {
+          JsonObject afjo = iterator.next().getAsJsonObject();
+          // make track class
+          // String id, Boolean explicit, int popularity, int duration_ms,
+          // List<String> artistIds, Boolean playable
+          String id = afjo.get("id").getAsString();
+          Float acousticness = afjo.get("acousticness").getAsFloat();
+          Float danceability = afjo.get("danceability").getAsFloat();
+          Integer duration_ms = afjo.get("duration_ms").getAsInt();
+          Float energy = afjo.get("energy").getAsFloat();
+          Float instrumentalness = afjo.get("instrumentalness").getAsFloat();
+          Integer key = afjo.get("key").getAsInt();
+          Float liveness = afjo.get("liveness").getAsFloat();
+          Float loudness = afjo.get("loudness").getAsFloat();
+          Integer mode = afjo.get("mode").getAsInt();
+          Float speechiness = afjo.get("speechiness").getAsFloat();
+          Float tempo = afjo.get("tempo").getAsFloat();
+          Integer time_signature = afjo.get("time_signature").getAsInt();
+          Float valence = afjo.get("valence").getAsFloat();
+          
+          audioFeature = new AudioFeatures(id, acousticness, danceability, duration_ms, energy, instrumentalness, key,
+              liveness, loudness, mode, speechiness, tempo, time_signature, valence);
+
+        }
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    return audioFeature;
   }
 
 }
