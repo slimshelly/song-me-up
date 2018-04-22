@@ -78,9 +78,7 @@ public class SpotifyQuery {
             "Failed to get tracks: " + response.getStatusLine().getStatusCode()
                 + " " + response.toString());
       }
-    } catch (UnsupportedEncodingException e) {
-      throw e;
-    } catch (ClientProtocolException e) {
+    } catch (UnsupportedEncodingException | ClientProtocolException e) {
       throw e;
     } catch (IOException e) {
       throw e;

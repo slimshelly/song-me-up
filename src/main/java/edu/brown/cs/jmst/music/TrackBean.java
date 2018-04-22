@@ -7,8 +7,7 @@ import edu.brown.cs.jmst.beans.EntityBean;
 
 public class TrackBean extends EntityBean implements Track {
   // NOTE: because this extends EntityBean, it already extends Entity. getId()
-  // is
-  // a default method and does not need to be re-implemented.
+  // is a default method and does not need to be re-implemented.
   private boolean explicit;
   // private boolean playable;
   private int popularity;
@@ -36,6 +35,7 @@ public class TrackBean extends EntityBean implements Track {
 
   @Override
   public List<String> getArtistIds() throws Exception {
+    //TODO: why are we returning a new list instead of this.artistIds?
     List<String> artists = new ArrayList<>();
     artists.addAll(this.artistIds);
     return artists;
@@ -68,11 +68,11 @@ public class TrackBean extends EntityBean implements Track {
 
   @Override
   public String getUrl() throws Exception {
-    return "https://api.spotify.com" + "/tracks/" + this.id;
+    return String.format("https://api.spotify.com/tracks/%s", this.id);
   }
 
   @Override
   public String toString() {
-    return "Name: " + "'" + name + "', " + "Id: " + "'" + id + "'";
+    return String.format("Name: '%s', Id: '%s'", this.name, this.id);
   }
 }
