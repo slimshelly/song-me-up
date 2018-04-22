@@ -11,13 +11,12 @@
 		<div class="nav-bar">
 			<a class="login" href="/login">${logchange}</a>
 			<a id="faqs" href="/faq">FAQS</a>
-			${homelink}
-			
+			<a id="home" href="/main">HOME</a>
 		</div>
 		<div class="title">Song Me Up</div>
 		<div class="buttons">
-			<a class="btn" href="/join">JOIN A PARTY</a>
 			<a class="btn" href="/host">HOST A PARTY</a>
+			<a class="btn" onclick="join_id()">JOIN A PARTY</a>
 		</div>
 		<div class="more" id="down">
     		<a class="arrow" href="#">

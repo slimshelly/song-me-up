@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.google.common.collect.ImmutableMap;
-
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.Request;
@@ -33,9 +31,7 @@ public class LoginHandler implements TemplateViewRoute {
     pairs.add(new BasicNameValuePair("show_dialog", "true"));
     res.redirect("https://accounts.spotify.com/authorize?"
         + URLEncodedUtils.format(pairs, "UTF-8"));
-
-    return new ModelAndView(new ImmutableMap.Builder<String, Object>().build(),
-        "songmeup/logintest.ftl");
+    return null;
   }
 
 }

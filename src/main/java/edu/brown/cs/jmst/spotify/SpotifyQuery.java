@@ -85,18 +85,18 @@ public class SpotifyQuery {
     } catch (IOException e) {
       throw e;
     }
-    for (Track t : songs) {
-      General.printInfo(t.toString());
-    }
+    // for (Track t : songs) {
+    // General.printInfo(t.toString());
+    // }
     return songs;
   }
-  
+
   /**
    * Requires an ID.
-   * 
+   *
    */
-  public static AudioFeatures searchAudioFeatures(String keywords, String access_token)
-      throws Exception {
+  public static AudioFeatures searchAudioFeatures(String keywords,
+      String access_token) throws Exception {
     General.printVal("Keywords", keywords);
     AudioFeatures audioFeature = new AudioFeatures();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
@@ -134,9 +134,10 @@ public class SpotifyQuery {
           Float tempo = afjo.get("tempo").getAsFloat();
           Integer time_signature = afjo.get("time_signature").getAsInt();
           Float valence = afjo.get("valence").getAsFloat();
-          
-          audioFeature = new AudioFeatures(id, acousticness, danceability, duration_ms, energy, instrumentalness, key,
-              liveness, loudness, mode, speechiness, tempo, time_signature, valence);
+
+          audioFeature = new AudioFeatures(id, acousticness, danceability,
+              duration_ms, energy, instrumentalness, key, liveness, loudness,
+              mode, speechiness, tempo, time_signature, valence);
 
         }
       } else {
