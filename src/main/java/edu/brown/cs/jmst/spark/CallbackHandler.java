@@ -17,7 +17,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -71,6 +73,12 @@ public class CallbackHandler implements TemplateViewRoute {
           HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
           get.setHeader("Authorization", "Bearer " + access_token);
           HttpResponse getResponse = client.execute(get);
+
+          List<Track> tracks = SpotifyQuery.searchSong("hello", access_token);
+          for (Track t : tracks) {
+            // can uncommment to see results.
+            // General.printInfo(t.toString());
+          }
 
           List<BasicNameValuePair> pairs2 = new ArrayList<>();
           pairs2.add(new BasicNameValuePair("access_token", access_token));
