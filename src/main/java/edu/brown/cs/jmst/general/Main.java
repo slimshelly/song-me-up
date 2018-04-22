@@ -101,7 +101,7 @@ public final class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-    SparkInitializer.setHandlers(freeMarker);
+    SparkInitializer.setHandlers(freeMarker, smuState);
   }
 
   /**

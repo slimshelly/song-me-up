@@ -11,7 +11,7 @@ public interface Track {
 
   String getId();
 
-  boolean isPlayable() throws Exception;
+  // boolean isPlayable() throws Exception;
 
   int getPopularity() throws Exception;
 

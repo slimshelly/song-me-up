@@ -1,0 +1,1 @@
+https://accounts.spotify.com/en/login?continue=https:%2F%2Faccounts.spotify.com%2Fen%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3D4dbc736d594345a99c6e00bf776f5464%26scope%3Duser-read-private%2520user-read-email%26redirect_uri%3Dhttp:%252F%252Flocalhost:4567%252Fcallback%26state%3DxgLVrrnpkBUfEkXh

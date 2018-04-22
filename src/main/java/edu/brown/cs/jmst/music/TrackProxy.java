@@ -43,13 +43,13 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
     return bean.isExplicit();
   }
 
-  @Override
-  public boolean isPlayable() throws Exception {
-    if (this.bean == null) {
-      this.fill();
-    }
-    return bean.isPlayable();
-  }
+  // @Override
+  // public boolean isPlayable() throws Exception {
+  // if (this.bean == null) {
+  // this.fill();
+  // }
+  // return bean.isPlayable();
+  // }
 
   @Override
   public int getPopularity() throws Exception {
