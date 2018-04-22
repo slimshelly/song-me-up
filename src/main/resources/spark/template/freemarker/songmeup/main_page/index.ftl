@@ -5,8 +5,6 @@
 		<script src="js/main_jscript.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/main_style.css">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
-		
-		
 	</head>
 	<body>
 		<div class="nav-bar">
