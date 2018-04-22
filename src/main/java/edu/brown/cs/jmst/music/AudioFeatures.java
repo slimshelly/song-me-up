@@ -5,6 +5,7 @@ package edu.brown.cs.jmst.music;
  */
 public class AudioFeatures {
 
+  private String id;
   //0.0 - 1.0 confidence track is acoustic. 1.0 is high confidence
   private Float acousticness;
 
@@ -48,6 +49,26 @@ public class AudioFeatures {
   //High valence tracks sound more happy
   private Float valence;
 
+  public AudioFeatures() {};
+  
+  public AudioFeatures(String id, Float ac, Float da, Integer duration, Float energy, Float instrumentalness, Integer key,
+                       Float liveness, Float loudness, Integer mode, Float speechiness, Float tempo, Integer t_s, Float valence) {
+      this.id = id;
+      this.acousticness = ac;
+      this.danceability = da;
+      this.duration_ms = duration;
+      this.energy = energy;
+      this.instrumentalness = instrumentalness;
+      this.key = key;
+      this.liveness = liveness;
+      this.loudness = loudness;
+      this.mode = mode;
+      this.speechiness = speechiness;
+      this.tempo = tempo;
+      this.time_signature = t_s;
+      this.valence = valence;
+      
+  }
 
   /**
    * @return acousticness

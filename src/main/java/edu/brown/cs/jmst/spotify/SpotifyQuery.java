@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 
@@ -92,10 +95,10 @@ public class SpotifyQuery {
    * Requires an ID.
    * 
    */
-  public static List<Track> searchAudioFeatures(String keywords, String access_token)
+  public static AudioFeatures searchAudioFeatures(String keywords, String access_token)
       throws Exception {
     General.printVal("Keywords", keywords);
-    List<Track> songs = new ArrayList<>();
+    AudioFeatures audioFeature = new AudioFeatures();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
       get.setHeader("Authorization", "Bearer " + access_token);
@@ -132,8 +135,9 @@ public class SpotifyQuery {
           Integer time_signature = afjo.get("time_signature").getAsInt();
           Float valence = afjo.get("valence").getAsFloat();
           
-          songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-              artist_ids, playable, album_id));
+          audioFeature = new AudioFeatures(id, acousticness, danceability, duration_ms, energy, instrumentalness, key,
+              liveness, loudness, mode, speechiness, tempo, time_signature, valence);
+
         }
       } else {
         throw new ClientProtocolException(
@@ -147,10 +151,7 @@ public class SpotifyQuery {
     } catch (IOException e) {
       throw e;
     }
-    for (Track t : songs) {
-      General.printInfo(t.toString());
-    }
-    return songs;
+    return audioFeature;
   }
 
 }
