@@ -41,7 +41,7 @@ public class CallbackHandler implements TemplateViewRoute {
       // General.printInfo("Failed!");
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("error", "state_mismatch"));
-      res.redirect("/loggedin#" + URLEncodedUtils.format(pairs, "UTF-8"));
+      res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
     } else {
       // General.printInfo("Success!");
       res.removeCookie("spotify_auth_state");
@@ -83,17 +83,18 @@ public class CallbackHandler implements TemplateViewRoute {
           List<BasicNameValuePair> pairs2 = new ArrayList<>();
           pairs2.add(new BasicNameValuePair("access_token", access_token));
           pairs2.add(new BasicNameValuePair("refresh_token", refresh_token));
-          res.redirect("/loggedin#" + URLEncodedUtils.format(pairs2, "UTF-8"));
+          pairs2.add(new BasicNameValuePair("loggedin", "true"));
+          res.redirect("/main?" + URLEncodedUtils.format(pairs2, "UTF-8"));
         } else {
           List<BasicNameValuePair> pairs3 = new ArrayList<>();
           pairs3.add(new BasicNameValuePair("error", "invalid_token"));
-          res.redirect("/loggedin#" + URLEncodedUtils.format(pairs3, "UTF-8"));
+          res.redirect("/main?" + URLEncodedUtils.format(pairs3, "UTF-8"));
         }
       }
     }
 
     return new ModelAndView(new ImmutableMap.Builder<String, Object>().build(),
-        "songmeup/logintest.ftl");
+        "songmeup/main_page/index.ftl");
   }
 
 }

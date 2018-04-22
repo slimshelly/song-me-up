@@ -17,9 +17,11 @@ public class SparkInitializer {
   public static final Gson GSON = new Gson();
 
   public static void setHandlers(FreeMarkerEngine freeMarker) {
+    Spark.get("/main", new MainPage(), freeMarker);
+
     Spark.get("/test", new SigninPage(), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
-    Spark.get("/loggedin", new LoggedinHandler(), freeMarker);
+    // Spark.get("/loggedin", new LoggedinHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(),
         freeMarker);
     Spark.post("/refresh_token", new RefreshToken());

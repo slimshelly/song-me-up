@@ -30,6 +30,7 @@ public class LoginHandler implements TemplateViewRoute {
     pairs.add(new BasicNameValuePair("redirect_uri",
         SpotifyAuthentication.REDIRECT_URI));
     pairs.add(new BasicNameValuePair("state", state));
+    pairs.add(new BasicNameValuePair("show_dialog", "true"));
     res.redirect("https://accounts.spotify.com/authorize?"
         + URLEncodedUtils.format(pairs, "UTF-8"));
 
