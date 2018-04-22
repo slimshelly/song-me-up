@@ -88,5 +88,70 @@ public class SpotifyQuery {
     }
     return songs;
   }
+  
+  /**
+   * Requires an ID.
+   * 
+   */
+  public static List<Track> searchAudioFeatures(String keywords, String access_token)
+      throws Exception {
+    General.printVal("Keywords", keywords);
+    List<Track> songs = new ArrayList<>();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
+      get.setHeader("Authorization", "Bearer " + access_token);
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("q", keywords));
+      pairs.add(new BasicNameValuePair("type", "track"));
+      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
+      urlentity.setContentEncoding("application/json");
+      get.setEntity(urlentity);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        JsonArray tracks = jo.get("tracks").getAsJsonArray();
+        Iterator<JsonElement> iterator = tracks.iterator();
+        while (iterator.hasNext()) {
+          JsonObject afjo = iterator.next().getAsJsonObject();
+          // make track class
+          // String id, Boolean explicit, int popularity, int duration_ms,
+          // List<String> artistIds, Boolean playable
+          String id = afjo.get("id").getAsString();
+          Float acousticness = afjo.get("acousticness").getAsFloat();
+          Float danceability = afjo.get("danceability").getAsFloat();
+          Integer duration_ms = afjo.get("duration_ms").getAsInt();
+          Float energy = afjo.get("energy").getAsFloat();
+          Float instrumentalness = afjo.get("instrumentalness").getAsFloat();
+          Integer key = afjo.get("key").getAsInt();
+          Float liveness = afjo.get("liveness").getAsFloat();
+          Float loudness = afjo.get("loudness").getAsFloat();
+          Integer mode = afjo.get("mode").getAsInt();
+          Float speechiness = afjo.get("speechiness").getAsFloat();
+          Float tempo = afjo.get("tempo").getAsFloat();
+          Integer time_signature = afjo.get("time_signature").getAsInt();
+          Float valence = afjo.get("valence").getAsFloat();
+          
+          songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
+              artist_ids, playable, album_id));
+        }
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    for (Track t : songs) {
+      General.printInfo(t.toString());
+    }
+    return songs;
+  }
 
 }
