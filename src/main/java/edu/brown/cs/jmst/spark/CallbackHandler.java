@@ -70,22 +70,6 @@ public class CallbackHandler implements TemplateViewRoute {
           String access_token = jo.get("access_token").getAsString();
           String refresh_token = jo.get("refresh_token").getAsString();
           u.logIn(access_token, refresh_token);
-          // HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
-          // get.setHeader("Authorization", "Bearer " + access_token);
-          // HttpResponse getResponse = client.execute(get);
-          //
-          // List<Track> tracks = SpotifyQuery.searchSong("hello",
-          // access_token);
-          // for (Track t : tracks) {
-          // // can uncommment to see results.
-          // // General.printInfo(t.toString());
-          // }
-          //
-          // List<BasicNameValuePair> pairs2 = new ArrayList<>();
-          // pairs2.add(new BasicNameValuePair("access_token", access_token));
-          // pairs2.add(new BasicNameValuePair("refresh_token", refresh_token));
-          // pairs2.add(new BasicNameValuePair("loggedin", "true"));
-          // res.redirect("/main?" + URLEncodedUtils.format(pairs2, "UTF-8"));
 
         } else {
           // List<BasicNameValuePair> pairs2 = new ArrayList<>();
@@ -98,14 +82,14 @@ public class CallbackHandler implements TemplateViewRoute {
         // res.redirect("/main?" + URLEncodedUtils.format(pairs2, "UTF-8"));
       }
     }
-    String login;
-    if (u.loggedIn()) {
-      login = "SWITCH USER";
-    } else {
-      login = "LOG IN";
-    }
-
-    pairs.add(new BasicNameValuePair("logchange", login));
+    // String login;
+    // if (u.loggedIn()) {
+    // login = "SWITCH USER";
+    // } else {
+    // login = "LOG IN";
+    // }
+    //
+    // pairs.add(new BasicNameValuePair("logchange", login));
     res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
     return null;
     // return new ModelAndView(new ImmutableMap.Builder<String,
