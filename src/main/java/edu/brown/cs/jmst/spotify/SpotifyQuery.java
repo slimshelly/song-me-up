@@ -23,6 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.Album;
+import edu.brown.cs.jmst.music.Artist;
 import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
@@ -136,7 +138,6 @@ public class SpotifyQuery {
           audioFeature = new AudioFeatures(id, acousticness, danceability,
               duration_ms, energy, instrumentalness, key, liveness, loudness,
               mode, speechiness, tempo, time_signature, valence);
-
         }
       } else {
         throw new ClientProtocolException(
@@ -151,6 +152,151 @@ public class SpotifyQuery {
       throw e;
     }
     return audioFeature;
+  }
+
+  /**
+   * Requires an ID.
+   *
+   */
+  public static List<Artist> searchArtist(String keywords,
+      String access_token) throws Exception {
+    General.printVal("Keywords", keywords);
+    
+    List<Artist> artists = new ArrayList<>();
+    
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
+      get.setHeader("Authorization", "Bearer " + access_token);
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("q", keywords));
+      pairs.add(new BasicNameValuePair("type", "artist"));
+      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
+      urlentity.setContentEncoding("application/json");
+      get.setEntity(urlentity);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        JsonArray artistArray = jo.get("artists").getAsJsonArray();
+        // returns a list of artists
+        Iterator<JsonElement> iterator = artistArray.iterator();
+        while (iterator.hasNext()) {
+          JsonObject afjo = iterator.next().getAsJsonObject();
+          // make artist class
+          String id = afjo.get("id").getAsString();
+          
+          JsonArray genres = afjo.get("genres").getAsJsonArray();
+          List<String> genreNames = new ArrayList<>();
+          
+              Iterator<JsonElement> iterator2 = genres.iterator();
+              while (iterator2.hasNext()) {
+                JsonObject ajo = iterator2.next().getAsJsonObject();
+                genreNames.add(ajo.getAsString());
+              }
+ 
+          String name = afjo.get("name").getAsString();
+          String type = afjo.get("type").getAsString();
+          Integer popularity = afjo.get("popularity").getAsInt();
+          
+          artists.add(new Artist(genreNames, id, name, popularity, type));
+        }
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    return artists;
+  }
+  
+
+  /**
+   * Requires an ID.
+   *
+   */
+  public static List<Album> searchAlbumss(String keywords,
+      String access_token) throws Exception {
+    General.printVal("Keywords", keywords);
+    
+    List<Album> albums = new ArrayList<>();
+    
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
+      get.setHeader("Authorization", "Bearer " + access_token);
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("q", keywords));
+      pairs.add(new BasicNameValuePair("type", "track"));
+      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
+      urlentity.setContentEncoding("application/json");
+      get.setEntity(urlentity);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        JsonArray albumList = jo.get("album").getAsJsonArray();
+        Iterator<JsonElement> iterator = albumList.iterator();
+        while (iterator.hasNext()) {
+          JsonObject afjo = iterator.next().getAsJsonObject();
+          // make track class
+          // String id, Boolean explicit, int popularity, int duration_ms,
+          // List<String> artistIds, Boolean playable
+          String id = afjo.get("id").getAsString();
+          
+          JsonArray genres = afjo.get("genres").getAsJsonArray();
+          List<String> genreNames = new ArrayList<>();
+          
+          Iterator<JsonElement> iterator2 = genres.iterator();
+          while (iterator2.hasNext()) {
+            JsonObject ajo = iterator2.next().getAsJsonObject();
+            genreNames.add(ajo.getAsString());
+          }
+          
+          JsonArray tracks = afjo.get("tracks").getAsJsonArray();
+          List<String> trackIds = new ArrayList<>();
+          
+          Iterator<JsonElement> iterator3 = tracks.iterator();
+          while (iterator3.hasNext()) {
+            JsonObject ajo = iterator3.next().getAsJsonObject();
+            trackIds.add(ajo.getAsString());
+          }
+          
+          String name = afjo.get("name").getAsString();
+          String type = afjo.get("type").getAsString();
+          Integer popularity = afjo.get("popularity").getAsInt();
+          
+          JsonArray artists = afjo.get("artists").getAsJsonArray();
+          // General.printInfo(artists.toString());
+          List<String> artistIds = new ArrayList<>();
+          Iterator<JsonElement> iterator4 = artists.iterator();
+          while (iterator4.hasNext()) {
+            JsonObject ajo = iterator4.next().getAsJsonObject();
+            artistIds.add(ajo.get("id").getAsString());
+          }
+          
+          albums.add(new Album(artistIds, genreNames, id, name, popularity, trackIds, type));
+          
+        }
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    return albums;
   }
 
 }
