@@ -2,6 +2,7 @@ package edu.brown.cs.jmst.songmeup;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,8 @@ public class SmuState {
       Collections.synchronizedMap(new HashMap<>());
   private Map<String, User> users =
       Collections.synchronizedMap(new HashMap<>());
+  private Set<String> party_people_ids =
+      Collections.synchronizedSet(new HashSet<>());
 
   /**
    * Add a party to the set.
@@ -51,6 +54,29 @@ public class SmuState {
     return parties.get(id);
   }
 
+  /**
+   * End a party.
+   *
+   * @param id
+   *          id of party to end.
+   */
+  public void endParty(String id) {
+    assert parties.containsKey(id);
+    Party p = parties.get(id);
+    for (String s : p.getPartyGoerIds()) {
+      party_people_ids.remove(s);
+    }
+    parties.remove(id);
+  }
+
+  /**
+   * Will either create a new user with the given id, or return the user with
+   * the given id.
+   *
+   * @param id
+   *          id of user
+   * @return user with given id
+   */
   public User getUser(String id) {
     // General.printVal("Users", Integer.toString(users.size()));
     if (users.containsKey(id)) {
