@@ -55,6 +55,44 @@ public class SmuState {
   }
 
   /**
+   * Adds a user to a party.
+   *
+   * @param u
+   *          user
+   * @param partyId
+   *          party id to add to
+   */
+  public void addPartyPerson(User u, String partyId) {
+    if (party_people_ids.contains(u.getId())) {
+      throw new IllegalArgumentException(
+          "User cannot be in two parties at once.");
+    } else {
+      assert parties.containsKey(partyId);
+      Party p = parties.get(partyId);
+      assert !p.getPartyGoerIds().contains(u.getId());
+      p.addPartyGoer(u);
+      party_people_ids.add(u.getId());
+    }
+  }
+
+  /**
+   * Allows a user to leave a party.
+   *
+   * @param u
+   *          leaving user
+   * @param partyId
+   *          id of party they are leaving
+   */
+  public void leaveParty(User u, String partyId) {
+    assert party_people_ids.contains(u.getId());
+    assert parties.containsKey(partyId);
+    Party p = parties.get(partyId);
+    assert p.getPartyGoerIds().contains(u.getId());
+    p.removePartyGoer(u);
+    party_people_ids.remove(u.getId());
+  }
+
+  /**
    * End a party.
    *
    * @param id

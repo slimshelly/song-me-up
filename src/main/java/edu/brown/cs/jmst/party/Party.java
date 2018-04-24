@@ -7,7 +7,7 @@ import java.util.Set;
 public class Party {
 
   private PartyHost ph;
-  private Set<PartyGoer> partygoers;
+  private Set<User> partygoers;
   private SongQueue suggestions;
 
   public Party(PartyHost host) {
@@ -16,8 +16,12 @@ public class Party {
     suggestions = new SongQueue();
   }
 
-  public void addPartyGoer(PartyGoer pg) {
+  public void addPartyGoer(User pg) {
     partygoers.add(pg);
+  }
+
+  public void removePartyGoer(User u) {
+    partygoers.remove(u);
   }
 
   public String getHostName() {
@@ -26,7 +30,7 @@ public class Party {
 
   public Set<String> getPartyGoerIds() {
     Set<String> ids = new HashSet<>();
-    for (PartyGoer p : partygoers) {
+    for (User p : partygoers) {
       ids.add(p.getId());
     }
     return ids;
