@@ -53,12 +53,15 @@ public class Suggestion implements Comparable<Suggestion> {
    * then the song's "age" is reset to 0, as though a new suggestion were made.
    * Otherwise, the suggestion's score is reduced by a greater and greater
    * amount until it has not been voted on for 3 consecutive rounds.
+   * The decay equations are designed so that a score of 1 always decays to 0,
+   * which means that new suggestions are always higher rated than suggestions
+   * that were not voted on after being submitted.
    */
   void decayScore() {
     this.age += 1;
     switch (age) {
       case 1: {
-        score = (2 *score) / 3;
+        score = (2 * score) / 3;
       }
       case 2: {
         score = (score / 2);

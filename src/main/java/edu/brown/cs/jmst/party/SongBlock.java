@@ -15,9 +15,9 @@ import java.util.concurrent.PriorityBlockingQueue;
  *      next song block, but the number of (positive) votes on the suggestion
  *      decreases (perhaps inversely proportional to amount of votes already
  *      accumulated so that less popular suggestions decay more rapidly)
+ * @author tvanderm
  */
 class SongBlock {
-
 
   private PriorityBlockingQueue<Suggestion> suggestions = new PriorityBlockingQueue<>();
   private SongBlock nextBlock;
@@ -27,6 +27,7 @@ class SongBlock {
   private static final int BLOCK_LENGTH_SONGS = 5;
   private static final int BLOCK_LENGTH_MS = 900000; //15 minutes
 
+  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
   protected void suggest(Suggestion song) {
     if (nextBlock.suggestions.contains(song)) {
       song.voteUp();
@@ -35,9 +36,9 @@ class SongBlock {
     } else {
       suggestions.add(song); //TODO: use add, or use one of the blocking alternatives?
     }
-  }
 
   protected SongBlock getNextBlock() {
+  }
     return this.nextBlock;
   }
 
@@ -98,7 +99,6 @@ class SongBlock {
   //TODO: put a collection of songs in an order that makes sense
 
   protected void passSuggestions() {
-    //TODO: let current suggestions decay
     for (Suggestion s: this.suggestions) {
       s.decayScore();
     }
@@ -108,6 +108,8 @@ class SongBlock {
     suggestions.drainTo(nextBlock.suggestions);
     assert(suggestions.isEmpty()); //TODO: temporary!
   }
+
+  //want an 'ordered' but not sorted data structure--alternating
 
   //  Add Vote Play
   //  A
