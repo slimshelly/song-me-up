@@ -2,6 +2,7 @@ package edu.brown.cs.jmst.songmeup;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,8 @@ public class SmuState {
       Collections.synchronizedMap(new HashMap<>());
   private Map<String, User> users =
       Collections.synchronizedMap(new HashMap<>());
+  private Set<String> party_people_ids =
+      Collections.synchronizedSet(new HashSet<>());
 
   /**
    * Add a party to the set.
@@ -51,6 +54,67 @@ public class SmuState {
     return parties.get(id);
   }
 
+  /**
+   * Adds a user to a party.
+   *
+   * @param u
+   *          user
+   * @param partyId
+   *          party id to add to
+   */
+  public void addPartyPerson(User u, String partyId) {
+    if (party_people_ids.contains(u.getId())) {
+      throw new IllegalArgumentException(
+          "User cannot be in two parties at once.");
+    } else {
+      assert parties.containsKey(partyId);
+      Party p = parties.get(partyId);
+      assert !p.getPartyGoerIds().contains(u.getId());
+      p.addPartyGoer(u);
+      party_people_ids.add(u.getId());
+    }
+  }
+
+  /**
+   * Allows a user to leave a party.
+   *
+   * @param u
+   *          leaving user
+   * @param partyId
+   *          id of party they are leaving
+   */
+  public void leaveParty(User u, String partyId) {
+    assert party_people_ids.contains(u.getId());
+    assert parties.containsKey(partyId);
+    Party p = parties.get(partyId);
+    assert p.getPartyGoerIds().contains(u.getId());
+    p.removePartyGoer(u);
+    party_people_ids.remove(u.getId());
+  }
+
+  /**
+   * End a party.
+   *
+   * @param id
+   *          id of party to end.
+   */
+  public void endParty(String id) {
+    assert parties.containsKey(id);
+    Party p = parties.get(id);
+    for (String s : p.getPartyGoerIds()) {
+      party_people_ids.remove(s);
+    }
+    parties.remove(id);
+  }
+
+  /**
+   * Will either create a new user with the given id, or return the user with
+   * the given id.
+   *
+   * @param id
+   *          id of user
+   * @return user with given id
+   */
   public User getUser(String id) {
     // General.printVal("Users", Integer.toString(users.size()));
     if (users.containsKey(id)) {
