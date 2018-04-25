@@ -18,21 +18,28 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 
-public class User {
+public class User extends Entity {
 
   private String auth_key = null;
   private String refresh_key = null;
   private boolean logged_in = false;
+  private String display_name = null;
+  private String id = null;
 
   public User() {
   }
 
-  public void logIn(String auth, String refresh) {
+  public void logIn(String auth, String refresh)
+      throws ClientProtocolException, IOException {
     auth_key = auth;
     refresh_key = refresh;
     logged_in = true;
+    JsonObject jo = getInfo();
+    display_name = jo.get("display_name").getAsString();
+    id = jo.get("id").getAsString();
   }
 
   public void refresh() throws ParseException, IOException {
@@ -58,7 +65,7 @@ public class User {
     }
   }
 
-  public JsonObject getInfo() throws ClientProtocolException, IOException {
+  private JsonObject getInfo() throws ClientProtocolException, IOException {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
       get.setHeader("Authorization", "Bearer " + auth_key);
@@ -75,6 +82,15 @@ public class User {
 
   public String getAuth() {
     return auth_key;
+  }
+
+  public String getName() {
+    return display_name;
+  }
+
+  @Override
+  public String getId() {
+    return id;
   }
 
 }
