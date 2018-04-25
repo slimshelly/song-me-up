@@ -221,7 +221,7 @@ public class SpotifyQuery {
    * Requires an ID.
    *
    */
-  public static List<Album> searchAlbumss(String keywords,
+  public static List<Album> searchAlbums(String keywords,
       String access_token) throws Exception {
     General.printVal("Keywords", keywords);
     

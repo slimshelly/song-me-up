@@ -51,6 +51,13 @@ https://docs.google.com/presentation/d/1VUB4MGLDvUJm22FoK3_i4An-As9YGxBhaWuYWOic
 https://docs.google.com/document/d/1GdvFD0OIzGPmfBUD5MkZBT0jESWok8TTp3pBFX--Qxs/edit?usp=sharing
 
 **4-Way Checkpoint:** _(Schedule for on or before April 23)_
+— We are using Sam Oliphant’s REPL. 
+— Responsibilities: 
+Jyang80 - queries & web playback
+Tvanderm - ranking algorithm
+mbecker09 - front end, web design
+Soliphant - bridging front end and back end, authorization token.
+
 
 **Adversary Checkpoint:** _(Schedule once you are assigned an adversary TA)_
 
