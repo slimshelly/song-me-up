@@ -42,9 +42,7 @@ public class CallbackHandler implements TemplateViewRoute {
     String state = qm.value("state");
     String storedState = req.cookies().get("spotify_auth_state");
     if (state == null || !state.equals(storedState)) {
-      // List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("error", "state_mismatch"));
-      // res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
     } else {
       res.removeCookie("spotify_auth_state");
 
@@ -60,9 +58,7 @@ public class CallbackHandler implements TemplateViewRoute {
         UrlEncodedFormEntity urlentity =
             new UrlEncodedFormEntity(pairs2, "UTF-8");
         urlentity.setContentEncoding("application/json");
-        // General.printInfo("Try no. 2: " + urlentity.toString());
         post.setEntity(urlentity);
-        // General.printInfo("Post entity: " + post.getEntity().toString());
         HttpResponse response = client.execute(post);
         if (response.getStatusLine().getStatusCode() == 200) {
           String json_string = EntityUtils.toString(response.getEntity());
@@ -70,31 +66,16 @@ public class CallbackHandler implements TemplateViewRoute {
           String access_token = jo.get("access_token").getAsString();
           String refresh_token = jo.get("refresh_token").getAsString();
           u.logIn(access_token, refresh_token);
-
         } else {
-          // List<BasicNameValuePair> pairs2 = new ArrayList<>();
           pairs2.add(new BasicNameValuePair("error", "invalid_token"));
-          // res.redirect("/main?" + URLEncodedUtils.format(pairs2, "UTF-8"));
         }
       } catch (Exception e) {
         List<BasicNameValuePair> pairs2 = new ArrayList<>();
         pairs2.add(new BasicNameValuePair("error", "client_error"));
-        // res.redirect("/main?" + URLEncodedUtils.format(pairs2, "UTF-8"));
       }
     }
-    // String login;
-    // if (u.loggedIn()) {
-    // login = "SWITCH USER";
-    // } else {
-    // login = "LOG IN";
-    // }
-    //
-    // pairs.add(new BasicNameValuePair("logchange", login));
     res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
     return null;
-    // return new ModelAndView(new ImmutableMap.Builder<String,
-    // Object>().build(),
-    // "songmeup/main_page/index.ftl");
   }
 
 }

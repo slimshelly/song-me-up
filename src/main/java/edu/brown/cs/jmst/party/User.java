@@ -28,6 +28,7 @@ public class User extends Entity {
   private boolean logged_in = false;
   private String display_name = null;
   private String id = null;
+  private boolean in_party = false;
 
   public User() {
   }
@@ -37,7 +38,7 @@ public class User extends Entity {
     auth_key = auth;
     refresh_key = refresh;
     logged_in = true;
-    JsonObject jo = getInfo();
+    JsonObject jo = getInfo(false);
     display_name = jo.get("display_name").getAsString();
     id = jo.get("id").getAsString();
   }
@@ -65,14 +66,26 @@ public class User extends Entity {
     }
   }
 
-  private JsonObject getInfo() throws ClientProtocolException, IOException {
+  private JsonObject getInfo(boolean attempted)
+      throws ClientProtocolException, IOException {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpGet get = new HttpGet("https://api.spotify.com/v1/me");
       get.setHeader("Authorization", "Bearer " + auth_key);
       HttpResponse getResponse = client.execute(get);
-      String json_string = EntityUtils.toString(getResponse.getEntity());
-      JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-      return jo;
+      if (getResponse.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(getResponse.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        return jo;
+      } else {
+        // try refreshing if request does not work.
+        if (attempted) {
+          // throw error if refresh did not work.
+          throw new ClientProtocolException("Refresh not working.");
+        } else {
+          refresh();
+          return getInfo(true);
+        }
+      }
     }
   }
 
@@ -91,6 +104,26 @@ public class User extends Entity {
   @Override
   public String getId() {
     return id;
+  }
+
+  public boolean inParty() {
+    return in_party;
+  }
+
+  public void leaveParty() throws PartyException {
+    if (in_party) {
+      in_party = false;
+    } else {
+      throw new PartyException("Not in a party.");
+    }
+  }
+
+  public void joinParty() throws PartyException {
+    if (in_party) {
+      throw new PartyException("Already in a party.");
+    } else {
+      in_party = true;
+    }
   }
 
 }

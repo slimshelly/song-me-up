@@ -12,9 +12,10 @@
 			<a id="faqs" href="/faq">FAQS</a>
 			<a id="home" href="/main">HOME</a>
 		</div>
-		<div class="title">${host}</div>
+		<div class="title">${hostname}'s Party</div>
 		<div class="buttons">
-			<a class="btn" href="/host">ADD SUGGESTION</a>
+			<a class="btn" onclick="spotify_search()">ADD SUGGESTION</a>
 		</div>
+		
 	</body>
 </html>
