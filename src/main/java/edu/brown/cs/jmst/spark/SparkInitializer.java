@@ -27,7 +27,7 @@ public class SparkInitializer {
 
     Spark.get("/host", new HostHandler(state), freeMarker);
     Spark.get("/join", new JoinHandler(state), freeMarker);
-    Spark.get("/error", new ErrorHandler(), freeMarker);
+    Spark.get("/error", new ErrorHandler(state), freeMarker);
   }
 
 }
