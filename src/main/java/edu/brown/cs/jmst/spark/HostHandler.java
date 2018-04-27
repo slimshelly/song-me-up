@@ -10,9 +10,10 @@ import org.apache.http.message.BasicNameValuePair;
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.jmst.party.Party;
-import edu.brown.cs.jmst.party.PartyHost;
+import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
+import edu.brown.cs.jmst.spotify.SpotifyException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -32,19 +33,31 @@ public class HostHandler implements TemplateViewRoute {
     if (!u.loggedIn()) {
       res.redirect("/login");
     } else {
-      if (u.isPremium()) {
-        Party p = new Party(new PartyHost(u));
-
+      SparkErrorEnum err = null;
+      try {
+        Party p = state.startParty(u);
         Map<String,
             Object> variables = new ImmutableMap.Builder<String, Object>()
-                .put("logchange", "SWITCH USER")
-                .put("hostname", p.getHostName()).build();
-        return new ModelAndView(variables, "songmeup/main_page/index.ftl");
-
-      } else {
-        List<BasicNameValuePair> pairs = new ArrayList<>();
-        pairs.add(new BasicNameValuePair("error", "not_premium"));
-        res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
+                .put("party_id", p.getId()).put("hostname", p.getHostName())
+                .build();
+        return new ModelAndView(variables, "songmeup/host/host.ftl");
+      } catch (PartyException pe) {
+        err = SparkErrorEnum.ALREADY_IN_PARTY;
+        // List<BasicNameValuePair> pairs = new ArrayList<>();
+        // pairs.add(new BasicNameValuePair("error",
+        // SparkErrorEnum.ALREADY_IN_PARTY.toString()));
+        // res.redirect("/error?" + URLEncodedUtils.format(pairs, "UTF-8"));
+      } catch (SpotifyException se) {
+        err = SparkErrorEnum.NEEDS_PREMIUM;
+        // List<BasicNameValuePair> pairs = new ArrayList<>();
+        // pairs.add(new BasicNameValuePair("error",
+        // SparkErrorEnum.NEEDS_PREMIUM.toString()));
+        // res.redirect("/error?" + URLEncodedUtils.format(pairs, "UTF-8"));
+      }
+      if (err != null) {
+        List<BasicNameValuePair> pair = new ArrayList<>();
+        pair.add(new BasicNameValuePair("error", err.toString()));
+        res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
       }
     }
     return null;

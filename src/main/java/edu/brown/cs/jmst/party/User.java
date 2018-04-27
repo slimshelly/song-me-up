@@ -27,8 +27,8 @@ public class User extends Entity {
   private String refresh_key = null;
   private boolean logged_in = false;
   private String display_name = null;
-  private boolean in_party = false;
   private boolean premium = false;
+  private String curr_party = null;
 
   public User() {
   }
@@ -44,7 +44,7 @@ public class User extends Entity {
     premium = jo.get("product").getAsString().equals("premium");
   }
 
-  public void logIn(String code) {
+  public void logIn(String code) throws IllegalArgumentException, Exception {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
       HttpPost post = new HttpPost("https://accounts.spotify.com/api/token");
       post.setHeader("Authorization",
@@ -66,11 +66,17 @@ public class User extends Entity {
         String refresh_token = jo.get("refresh_token").getAsString();
         this.logIn(access_token, refresh_token);
       } else {
-        pairs2.add(new BasicNameValuePair("error", "invalid_token"));
+        throw new IllegalArgumentException("Invalid token.");
+        // pairs2.add(new BasicNameValuePair("error", "invalid_token"));
       }
+      // } catch (Exception e) {
+      // throw
+      //// List<BasicNameValuePair> pairs2 = new ArrayList<>();
+      //// pairs2.add(new BasicNameValuePair("error", "client_error"));
+    } catch (IllegalArgumentException e) {
+      throw e;
     } catch (Exception e) {
-      List<BasicNameValuePair> pairs2 = new ArrayList<>();
-      pairs2.add(new BasicNameValuePair("error", "client_error"));
+      throw e;
     }
   }
 
@@ -133,26 +139,36 @@ public class User extends Entity {
   }
 
   public boolean inParty() {
-    return in_party;
+    return curr_party == null;
   }
 
-  public void leaveParty() throws PartyException {
-    if (in_party) {
-      in_party = false;
+  public String leaveParty() throws PartyException {
+    if (curr_party != null) {
+      String retval = curr_party;
+      curr_party = null;
+      return retval;
     } else {
       throw new PartyException("Not in a party.");
     }
   }
 
-  public void joinParty() throws PartyException {
-    if (in_party) {
+  public void joinParty(String id) throws PartyException {
+    if (curr_party != null) {
       throw new PartyException("Already in a party.");
     } else {
-      in_party = true;
+      curr_party = id;
     }
+  }
+
+  public String getCurrentParty() {
+    return curr_party;
   }
 
   public boolean isPremium() {
     return premium;
+  }
+
+  public String getRefresh() {
+    return refresh_key;
   }
 }

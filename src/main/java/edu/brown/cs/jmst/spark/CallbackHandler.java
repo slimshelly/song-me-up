@@ -25,26 +25,27 @@ public class CallbackHandler implements TemplateViewRoute {
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
     User u = state.getUser(req.session().id());
-    List<BasicNameValuePair> pairs = new ArrayList<>();
-
     QueryParamsMap qm = req.queryMap();
     String code = qm.value("code");
     String state = qm.value("state");
     String storedState = req.cookies().get("spotify_auth_state");
+    SparkErrorEnum err = null;
     if (state == null || !state.equals(storedState)) {
-      pairs.add(new BasicNameValuePair("error", "state_mismatch"));
+      err = SparkErrorEnum.STATE_MISMATCH;
     } else {
       res.removeCookie("spotify_auth_state");
       try {
         u.logIn(code);
       } catch (IllegalArgumentException e) {
-        pairs.add(new BasicNameValuePair("error", "invalid_token"));
+        err = SparkErrorEnum.INVALID_TOKEN;
       } catch (Exception e) {
-        pairs.add(new BasicNameValuePair("error", "client_error"));
+        err = SparkErrorEnum.CLIENT_ERROR;
       }
     }
-    if (pairs.size() > 0) {
-      res.redirect("/main?" + URLEncodedUtils.format(pairs, "UTF-8"));
+    if (err != null) {
+      List<BasicNameValuePair> pair = new ArrayList<>();
+      pair.add(new BasicNameValuePair("error", err.toString()));
+      res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
       res.redirect("/main");
     }
