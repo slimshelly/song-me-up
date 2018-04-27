@@ -27,8 +27,8 @@ public class User extends Entity {
   private String refresh_key = null;
   private boolean logged_in = false;
   private String display_name = null;
-  private String id = null;
   private boolean in_party = false;
+  private boolean premium = false;
 
   public User() {
   }
@@ -41,6 +41,37 @@ public class User extends Entity {
     JsonObject jo = getInfo(false);
     display_name = jo.get("display_name").getAsString();
     id = jo.get("id").getAsString();
+    premium = jo.get("product").getAsString().equals("premium");
+  }
+
+  public void logIn(String code) {
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpPost post = new HttpPost("https://accounts.spotify.com/api/token");
+      post.setHeader("Authorization",
+          "Basic " + SpotifyAuthentication.ENCODED_CLIENT_KEY);
+      List<BasicNameValuePair> pairs2 = new ArrayList<>();
+      pairs2.add(new BasicNameValuePair("code", code));
+      pairs2.add(new BasicNameValuePair("redirect_uri",
+          SpotifyAuthentication.REDIRECT_URI));
+      pairs2.add(new BasicNameValuePair("grant_type", "authorization_code"));
+      UrlEncodedFormEntity urlentity =
+          new UrlEncodedFormEntity(pairs2, "UTF-8");
+      urlentity.setContentEncoding("application/json");
+      post.setEntity(urlentity);
+      HttpResponse response = client.execute(post);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        String access_token = jo.get("access_token").getAsString();
+        String refresh_token = jo.get("refresh_token").getAsString();
+        this.logIn(access_token, refresh_token);
+      } else {
+        pairs2.add(new BasicNameValuePair("error", "invalid_token"));
+      }
+    } catch (Exception e) {
+      List<BasicNameValuePair> pairs2 = new ArrayList<>();
+      pairs2.add(new BasicNameValuePair("error", "client_error"));
+    }
   }
 
   public void refresh() throws ParseException, IOException {
@@ -101,11 +132,6 @@ public class User extends Entity {
     return display_name;
   }
 
-  @Override
-  public String getId() {
-    return id;
-  }
-
   public boolean inParty() {
     return in_party;
   }
@@ -126,4 +152,7 @@ public class User extends Entity {
     }
   }
 
+  public boolean isPremium() {
+    return premium;
+  }
 }

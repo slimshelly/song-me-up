@@ -12,7 +12,7 @@
 			<a id="faqs" href="/faq">FAQS</a>
 			<a id="home" href="/main">HOME</a>
 		</div>
-		<div class="title">${hostname}'s Party</div>
+		<div class="title">${hostname}, you have made a party! Your party id is: ${party_id}.</div>
 		<div class="buttons">
 			<a class="btn" onclick="spotify_search()">ADD SUGGESTION</a>
 		</div>
