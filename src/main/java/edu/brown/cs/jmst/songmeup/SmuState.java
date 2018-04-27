@@ -36,9 +36,9 @@ public class SmuState {
    * @throws PartyException
    */
   public Party startParty(User u) throws PartyException, SpotifyException {
-    String key = SpotifyAuthentication.randomString(Party.ID_LENGTH);
+    String key = SpotifyAuthentication.randomReadableString(Party.ID_LENGTH);
     while (parties.containsKey(key)) {
-      key = SpotifyAuthentication.randomString(Party.ID_LENGTH);
+      key = SpotifyAuthentication.randomReadableString(Party.ID_LENGTH);
     }
     Party party = new Party(u, key);
     parties.put(key, party);
@@ -68,22 +68,13 @@ public class SmuState {
    */
   public Party addPartyPerson(User u, String partyId)
       throws PartyException, IllegalArgumentException {
-    // if (party_people_ids.contains(u.getId())) {
-    // if(u.inParty()){
-    // throw new IllegalArgumentException(
-    // "User cannot be in two parties at once.");
-    // } else {
-    // assert parties.containsKey(partyId);
-    // Party p = parties.get(partyId);
-    // assert !p.getPartyGoerIds().contains(u.getId());
-    // p.addPartyGoer(u);
-    // party_people_ids.add(u.getId());
-    // }
     if (!parties.containsKey(partyId)) {
       throw new IllegalArgumentException("Invalid party id.");
     }
     Party p = parties.get(partyId);
-    p.addPartyGoer(u);
+    if (!partyId.equals(u.getCurrentParty())) {
+      p.addPartyGoer(u);
+    }
     return p;
   }
 
