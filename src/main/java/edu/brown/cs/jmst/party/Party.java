@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
-public class Party {
+public class Party extends Entity {
 
   private User ph;
   private Set<User> partygoers;
   private SongQueue suggestions;
-  private String id;
   public static final int ID_LENGTH = 6;
 
   public Party(User host, String id) throws PartyException, SpotifyException {
@@ -54,8 +54,13 @@ public class Party {
     }
   }
 
+  @Override
   public String getId() {
     return id;
+  }
+
+  public String getHostId() {
+    return ph.getId();
   }
 
 }

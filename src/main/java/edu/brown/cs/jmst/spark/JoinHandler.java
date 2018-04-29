@@ -44,16 +44,8 @@ public class JoinHandler implements TemplateViewRoute {
         return new ModelAndView(variables, "songmeup/join/join.ftl");
       } catch (IllegalArgumentException e) {
         err = SparkErrorEnum.INVALID_PARTY_ID;
-        // List<BasicNameValuePair> pairs = new ArrayList<>();
-        // pairs.add(new BasicNameValuePair("error",
-        // SparkErrorEnum.INVALID_PARTY_ID.toString()));
-        // res.redirect("/error?" + URLEncodedUtils.format(pairs, "UTF-8"));
       } catch (PartyException pe) {
         err = SparkErrorEnum.ALREADY_IN_PARTY;
-        // List<BasicNameValuePair> pairs = new ArrayList<>();
-        // pairs.add(new BasicNameValuePair("error",
-        // SparkErrorEnum.ALREADY_IN_PARTY.toString()));
-        // res.redirect("/error?" + URLEncodedUtils.format(pairs, "UTF-8"));
       }
       if (err != null) {
         List<BasicNameValuePair> pair = new ArrayList<>();

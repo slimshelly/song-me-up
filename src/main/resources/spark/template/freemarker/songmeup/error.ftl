@@ -15,6 +15,7 @@
 		<div class="section">
 			<h1>Something went wrong!</h1>
 				<p>${errmsg}</p>
+			<#if redirect??><p>Maybe you meant to go here? <a class="redirect" href=${redirect}>Your Party</a></p></#if>
 		</div>
 	</body>
 </html>
