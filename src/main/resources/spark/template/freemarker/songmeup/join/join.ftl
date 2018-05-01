@@ -5,28 +5,38 @@
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-		<div class="nav-bar">
-			<a class="login" href="/login">SWITCH USER</a>
-			<a id="faqs" href="/faq">FAQS</a>
-			<a id="home" href="/main">HOME</a>
+
+		<nav role="navigation" id="navvy">
+			<div id="menuToggle">
+				<input type="checkbox" />
+				<span></span>
+				<span></span>
+				<span></span>
+				<ul id="menu">
+					<a href="main"><li>Home</li></a>
+					<a href="#"><li>Listeners</li></a>
+					<a href="#"><li>Info</li></a>
+					<a href="#"><li>Log Out</li></a>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="party">
+			<div class="title">Listening to Bob's Party</div>
+			<!-- replace Bob with $hostname -->
 		</div>
-
-		<!-- IN PROGRESS - not showing up yet -->
-		<a class="hamburger menu-btn" href="javascript:void(0)"><span></span></a>
-
-<!-- 		<div class="title">
-			<div class="party">Party Name</div>
-		</div> -->
-		<div class="title">${hostname}'s Party</div>
 
 		<div class="nowPlaying">
 			<div class="imgContainer">
 				<img class="albumArt" src="photos/flume.jpg">
 				<div class="artistInfo">
-					<p>Lose It (feat. Vic Mensa)</p>
-					<p>Flume</p>
+					<span class="now">Now Playing</span>
+					<span class="trackName">Lose It (feat. Vic Mensa)</span>
+					<span class="artistName">Flume — Skin</span>
 				</div>
 			</div>
 		</div>
@@ -35,7 +45,7 @@
 			<div class="playlist" id="playlist">
 				<!-- SEARCH BAR -->
 				<div class="search">
-					<button type="submit"><i class="fa fa-search"></i></button>
+					<button type="submit"><i class="fas fa-plus"></i></button>
 					<input type="text" placeholder="Add Songs" name="search" id="songName">
 				</div>
 				<!-- SUGGESTIONS -->

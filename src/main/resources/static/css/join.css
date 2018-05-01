@@ -1,6 +1,9 @@
 
 body {
-	background: rgba(50, 50, 50, 0.8);
+	background: white;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
 }
 
 a {
@@ -8,42 +11,133 @@ a {
 	color: black;
 }
 
-.nav-bar a {
+/* NAV BAR */
+#navvy {
+	display: flex;
+	justify-content: flex-end;
+}
+
+#menuToggle {
+	position: relative;
+	top: 30px;
+	right: 30px;
+
+	z-index: 1;
+
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#menuToggle input {
+	display: block;
+	width: 40px;
+	height: 32px;
+	position: absolute;
+	top: -7px;
+	left: -5px;
+
+	cursor: pointer;
+
+	opacity: 0; /* hide this */
+	z-index: 2; /* and place it over the hamburger */
+
+	-webkit-touch-callout: none;
+}
+
+#menuToggle span {
+	display: block;
+	width: 33px;
+	height: 4px;
+	margin-bottom: 5px;
+	position: relative;
+
+	background: #cdcdcd;
+	border-radius: 3px;
+
+	z-index: 1;
+
+	transform-origin: 4px 0px;
+	transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+	          background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+	          opacity 0.55s ease;
+}
+
+#menuToggle span:first-child {
+	transform-origin: 0% 0%;
+}
+
+#menuToggle span:nth-last-child(2) {
+	transform-origin: 0% 100%;
+}
+
+#menuToggle input:checked ~ span {
+	opacity: 1;
+	transform: rotate(45deg) translate(-2px, -1px);
+	background: rgb(160, 160, 205);
+}
+
+#menuToggle input:checked ~ span:nth-last-child(3) {
+	opacity: 0;
+	transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+#menuToggle input:checked ~ span:nth-last-child(2) {
+	transform: rotate(-45deg) translate(0, -1px);
+}
+
+#menu {
+	position: absolute;
+	width: 300px;
+	height: 100vh;
+
+	margin: -100px 0 0 0;
+	padding: 50px;
+	padding-top: 125px;
+	right: -100px;
+
+	background: #ededed;
+	list-style-type: none;
+	-webkit-font-smoothing: antialiased;
+	/* to stop flickering of text in safari */
+
+	transform-origin: 0% 0%;
+	transform: translate(100%, 0);
+	transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+
+#menu li {
 	font-family: 'Raleway', sans-serif;
 	text-transform: capitalize;
-	color: white;
-	float: right;
-	margin: 15px 15px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding: 10px 0;
+	font-size: 22px;
 }
 
-.nav-bar a:hover {
-	color: pink;
+#menu li:hover {
+	color: rgb(160, 160, 205);
 }
 
-/* PARTY TITLE - commented out now */
+#menuToggle input:checked ~ ul {
+	transform: none;
+}
+
+
+/* PARTY TITLE - in progress! */
 .title {
 	clear: both;
 }
 
 .party {
-	text-align: center;
-	width: 25%;
-  	margin: 0 auto;
-	clear: both;
-	color: white;
-	font-size: 40px;
-	font-weight: bolder;
-	font-family: 'Raleway', sans-serif;
-	border: 4px solid white;
-	padding: 8px 8px 8px 8px;
-	margin-bottom: 10%;
+	margin-bottom: 2%;
+	margin-left: 1%;
+	top: 5px;
+	font-size: 30px;
+	font-family: 'Lato', sans-serif;
 }
 
 
 /* PLAYLIST CONTENTS */
 .content {
+	margin-top: 1%;
 	display: flex;
 	justify-content: center;
 }
@@ -71,10 +165,6 @@ a {
 .playlist ul li:hover {
 	background: rgb(255, 229, 229);
 }
-
-/*.playlist ul li:nth-child(odd) { 
-	background: rgb(50, 50, 50);
-}*/
 
 .playlist ul li {
 	display: flex;
@@ -166,16 +256,35 @@ input[type=text] {
 
 .imgContainer {
 	width: 75%;
-	justify-content: center;
-	border: 1px solid black;
+	display: flex;
+	justify-content: flex-start;
 }
 
 .albumArt {
 	width: 30%;
+	height: 100%;
+	box-shadow: 5px 5px 5px rgba(50, 50, 50, 0.8);
 }
 
 .artistInfo {
-	float: right;
+	margin-top: 5%;
+	display: block;
+	width: 100%;
+}
+
+.now {
+	font-family: 'Lato', sans-serif;
+	font-weight: bolder;
+}
+
+.now, .trackName, .artistName {
+	font-family: 'Lato', sans-serif;
+	display: block;
+	margin-left: 10%;
+}
+
+.trackName {
+	font-size: 30px;
 }
 
 

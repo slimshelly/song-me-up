@@ -29,7 +29,7 @@ public class SparkInitializer {
     Spark.get("/error", new ErrorHandler(state), freeMarker);
     
     // for purposes of editing join page
-    Spark.get("playlist", new PlaylistHandler(), freeMarker);
+    Spark.get("/playlist", new PlaylistHandler(), freeMarker);
   }
 
 }
