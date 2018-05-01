@@ -2,6 +2,16 @@ const root_dir = "http://localhost:4567"
 
 $(document).ready(() => {
 
+	/* REMOVE GREY OUT BUTTONS IF USER IS LOGGED IN */
+	let status = document.getElementById("userStatus").innerHTML;
+	if (status === "SWITCH USER") {
+		let host_button = document.getElementById("host");
+		let join_button = document.getElementById("join");
+    	host_button.classList.remove("gray");
+    	join_button.classList.remove("gray");
+	}
+
+	/* NAV BAR */
 	let $nav = $("nav-bar");
 	console.log($nav);
 	console.log($nav.height);
@@ -17,8 +27,8 @@ $(document).ready(() => {
 	let totalHeight = document.body.scrollHeight;
 	console.log(totalHeight);
 
+	/* PAN DOWN TO INFO */
 	$("#down").click(function() {
-		console.log("hi bis");
 	    $('html,body').animate({
 	        scrollTop: $("#info").offset().top},
 	        'slow');
@@ -30,6 +40,7 @@ function join_id(){
 	let party_id = prompt("Enter the party code:", "######");
 	const postParameters = {"party_id": party_id};
 	window.location = root_dir + "/join?" + jQuery.param(postParameters);
+	console.log(jQuery.param(postParameters));
 }
 
 

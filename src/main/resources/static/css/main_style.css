@@ -130,12 +130,25 @@ a {
 .info1 {
 	background-color: pink;
 	height: 100vh;
-	margin-top: 40vh;
 }
 
 .section {
 	font-family: 'Raleway', sans-serif;
 	transform: translateY(50%);
+}
+
+.topSection {
+	background-color: white;
+	height: 100vh;
+}
+
+.gray {
+	background-color: gray;
+	border-color: gray;
+	color: rgb(205, 205, 205);
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
 }
 
 

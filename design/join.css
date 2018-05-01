@@ -1,0 +1,181 @@
+
+body {
+	background: rgba(50, 50, 50, 0.8);
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.nav-bar a {
+	font-family: 'Raleway', sans-serif;
+	text-transform: capitalize;
+	color: white;
+	float: right;
+	margin: 15px 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.nav-bar a:hover {
+	color: pink;
+}
+
+/* PARTY TITLE - commented out now */
+.title {
+	clear: both;
+}
+
+.party {
+	text-align: center;
+	width: 25%;
+  	margin: 0 auto;
+	clear: both;
+	color: white;
+	font-size: 40px;
+	font-weight: bolder;
+	font-family: 'Raleway', sans-serif;
+	border: 4px solid white;
+	padding: 8px 8px 8px 8px;
+	margin-bottom: 10%;
+}
+
+
+/* PLAYLIST CONTENTS */
+.content {
+	display: flex;
+	justify-content: center;
+}
+
+.playlist {
+	box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.4);
+	width: 75%;
+	margin: 10px 10px 10px 10px;
+}
+
+.playlist ul {
+	color: black;
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.playlist ul li {
+	min-height: 50px;
+	background-color: white;
+	transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+.playlist ul li:hover {
+	background: rgb(255, 229, 229);
+}
+
+/*.playlist ul li:nth-child(odd) { 
+	background: rgb(50, 50, 50);
+}*/
+
+.playlist ul li {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.playlist ul li div {
+/*	margin-left: 10%;*/
+}
+
+
+/* SEARCH BAR */
+.search {
+	background: #ddd;
+}
+
+button {
+	padding: 6px 10px;
+	background: #ddd;
+	font-size: 17px;
+	border: none;
+	cursor: pointer;
+}
+
+input[type=text] {
+	width: 50%;
+	background: #ddd;
+	padding: 6px;
+	font-size: 17px;
+	border: none;
+	outline: none;
+}
+
+/* APPEARANCE OF SONG AND ARTIST NAME */
+.song, .artist {
+	font-family: 'Raleway', sans-serif;
+}
+
+.song {
+	font-size: 15px;
+	color: black;
+	font-weight: bold;
+}
+
+.artist {
+	font-size: 10px;
+	color: gray;
+	text-transform: uppercase;
+}
+
+
+/* UP AND DOWN BUTTONS */
+.track {
+	margin-left: 10%;
+}
+
+#playlistItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#buttons {
+	margin-right: 10px;
+}
+
+#down, #up {
+	margin-right: 5px;
+	font-size: 30px;
+	transition-property: color;
+	transition-duration: 0.3s;
+}
+
+#down:hover {
+	color: red;
+}
+
+#up:hover {
+	color: green;
+}
+
+/* CURRENTLY PLAYING */
+.nowPlaying {
+	clear: both;
+	display: flex;
+	justify-content: center;
+}
+
+.imgContainer {
+	width: 75%;
+	justify-content: center;
+	border: 1px solid black;
+}
+
+.albumArt {
+	width: 30%;
+}
+
+.artistInfo {
+	float: right;
+}
+
+

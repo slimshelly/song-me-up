@@ -1,5 +1,7 @@
 package edu.brown.cs.jmst.spark;
 
+import org.eclipse.jetty.server.handler.ErrorHandler;
+
 import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -23,11 +25,16 @@ public class SparkInitializer {
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
         freeMarker);
-    Spark.post("/refresh_token", new RefreshToken());
 
     Spark.get("/host", new HostHandler(state), freeMarker);
     Spark.get("/join", new JoinHandler(state), freeMarker);
+
     Spark.get("/player", new PlayerPage(), freeMarker);
+
+    Spark.get("/error", new ErrorHandler(state), freeMarker);
+    
+    // for purposes of editing join page
+    Spark.get("/playlist", new PlaylistHandler(), freeMarker);
   }
 
 }
