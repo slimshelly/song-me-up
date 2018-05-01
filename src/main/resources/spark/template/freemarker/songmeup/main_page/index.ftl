@@ -8,15 +8,15 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<a class="login" href="/login">${logchange}</a>
+			<a class="login" id="userStatus" href="/login">${logchange}</a>
 			<a id="faqs" href="/faq">FAQS</a>
 			<a id="home" href="/main">HOME</a>
 		</div>
 		<div class="topSection">
 			<div class="title">Song Me Up</div>
 			<div class="buttons">
-				<a class="btn" href="/host">HOST A PARTY</a>
-				<a class="btn" onclick="join_id()">JOIN A PARTY</a>
+				<a class="btn gray" id="host" href="/host">HOST A PARTY</a>
+				<a class="btn gray" id="join" onclick="join_id()">JOIN A PARTY</a>
 			</div>
 			<div class="more" id="down">
 	    		<a class="arrow" href="#">

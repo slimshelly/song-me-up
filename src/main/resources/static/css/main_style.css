@@ -142,5 +142,14 @@ a {
 	height: 100vh;
 }
 
+.gray {
+	background-color: gray;
+	border-color: gray;
+	color: rgb(205, 205, 205);
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
+}
+
 
 
