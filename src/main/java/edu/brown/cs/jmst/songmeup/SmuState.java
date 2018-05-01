@@ -123,8 +123,7 @@ public class SmuState {
   }
 
   /**
-   * Will either create a new user with the given id, or return the user with
-   * the given id.
+   * Will return the user with the given Spotify id.
    *
    * @param id
    *          id of user
@@ -132,13 +131,11 @@ public class SmuState {
    */
   public User getUser(String id) {
     // General.printVal("Users", Integer.toString(users.size()));
-    if (users.containsKey(id)) {
-      return users.get(id);
-    } else {
-      User user = new User();
-      users.put(id, user);
-      return user;
-    }
+    return users.get(id);
+  }
+
+  public void addUser(User u) {
+    users.put(u.getId(), u);
   }
 
   /**

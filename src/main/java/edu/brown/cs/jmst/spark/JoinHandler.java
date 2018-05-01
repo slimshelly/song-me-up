@@ -29,9 +29,10 @@ public class JoinHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
-    User u = state.getUser(req.session().id());
-    if (!u.loggedIn()) {
-      res.redirect("/login");
+    String userid = req.session().attribute("user");
+    User u = state.getUser(userid);
+    if (u == null || !u.loggedIn()) {
+      res.redirect("/songmeup");
     } else {
       QueryParamsMap qm = req.queryMap();
       String party_id = qm.value("party_id");

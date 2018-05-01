@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<a class="login" href="/login">SWITCH USER</a>
+			<a class="logout" href="/logout">LOG OUT</a>
 			<a id="faqs" href="/faq">FAQS</a>
 			<a id="home" href="/main">HOME</a>
 		</div>
