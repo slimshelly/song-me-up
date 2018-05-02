@@ -29,6 +29,10 @@ public class Party extends Entity {
     suggestions = new SongQueue();
   }
 
+  public SongMeUpPlaylist getPlaylist() {
+	  return this.partyPlaylist;
+  }
+  
   public void addPartyGoer(User pg) throws PartyException {
     pg.joinParty(this.id);
     partygoers.add(pg);

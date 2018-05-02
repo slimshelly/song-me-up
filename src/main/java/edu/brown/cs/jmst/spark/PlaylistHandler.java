@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.Party;
