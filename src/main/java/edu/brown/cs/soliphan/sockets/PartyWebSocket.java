@@ -21,7 +21,7 @@ public class PartyWebSocket {
   private static int nextId = 0;
 
   private static enum MESSAGE_TYPE {
-    CONNECT, VOTESONG, ADDSONG, REMOVESONG
+    CONNECT, VOTESONG, ADDSONG, REMOVESONG, PLAYLIST
   }
 
   @OnWebSocketConnect

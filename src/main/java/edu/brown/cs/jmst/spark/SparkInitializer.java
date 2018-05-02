@@ -22,6 +22,7 @@ public class SparkInitializer {
 
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
 
+    Spark.get("/logout", new LogoutHandler(state), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
         freeMarker);
