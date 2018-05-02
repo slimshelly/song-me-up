@@ -18,6 +18,7 @@ public class SparkInitializer {
   public static final Gson GSON = new Gson();
 
   public static void setHandlers(FreeMarkerEngine freeMarker) {
+    Spark.webSocket("/songupdates", PartyWebSocket.class);
     Spark.get("/main", new MainPage(), freeMarker);
 
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
@@ -30,7 +31,6 @@ public class SparkInitializer {
     Spark.get("/host", new HostHandler(), freeMarker);
     Spark.get("/join", new JoinHandler(), freeMarker);
     Spark.post("/suggestions", new SongSuggestor());
-    Spark.webSocket("/songupdates", PartyWebSocket.class);
 
     Spark.get("/player", new PlayerPage(), freeMarker);
 

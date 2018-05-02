@@ -6,6 +6,7 @@ $(document).ready(() => {
 	*/
 	$("#down").click(function () {
 		console.log("hiii");
+		new_vote(false,"SongId");
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
 		}
@@ -13,6 +14,7 @@ $(document).ready(() => {
 	});
 
 	$("#up").click(function () {
+		new_vote(true,"SongId");
 		if (document.getElementById("down").classList.contains("downColor")) {
 			$("#down").toggleClass("downColor");
 		}
@@ -67,7 +69,7 @@ const $playlist = $("#displaySongs");
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/join");
+  conn = new WebSocket("ws://localhost:4567/songupdates");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -85,6 +87,7 @@ const setup_live_playlist = () => {
       	// update number of votes for a specific song on the playlist
       	let song_id = data.payload.song_id;
       	let votes = data.payload.votes; //number of votes the song has
+		console.log(votes);
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
@@ -113,26 +116,26 @@ const setup_live_playlist = () => {
   };
 }
 
+
 /*
 Send message to backend when a user votes on a song - params are boolean vote and song id
 */
-const new_vote = (vote, songId) => {
+function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  console.log(myId);
+  console.log(userId);
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":userId, 
         "song_id":songId,
-        "vote":vote}
+        "vote":vote_boolean}
       };
   conn.send(JSON.stringify(vote));
 }
-
 /*
 Send message to backend when a user adds a song
 */
 const new_song = songId => {
   // Send a VOTESONG message to the server using `conn`
-  console.log(myId);
+  console.log(userId);
   let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
         "id":userId, 
         "song_id":songId}
