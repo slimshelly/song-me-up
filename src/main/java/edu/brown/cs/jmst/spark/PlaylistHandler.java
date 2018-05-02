@@ -1,11 +1,8 @@
 package edu.brown.cs.jmst.spark;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import edu.brown.cs.jmst.music.SongMeUpPlaylist;
-import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import spark.ModelAndView;
@@ -26,8 +23,8 @@ public class PlaylistHandler implements TemplateViewRoute {
       throws Exception {
     // Pass list
     Party currParty = state.getParty(request.session().id()); // is this right?
-    SongMeUpPlaylist playlist = currParty.getPlaylist();
-    List<Track> playlistSongs = playlist.getSongs();
+//    SongMeUpPlaylist playlist = currParty.getPlaylist();
+//    List<Track> playlistSongs = playlist.getSongs();
 
     Map<String, Object> variables = new HashMap<>();
     return new ModelAndView(variables, "songmeup/join/join.ftl");
