@@ -35,7 +35,7 @@ $(document).ready(() => {
 	    else {
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
-
+			$results.empty();
 		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
