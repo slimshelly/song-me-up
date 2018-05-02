@@ -3,6 +3,7 @@ package edu.brown.cs.jmst.spark;
 import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
+import edu.brown.cs.soliphan.sockets.PartyWebSocket;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -29,6 +30,7 @@ public class SparkInitializer {
     Spark.get("/host", new HostHandler(), freeMarker);
     Spark.get("/join", new JoinHandler(), freeMarker);
     Spark.post("/suggestions", new SongSuggestor());
+    Spark.webSocket("/songupdates", PartyWebSocket.class);
 
     Spark.get("/player", new PlayerPage(), freeMarker);
 

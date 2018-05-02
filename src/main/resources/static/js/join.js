@@ -43,7 +43,7 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-					$results.append("<a href='javascript:;' onclick='new_song(sug.song_id)'><div class='option'>" + sug.song_name + "</div></a>");
+					$results.append("<a href='javascript:;' onclick='new_song(sug.id)'><div class='option'>" + sug.name + "</div></a>");
 				};
 		    });
 		}
@@ -92,14 +92,14 @@ const setup_live_playlist = () => {
         $("#" + userId).append("<div id='playlistItem'>" + "</div>");
         // add song information
         $(".playlistItem").append("<div class='track'>" + "</div>");
-        $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
-        $(".track").append("<div class='artist'>" + data.payload.song_artist + "</div>");
+        $(".track").append("<div class='song'>" + data.payload.name + "</div>");
+        $(".track").append("<div class='artist'>" + data.payload.artists[0].name + "</div>");
         // add number of votes
 
         // add buttons
         $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
