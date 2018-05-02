@@ -8,18 +8,12 @@ import spark.TemplateViewRoute;
 
 public class LogoutHandler implements TemplateViewRoute {
 
-  private SmuState state;
-
-  public LogoutHandler(SmuState state) {
-    this.state = state;
-  }
-
   @Override
   public ModelAndView handle(Request request, Response response)
       throws Exception {
     String userid = request.session().attribute("user");
     request.session().removeAttribute("user");
-    state.removeUser(userid);
+    SmuState.getInstance().removeUser(userid);
     response.redirect("https://www.spotify.com/us/logout/");
     return null;
   }

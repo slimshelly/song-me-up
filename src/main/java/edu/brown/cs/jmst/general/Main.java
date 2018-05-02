@@ -34,8 +34,8 @@ public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
-  private final SmuState smuState = new SmuState();
-  private final SmuInputHandler smuHandler = new SmuInputHandler(smuState);
+  private final SmuInputHandler smuHandler =
+      new SmuInputHandler(SmuState.getInstance());
 
   /**
    * The initial method called when execution begins.
@@ -101,7 +101,7 @@ public final class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-    SparkInitializer.setHandlers(freeMarker, smuState);
+    SparkInitializer.setHandlers(freeMarker);
   }
 
   /**
