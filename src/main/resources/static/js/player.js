@@ -76,7 +76,7 @@ $(document).ready(() => {
 
             play({
                 spotify_uri: "spotify:track:7xGfFoTpQ2E7fRF5lN10tr",
-                player
+                playerInstance: player
             });
             // if success, then play
 
