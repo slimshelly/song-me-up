@@ -11,7 +11,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-
+		<div class="hidden" hidden>${user_id}</div>
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
@@ -56,7 +56,7 @@
 					<div id="message">Lorem ipsum dolor sit amet, quas simul aeterno id qui, ne timeam apeirian electram vim, an alterum detracto mea. Ad pri utamur gubergren scripserit, iudico maluisset hendrerit sea te. Omnium labitur omnesque ea qui. At unum elit eos, propriae persequeris delicatissimi quo ut.</div>
 				</div>
 				<!-- SONGS -->
-				<ul id="songs">
+				<ul id="displaySongs">
 					<li>
 						<div id="playlistItem">
 							<div class="track">
@@ -122,3 +122,9 @@
 		</div>
 	</body>
 </html>
+
+<script>
+	$(document).ready(function() {
+	  setup_live_playlist();
+	});
+</script>

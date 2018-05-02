@@ -11,10 +11,23 @@ payload: {
 	vote: boolean. true for upvote, false for downvote.
 	}
 
+SEND TO SAM
 type: ADDSONG,
 payload: {
 	id: Spotify's user id,
 	song_id: Spotify id for song
+	}
+	
+SEND TO MADDIE
+type: ADDSONG,
+payload: {
+	id: Spotify's user id,
+	song_id: Spotify id for song
+	song_name: name of song
+	song_artist: name of song artist(s)
+	song_album: name of song album
+	song_duration: duration of song
+	ideally also a song_album_cover: album cover of song
 	}
 
 Remove should only be able to be sent by the admin.
