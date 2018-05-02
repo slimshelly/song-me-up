@@ -27,7 +27,7 @@
 		</nav>
 		
 		<div class="party">
-			<div class="title">Listening to Bob's Party</div>
+			<div class="title">Listening to ${hostname}'s Party</div>
 			<!-- replace Bob with $hostname -->
 		</div>
 
@@ -51,6 +51,8 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
+					<a href="javascript:;"><div class="option">Lorem ipsum dolor.</div></a>
+					<a href="javascript:;"><div class="option">Lorem sdf dolor.</div></a>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
@@ -61,8 +63,8 @@
 								<div class="artist">Artist</div>
 							</div>
 							<div id="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
+		    					<a href="javascript:;"><i class="fa fa-chevron-circle-down" id="down"></i></a>
+		    					<a href="javascript:;"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>

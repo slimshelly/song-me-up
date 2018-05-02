@@ -34,13 +34,13 @@ $(document).ready(() => {
 	    else {
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
-
+			$results.empty();
 		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
 				const responseObject = JSON.parse(responseJSON);
 				console.log(responseObject);
-				let output = responseObject.suggestions;
+				let output = responseObject;
 
 				for(const sug of output){
 					$results.append("<a href='javascript:;' onclick='new_song(sug.song_id)'><div class='option'>" + sug.song_name + "</div></a>");
