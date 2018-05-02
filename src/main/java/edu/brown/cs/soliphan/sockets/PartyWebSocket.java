@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.songmeup.SmuState;
+
 @WebSocket
 public class PartyWebSocket {
   private static final Gson GSON = new Gson();
@@ -50,11 +52,19 @@ public class PartyWebSocket {
     JsonObject received = parser.parse(message).getAsJsonObject();
     assert received.get("type").getAsInt() < 4
         && received.get("type").getAsInt() >= 0;
+    SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
-
     switch (type) {
       case VOTESONG:
-
+        JsonObject jpayload = new JsonObject();
+        // jpayload.addProperty("song_id", score);
+        // jpayload.addProperty("vote", score);
+        JsonObject jo = new JsonObject();
+        // jo.addProperty("type", MESSAGE_TYPE.UPDATE.ordinal());
+        jo.add("payload", jpayload);
+        for (Session s : sessions) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
         break;
       case ADDSONG:
         break;

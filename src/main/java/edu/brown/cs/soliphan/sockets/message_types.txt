@@ -3,10 +3,18 @@ Each has two keys: type, payload
 type: CONNECT, payload: {
 	id: Spotify's user id
 	}
-
+	
+SEND TO SAM
 type: VOTESONG, 
 payload: {
 	id: Spotify's user id,
+	song_id: Spotify id for song,
+	vote: boolean. true for upvote, false for downvote.
+	}
+	
+SEND TO MADDIE
+type: VOTESONG, 
+payload: {
 	song_id: Spotify id for song,
 	vote: boolean. true for upvote, false for downvote.
 	}
