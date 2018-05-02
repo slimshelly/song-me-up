@@ -22,6 +22,7 @@ public class SparkInitializer {
 
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
 
+    Spark.get("/logout", new LogoutHandler(state), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
         freeMarker);
@@ -36,7 +37,7 @@ public class SparkInitializer {
     // for purposes of editing join page
     Spark.get("/playlist", new MockPlaylist(), freeMarker);
     // for purposes of linking playlist to join page
-    Spark.get("/join", new PlaylistHandler(state), freeMarker);
+    Spark.post("/playlist", new PlaylistHandler(state));
   }
 
 }

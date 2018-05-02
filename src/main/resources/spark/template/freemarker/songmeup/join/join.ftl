@@ -56,8 +56,7 @@
 					<div id="message">Lorem ipsum dolor sit amet, quas simul aeterno id qui, ne timeam apeirian electram vim, an alterum detracto mea. Ad pri utamur gubergren scripserit, iudico maluisset hendrerit sea te. Omnium labitur omnesque ea qui. At unum elit eos, propriae persequeris delicatissimi quo ut.</div>
 				</div>
 				<!-- SONGS -->
-				<#include "playlist.ftl">
-<!-- 				<ul>
+				<ul id="songs">
 					<li>
 						<div id="playlistItem">
 							<div class="track">
@@ -118,7 +117,7 @@
 		    				</div>
 		    			</div>
 					</li>
-				</ul> -->
+				</ul>
 			</div>
 		</div>
 	</body>

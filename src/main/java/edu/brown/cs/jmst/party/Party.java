@@ -17,7 +17,7 @@ public class Party extends Entity {
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist state
   public static final int ID_LENGTH = 6;
 
-  public Party(User host, String id) throws PartyException, SpotifyException {
+  public Party(User host, String id, SongMeUpPlaylist partyPlaylist) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
     if (!host.isPremium()) {
@@ -27,8 +27,13 @@ public class Party extends Entity {
     ph = host;
     partygoers = Collections.synchronizedSet(new HashSet<>());
     suggestions = new SongQueue();
+    this.partyPlaylist = partyPlaylist;
   }
 
+  public SongMeUpPlaylist getPlaylist() {
+	  return this.partyPlaylist;
+  }
+  
   public void addPartyGoer(User pg) throws PartyException {
     pg.joinParty(this.id);
     partygoers.add(pg);
