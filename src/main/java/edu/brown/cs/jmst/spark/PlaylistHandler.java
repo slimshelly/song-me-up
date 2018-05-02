@@ -1,20 +1,23 @@
 package edu.brown.cs.jmst.spark;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.Party;
+import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
-import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-public class PlaylistHandler implements TemplateViewRoute {
-
+public class PlaylistHandler implements Route {
+	
+  private static final Gson GSON = new Gson();
   private SmuState state;
 
   public PlaylistHandler(SmuState state) {
@@ -22,15 +25,17 @@ public class PlaylistHandler implements TemplateViewRoute {
   }
 
   @Override
-  public ModelAndView handle(Request request, Response response)
+  public Object handle(Request request, Response response)
       throws Exception {
-    // Pass list
-    Party currParty = state.getParty(request.session().id()); // is this right?
+    String userId = request.session().attribute("user");
+    User u = state.getUser(userId);
+    String partyId = u.getCurrentParty();
+    Party currParty = state.getParty(partyId);
     SongMeUpPlaylist playlist = currParty.getPlaylist();
     List<Track> playlistSongs = playlist.getSongs();
 
-    Map<String, Object> variables = new HashMap<>();
-    return new ModelAndView(variables, "songmeup/join/join.ftl");
+    Map<String, Object> variables = ImmutableMap.of("songs", playlistSongs);
+    return GSON.toJson(variables); //only sending info, not reloading page
   }
 
 }

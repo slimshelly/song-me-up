@@ -39,4 +39,9 @@ $(document).ready(() => {
 		    });
 		}
     });
+
+    /*
+	Retrieve current list of coming up songs from backend to display on page.
+    */
+    
 });

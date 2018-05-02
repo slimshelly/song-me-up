@@ -36,7 +36,7 @@ public class SparkInitializer {
     // for purposes of editing join page
     Spark.get("/playlist", new MockPlaylist(), freeMarker);
     // for purposes of linking playlist to join page
-    Spark.get("/join", new PlaylistHandler(state), freeMarker);
+    Spark.post("/playlist", new PlaylistHandler(state));
   }
 
 }

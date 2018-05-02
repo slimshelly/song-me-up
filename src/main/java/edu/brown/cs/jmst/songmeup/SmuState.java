@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
@@ -41,7 +42,8 @@ public class SmuState {
     while (parties.containsKey(key)) {
       key = SpotifyAuthentication.randomReadableString(Party.ID_LENGTH);
     }
-    Party party = new Party(u, key);
+    SongMeUpPlaylist partyPlaylist = new SongMeUpPlaylist();
+    Party party = new Party(u, key, partyPlaylist);
     parties.put(key, party);
     return party;
   }
