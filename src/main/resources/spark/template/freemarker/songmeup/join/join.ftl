@@ -22,7 +22,7 @@
 					<a href="main"><li>Home</li></a>
 					<a href="#"><li>Listeners</li></a>
 					<a href="#"><li>Info</li></a>
-					<a href="#"><li>Log Out</li></a>
+					<a href="/logout"><li>Log Out</li></a>
 				</ul>
 			</div>
 		</nav>

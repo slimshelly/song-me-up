@@ -20,14 +20,19 @@ public class SparkInitializer {
   public static void setHandlers(FreeMarkerEngine freeMarker, SmuState state) {
     Spark.get("/main", new MainPage(state), freeMarker);
 
+    Spark.get("/songmeup", new PreMainPage(), freeMarker);
+
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
         freeMarker);
 
     Spark.get("/host", new HostHandler(state), freeMarker);
     Spark.get("/join", new JoinHandler(state), freeMarker);
+
+    Spark.get("/player", new PlayerPage(), freeMarker);
+
     Spark.get("/error", new ErrorHandler(state), freeMarker);
-    
+
     // for purposes of editing join page
     Spark.get("/playlist", new MockPlaylist(), freeMarker);
     // for purposes of linking playlist to join page

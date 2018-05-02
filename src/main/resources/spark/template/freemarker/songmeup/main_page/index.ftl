@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<a class="login" id="userStatus" href="/login">${logchange}</a>
+			<a class="logout" id="userStatus" href="/logout">LOG OUT</a>
 			<a id="faqs" href="/faq">FAQS</a>
 			<a id="home" href="/main">HOME</a>
 		</div>
