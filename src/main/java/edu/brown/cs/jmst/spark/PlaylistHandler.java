@@ -34,7 +34,7 @@ public class PlaylistHandler implements Route {
     String userId = request.session().attribute("user");
     User u = state.getUser(userId);
     String partyId = u.getCurrentParty();
-    Party currParty = state.getParty(partyId);
+//    Party currParty = state.getParty(partyId);
     SongMeUpPlaylist playlist = currParty.getPlaylist();
     List<Track> playlistSongs = playlist.getSongs();
 
