@@ -28,6 +28,7 @@ public class SparkInitializer {
 
     Spark.get("/host", new HostHandler(), freeMarker);
     Spark.get("/join", new JoinHandler(), freeMarker);
+    Spark.post("/suggestions", new SongSuggestor());
 
     Spark.get("/player", new PlayerPage(), freeMarker);
 

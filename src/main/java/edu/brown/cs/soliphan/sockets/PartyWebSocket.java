@@ -14,6 +14,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.party.Party;
+import edu.brown.cs.jmst.party.PartyException;
+import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 
 @WebSocket
@@ -54,50 +57,54 @@ public class PartyWebSocket {
         && received.get("type").getAsInt() >= 0;
     SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
-    switch (type) {
-      case VOTESONG:
-        JsonObject jpayload = new JsonObject();
-        // jpayload.addProperty("song_id", score);
-        // jpayload.addProperty("vote", score);
-        JsonObject jo = new JsonObject();
-        // jo.addProperty("type", MESSAGE_TYPE.UPDATE.ordinal());
-        jo.add("payload", jpayload);
-        for (Session s : sessions) {
-          s.getRemote().sendString(GSON.toJson(jo));
-        }
-        break;
-      case ADDSONG:
-        break;
-      case REMOVESONG:
-        break;
-      case PLAYLIST:
-        break;
-    }
+    JsonObject inputPayload = received.get("payload").getAsJsonObject();
+    String user_id = inputPayload.get("id").getAsString();
 
-    JsonObject payload = received.get("payload").getAsJsonObject();
-    // Compute the player's score
-    int id = payload.get("id").getAsInt();
-    // Board board = new Board(payload.get("board").getAsString());
-    String[] text = payload.get("text").getAsString().split(" ");
-
-    // Set<String> legal = board.play();
-    int score = 0;
-    for (String word : text) {
-      // if (legal.contains(word)) {
-      // int s = Board.score(word);
-      // score += s;
-      // }
-    }
-    // Send an UPDATE message to all users
-    JsonObject jpayload = new JsonObject();
-    jpayload.addProperty("id", id);
-    jpayload.addProperty("score", score);
-    JsonObject jo = new JsonObject();
-    // jo.addProperty("type", MESSAGE_TYPE.UPDATE.ordinal());
-    jo.add("payload", jpayload);
-
-    for (Session s : sessions) {
-      s.getRemote().sendString(GSON.toJson(jo));
+    User u = state.getUser(user_id);
+    String partyId = u.getCurrentParty();
+    if (partyId != null) {
+      Party p = state.getParty(partyId);
+      switch (type) {
+        case VOTESONG:
+          String song_id = inputPayload.get("song_id").getAsString();
+          boolean vote = inputPayload.get("vote").getAsBoolean();
+          try {
+            JsonObject jpayload = new JsonObject();
+            jpayload.addProperty("song_id", song_id);
+            jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
+            JsonObject jo = new JsonObject();
+            jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
+            jo.add("payload", jpayload);
+            for (Session s : sessions) {
+              s.getRemote().sendString(GSON.toJson(jo));
+            }
+          } catch (PartyException e) {
+            return;
+          }
+          break;
+        case ADDSONG:
+          // String song_id = inputPayload.get("song_id").getAsString();
+          // boolean vote = inputPayload.get("vote").getAsBoolean();
+          // try {
+          // JsonObject jpayload = new JsonObject();
+          // jpayload.addProperty("song_id", song_id);
+          // jpayload.addProperty("votes", p.voteOnSong(user_id, song_id,
+          // vote));
+          // JsonObject jo = new JsonObject();
+          // jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
+          // jo.add("payload", jpayload);
+          // for (Session s : sessions) {
+          // s.getRemote().sendString(GSON.toJson(jo));
+          // }
+          // } catch (PartyException e) {
+          // return;
+          // }
+          break;
+        case REMOVESONG:
+          break;
+        case PLAYLIST:
+          break;
+      }
     }
   }
 }
