@@ -23,3 +23,8 @@ payload: {
 	id: Spotify's user id,
 	song_id: Spotify id for song
 	}
+
+type: PLAYLIST,
+payload: {
+	
+	}

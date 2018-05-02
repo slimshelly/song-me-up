@@ -92,12 +92,6 @@ public class SmuState {
    *           if u is not in a party.
    */
   public void leaveParty(User u, String partyId) throws PartyException {
-    // assert party_people_ids.contains(u.getId());
-    // assert parties.containsKey(partyId);
-    // Party p = parties.get(partyId);
-    // assert p.getPartyGoerIds().contains(u.getId());
-    // p.removePartyGoer(u);
-    // party_people_ids.remove(u.getId());
     if (!parties.containsKey(partyId)) {
       throw new PartyException("Invalid party id.");
     }
@@ -112,12 +106,6 @@ public class SmuState {
    * @throws PartyException
    */
   public void endParty(String id) throws PartyException {
-    // assert parties.containsKey(id);
-    // Party p = parties.get(id);
-    // for (String s : p.getPartyGoerIds()) {
-    // party_people_ids.remove(s);
-    // }
-    // parties.remove(id);
     if (!parties.containsKey(id)) {
       throw new IllegalArgumentException("Invalid party id.");
     }
@@ -145,6 +133,12 @@ public class SmuState {
     }
     users.put(u.getId(), u);
     return u;
+  }
+
+  public void removeUser(String id) throws PartyException {
+    User u = getUser(id);
+    leaveParty(u, u.getCurrentParty());
+    users.remove(id);
   }
 
   /**
