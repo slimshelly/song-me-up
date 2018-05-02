@@ -1,3 +1,5 @@
+<#include "playlist.ftl">
+
 <!DOCTYPE html>
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
@@ -20,7 +22,7 @@
 					<a href="main"><li>Home</li></a>
 					<a href="#"><li>Listeners</li></a>
 					<a href="#"><li>Info</li></a>
-					<a href="#"><li>Log Out</li></a>
+					<a href="/logout"><li>Log Out</li></a>
 				</ul>
 			</div>
 		</nav>
@@ -53,7 +55,8 @@
 					<div id="message">Lorem ipsum dolor sit amet, quas simul aeterno id qui, ne timeam apeirian electram vim, an alterum detracto mea. Ad pri utamur gubergren scripserit, iudico maluisset hendrerit sea te. Omnium labitur omnesque ea qui. At unum elit eos, propriae persequeris delicatissimi quo ut.</div>
 				</div>
 				<!-- SONGS -->
-				<ul>
+				<#include "playlist.ftl">
+<!-- 				<ul>
 					<li>
 						<div id="playlistItem">
 							<div class="track">
@@ -114,7 +117,7 @@
 		    				</div>
 		    			</div>
 					</li>
-				</ul>
+				</ul> -->
 			</div>
 		</div>
 	</body>
