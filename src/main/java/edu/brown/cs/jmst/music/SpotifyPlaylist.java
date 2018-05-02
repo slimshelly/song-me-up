@@ -6,15 +6,15 @@ public class SpotifyPlaylist {
 	
 	private String description;
 	private String id;
-	private String url;
+	private String uri;
   
 	private List<Track> songs;
 	private String name;
 	
-	public SpotifyPlaylist(String description, String id, String url, List<Track> songs, String name) {
+	public SpotifyPlaylist(String description, String id, String uri, List<Track> songs, String name) {
 		this.setDescription(description);
 		this.id = id;
-		this.url = url;
+		this.uri = uri;
 		this.songs = songs;
 		this.name = name;
 	}
@@ -28,11 +28,11 @@ public class SpotifyPlaylist {
 	}
 	
 	public String getUrl() {
-		return url;
+		return uri;
 	}
 	
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 	
 	public List<Track> getSongs() {

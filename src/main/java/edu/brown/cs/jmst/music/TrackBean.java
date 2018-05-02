@@ -15,10 +15,12 @@ public class TrackBean extends EntityBean implements Track {
   private String name;
   private List<String> artistIds;
   private String album_id;
+  private String uri;
 
   public TrackBean(String id, String name, Boolean explicit, int popularity,
-      int duration_ms, List<String> artistIds, String album_id) {
+      int duration_ms, List<String> artistIds, String album_id, String uri) {
     this.id = id;
+    this.uri = uri;
     this.explicit = explicit;
     this.popularity = popularity;
     this.duration_ms = duration_ms;
@@ -27,6 +29,7 @@ public class TrackBean extends EntityBean implements Track {
     this.album_id = album_id;
     this.name = name;
   }
+  
 
   @Override
   public String getAlbumId() throws Exception {
@@ -67,12 +70,12 @@ public class TrackBean extends EntityBean implements Track {
   }
 
   @Override
-  public String getUrl() throws Exception {
+  public String getUri() throws Exception {
     return String.format("https://api.spotify.com/tracks/%s", this.id);
   }
 
   @Override
   public String toString() {
-    return String.format("Name: '%s', Id: '%s'", this.name, this.id);
+    return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
   }
 }
