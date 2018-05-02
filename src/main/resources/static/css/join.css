@@ -199,6 +199,10 @@ input[type=text] {
 	outline: none;
 }
 
+.option:hover {
+	background: gray;
+}
+
 /* APPEARANCE OF SONG AND ARTIST NAME */
 .song, .artist {
 	font-family: 'Raleway', sans-serif;

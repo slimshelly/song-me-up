@@ -22,7 +22,8 @@ $(document).ready(() => {
 	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	$("#dropdown").hide();
+	// $("#dropdown").hide();
+	let $results = $("#dropdown");
     $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
     	console.log(song);
@@ -34,24 +35,16 @@ $(document).ready(() => {
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
 
+		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
-		     //    const responseObject = JSON.parse(responseJSON);
-		     //    console.log(responseObject);
-		     //    let output = responseObject.suggestions;
-		   		
-		   		// // set width of dropdown to be same width as input text box
-		   		// // var dropdown = document.getElementById("dropdown").style.width = searchBarWidth + "px";
-		   		// $("#dropdown").show();
+				const responseObject = JSON.parse(responseJSON);
+				console.log(responseObject);
+				let output = responseObject.suggestions;
 
-		   		// let suggestions = "";
-		     //    for (let i = 0; i <= output.length - 1; i++) {
-		     //    	suggestions += output[i] + "<br />";
-		     //    }
-		     //    $message.html(suggestions);
-
-
-
+				for(const sug of output){
+					$results.append("<a href='javascript:;' onclick='new_song(sug.song_id)'><div class='option'>" + sug.song_name + "</div></a>");
+				};
 		    });
 		}
     });
@@ -105,8 +98,8 @@ const setup_live_playlist = () => {
 
         // add buttons
         $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='#' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='#' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
