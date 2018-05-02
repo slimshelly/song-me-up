@@ -45,14 +45,14 @@ $(document).ready(() => {
     Send message to backend when a user votes on a song
     */
 
-    $("#up").click(function(e){
+    $(".fa-chevron-circle-up").click(function(e){
     	// color button permanently green, send VOTE message
-    	new_vote(true, );
+    	new_vote();
 	});
 
-    $("#down").click(function(e){
+    $(".fa-chevron-circle-down").click(function(e){
 		// color button permanently red, send VOTE message
-		new_vote(false, );
+		new_vote();
 	});
 
 });
@@ -68,7 +68,7 @@ const MESSAGE_TYPE = {
 };
 
 let conn;
-let userId = $("hidden").innerHTML;
+let userId = $(".hidden").innerHTML;
 const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
@@ -89,7 +89,7 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.VOTESONG; 
-      	// update number of votes for a specific playlist song
+      	// update number of votes for a specific song on the playlist
 
       	break;
 
@@ -117,8 +117,9 @@ const setup_live_playlist = () => {
   };
 }
 
-
-
+/*
+Send message to backend when a user votes on a song
+*/
 const new_vote = songId => {
   // Send a VOTESONG message to the server using `conn`
   console.log(myId);
@@ -130,5 +131,17 @@ const new_vote = songId => {
   conn.send(JSON.stringify(vote));
 }
 
+/*
+Send message to backend when a user adds a song
+*/
+const new_song = songId => {
+  // Send a VOTESONG message to the server using `conn`
+  console.log(myId);
+  let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
+        "id":userId, 
+        "song_id":songId
+      };
+  conn.send(JSON.stringify(vote));
+}
 
 
