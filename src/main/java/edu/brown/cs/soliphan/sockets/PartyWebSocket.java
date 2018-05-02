@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
@@ -79,7 +80,7 @@ public class PartyWebSocket {
               s.getRemote().sendString(GSON.toJson(jo));
             }
           } catch (PartyException e) {
-            return;
+            General.printErr("Failed to vote on song. " + e.getMessage());
           }
           break;
         case ADDSONG:
