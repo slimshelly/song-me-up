@@ -27,10 +27,14 @@ public class PlaylistHandler implements Route {
   @Override
   public Object handle(Request request, Response response)
       throws Exception {
+    // Pass list
+    Party currParty = state.getParty(request.session().id()); // is this right?
+//    SongMeUpPlaylist playlist = currParty.getPlaylist();
+//    List<Track> playlistSongs = playlist.getSongs();
     String userId = request.session().attribute("user");
     User u = state.getUser(userId);
     String partyId = u.getCurrentParty();
-    Party currParty = state.getParty(partyId);
+//    Party currParty = state.getParty(partyId);
     SongMeUpPlaylist playlist = currParty.getPlaylist();
     List<Track> playlistSongs = playlist.getSongs();
 

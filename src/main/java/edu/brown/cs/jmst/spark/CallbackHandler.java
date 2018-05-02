@@ -51,7 +51,6 @@ public class CallbackHandler implements TemplateViewRoute {
       pair.add(new BasicNameValuePair("error", err.toString()));
       res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
-
       res.redirect("/main");
     }
     return null;

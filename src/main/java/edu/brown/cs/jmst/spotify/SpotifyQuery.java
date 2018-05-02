@@ -57,6 +57,7 @@ public class SpotifyQuery {
           JsonObject trackjo = iterator.next().getAsJsonObject();
           String id = trackjo.get("id").getAsString();
           String name = trackjo.get("name").getAsString();
+          String uri = trackjo.get("uri").getAsString();
           boolean explicit = trackjo.get("explicit").getAsBoolean();
           int popularity = trackjo.get("popularity").getAsInt();
           int duration_ms = trackjo.get("duration_ms").getAsInt();
@@ -73,7 +74,7 @@ public class SpotifyQuery {
               trackjo.get("album").getAsJsonObject().get("id").getAsString();
 
           songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-              artist_ids, album_id));
+              artist_ids, album_id, uri));
         }
       } else {
         throw new ClientProtocolException(
@@ -194,12 +195,13 @@ public class SpotifyQuery {
                 JsonObject ajo = iterator2.next().getAsJsonObject();
                 genreNames.add(ajo.getAsString());
               }
- 
+          
+          String uri = afjo.get("uri").getAsString();
           String name = afjo.get("name").getAsString();
           String type = afjo.get("type").getAsString();
           Integer popularity = afjo.get("popularity").getAsInt();
           
-          artists.add(new Artist(genreNames, id, name, popularity, type));
+          artists.add(new Artist(uri,genreNames, id, name, popularity, type));
         }
       } else {
         throw new ClientProtocolException(
@@ -268,6 +270,7 @@ public class SpotifyQuery {
             trackIds.add(ajo.getAsString());
           }
           
+          String uri = afjo.get("uri").getAsString();
           String name = afjo.get("name").getAsString();
           String type = afjo.get("type").getAsString();
           Integer popularity = afjo.get("popularity").getAsInt();
@@ -281,7 +284,7 @@ public class SpotifyQuery {
             artistIds.add(ajo.get("id").getAsString());
           }
           
-          albums.add(new Album(artistIds, genreNames, id, name, popularity, trackIds, type));
+          albums.add(new Album(uri, artistIds, genreNames, id, name, popularity, trackIds, type));
           
         }
       } else {
