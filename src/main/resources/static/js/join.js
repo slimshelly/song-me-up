@@ -90,7 +90,8 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.VOTESONG; 
       	// update number of votes for a specific song on the playlist
-
+      	let song_id = data.payload.song_id;
+      	let vote = data.payload.vote;
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
@@ -102,8 +103,8 @@ const setup_live_playlist = () => {
         $(".track").append("<div class='artist'>" + data.payload.song_artist + "</div>");
         // add buttons
         $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='#''><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='#''><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        $("#buttons").append("<a href='#' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        $("#buttons").append("<a href='#' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
@@ -120,13 +121,13 @@ const setup_live_playlist = () => {
 /*
 Send message to backend when a user votes on a song
 */
-const new_vote = songId => {
+const new_vote = (vote, songId) => {
   // Send a VOTESONG message to the server using `conn`
   console.log(myId);
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":userId, 
         "song_id":songId,
-        "vote":$("#")}
+        "vote":vote}
       };
   conn.send(JSON.stringify(vote));
 }

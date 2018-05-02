@@ -53,7 +53,7 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
-					<div id="message">Lorem ipsum dolor sit amet, quas simul aeterno id qui, ne timeam apeirian electram vim, an alterum detracto mea. Ad pri utamur gubergren scripserit, iudico maluisset hendrerit sea te. Omnium labitur omnesque ea qui. At unum elit eos, propriae persequeris delicatissimi quo ut.</div>
+					<div id="message">Lorem ipsum dolor.</div>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
