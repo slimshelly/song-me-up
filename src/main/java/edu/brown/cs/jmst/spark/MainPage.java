@@ -16,14 +16,9 @@ import spark.TemplateViewRoute;
 
 public class MainPage implements TemplateViewRoute {
 
-  private SmuState state;
-
-  public MainPage(SmuState state) {
-    this.state = state;
-  }
-
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
+    SmuState state = SmuState.getInstance();
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {

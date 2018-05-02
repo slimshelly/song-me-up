@@ -16,30 +16,25 @@ import spark.Response;
 import spark.Route;
 
 public class PlaylistHandler implements Route {
-	
-  private static final Gson GSON = new Gson();
-  private SmuState state;
 
-  public PlaylistHandler(SmuState state) {
-    this.state = state;
-  }
+  private static final Gson GSON = new Gson();
 
   @Override
-  public Object handle(Request request, Response response)
-      throws Exception {
+  public Object handle(Request request, Response response) throws Exception {
+    SmuState state = SmuState.getInstance();
     // Pass list
     Party currParty = state.getParty(request.session().id()); // is this right?
-//    SongMeUpPlaylist playlist = currParty.getPlaylist();
-//    List<Track> playlistSongs = playlist.getSongs();
+    // SongMeUpPlaylist playlist = currParty.getPlaylist();
+    // List<Track> playlistSongs = playlist.getSongs();
     String userId = request.session().attribute("user");
     User u = state.getUser(userId);
     String partyId = u.getCurrentParty();
-//    Party currParty = state.getParty(partyId);
+    // Party currParty = state.getParty(partyId);
     SongMeUpPlaylist playlist = currParty.getPlaylist();
     List<Track> playlistSongs = playlist.getSongs();
 
     Map<String, Object> variables = ImmutableMap.of("songs", playlistSongs);
-    return GSON.toJson(variables); //only sending info, not reloading page
+    return GSON.toJson(variables); // only sending info, not reloading page
   }
 
 }
