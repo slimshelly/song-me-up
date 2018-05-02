@@ -25,6 +25,7 @@ $(document).ready(() => {
 	// $("#dropdown").hide();
 	let $results = $("#dropdown");
     $("#playlist").keyup(event => {
+
     	let song = document.getElementById('songName').value;
     	console.log(song);
 
@@ -40,10 +41,10 @@ $(document).ready(() => {
 
 				const responseObject = JSON.parse(responseJSON);
 				console.log(responseObject);
-				let output = responseObject.suggestions;
+				let output = responseObject;
 
 				for(const sug of output){
-					$results.append("<a href='javascript:;' onclick='new_song(sug.song_id)'><div class='option'>" + sug.song_name + "</div></a>");
+					$results.append("<a href='javascript:;' onclick='new_song(" + sug.song_id + ")'><div class='option'>" + sug.song_name + "</div></a>");
 				};
 		    });
 		}

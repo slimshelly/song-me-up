@@ -199,8 +199,14 @@ input[type=text] {
 	outline: none;
 }
 
+.option {
+	position: absolute;
+	width: 75%;
+	/*border: 1px solid black;*/
+}
+
 .option:hover {
-	background: gray;
+	background: rgb(25, 25, 25, 0.3);
 }
 
 /* APPEARANCE OF SONG AND ARTIST NAME */
