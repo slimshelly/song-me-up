@@ -1,5 +1,3 @@
-<#include "playlist.ftl">
-
 <!DOCTYPE html>
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
@@ -11,7 +9,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-		<div class="hidden" hidden>${user_id}</div>
+		<div class="hidden" hidden>hallo</div>
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
@@ -64,8 +62,8 @@
 								<div class="artist">Artist</div>
 							</div>
 							<div id="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
+		    					<a href="javascript:;"><i class="fa fa-chevron-circle-down" id="down"></i></a>
+		    					<a href="javascript:;"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>
@@ -122,9 +120,3 @@
 		</div>
 	</body>
 </html>
-
-<script>
-	$(document).ready(function() {
-	  setup_live_playlist();
-	});
-</script>

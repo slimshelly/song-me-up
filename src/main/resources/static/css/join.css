@@ -239,11 +239,19 @@ input[type=text] {
 	transition-duration: 0.3s;
 }
 
-#down:hover {
+/*#down:hover {
 	color: red;
 }
 
 #up:hover {
+	color: green;
+}*/
+
+.downColor {
+	color: red;
+}
+
+.upColor {
 	color: green;
 }
 
