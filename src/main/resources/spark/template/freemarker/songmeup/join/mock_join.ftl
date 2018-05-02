@@ -9,7 +9,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-		<div class="hidden" hidden>${user_id}</div>
+		<div class="hidden" hidden>hallo</div>
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
@@ -27,7 +27,7 @@
 		</nav>
 		
 		<div class="party">
-			<div class="title">Listening to ${hostname}'s Party</div>
+			<div class="title">Listening to Bob's Party</div>
 			<!-- replace Bob with $hostname -->
 		</div>
 
@@ -121,9 +121,3 @@
 		</div>
 	</body>
 </html>
-
-<script>
-	$(document).ready(function() {
-	  setup_live_playlist();
-	});
-</script>

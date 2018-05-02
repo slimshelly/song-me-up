@@ -22,14 +22,9 @@ import spark.TemplateViewRoute;
 
 public class HostHandler implements TemplateViewRoute {
 
-  private SmuState state;
-
-  public HostHandler(SmuState state) {
-    this.state = state;
-  }
-
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
+    SmuState state = SmuState.getInstance();
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
@@ -43,7 +38,7 @@ public class HostHandler implements TemplateViewRoute {
           Map<String,
               Object> variables = new ImmutableMap.Builder<String, Object>()
                   .put("party_id", p.getId()).put("hostname", p.getHostName())
-                  .build();
+                  .put("user_id", u.getId()).build();
           return new ModelAndView(variables, "songmeup/host/host.ftl");
         } else {
           Party p = state.startParty(u);

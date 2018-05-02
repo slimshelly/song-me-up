@@ -199,6 +199,10 @@ input[type=text] {
 	outline: none;
 }
 
+.option:hover {
+	background: gray;
+}
+
 /* APPEARANCE OF SONG AND ARTIST NAME */
 .song, .artist {
 	font-family: 'Raleway', sans-serif;
@@ -239,11 +243,19 @@ input[type=text] {
 	transition-duration: 0.3s;
 }
 
-#down:hover {
+/*#down:hover {
 	color: red;
 }
 
 #up:hover {
+	color: green;
+}*/
+
+.downColor {
+	color: red;
+}
+
+.upColor {
 	color: green;
 }
 

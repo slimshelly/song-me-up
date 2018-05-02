@@ -2,8 +2,8 @@ package edu.brown.cs.jmst.spark;
 
 import com.google.gson.Gson;
 
-import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
+import edu.brown.cs.soliphan.sockets.PartyWebSocket;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -17,27 +17,29 @@ public class SparkInitializer {
 
   public static final Gson GSON = new Gson();
 
-  public static void setHandlers(FreeMarkerEngine freeMarker, SmuState state) {
-    Spark.get("/main", new MainPage(state), freeMarker);
+  public static void setHandlers(FreeMarkerEngine freeMarker) {
+    Spark.get("/main", new MainPage(), freeMarker);
 
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
 
-    Spark.get("/logout", new LogoutHandler(state), freeMarker);
+    Spark.get("/logout", new LogoutHandler(), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
-    Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(state),
+    Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(),
         freeMarker);
 
-    Spark.get("/host", new HostHandler(state), freeMarker);
-    Spark.get("/join", new JoinHandler(state), freeMarker);
+    Spark.get("/host", new HostHandler(), freeMarker);
+    Spark.get("/join", new JoinHandler(), freeMarker);
+    Spark.post("/suggestions", new SongSuggestor());
+    Spark.webSocket("/songupdates", PartyWebSocket.class);
 
     Spark.get("/player", new PlayerPage(), freeMarker);
 
-    Spark.get("/error", new ErrorHandler(state), freeMarker);
+    Spark.get("/error", new ErrorHandler(), freeMarker);
 
     // for purposes of editing join page
-    Spark.get("/playlist", new MockPlaylist(), freeMarker);
+    Spark.get("/playlists", new MockPlaylist(), freeMarker);
     // for purposes of linking playlist to join page
-    Spark.post("/playlist", new PlaylistHandler(state));
+    Spark.post("/playlist", new PlaylistHandler());
   }
 
 }

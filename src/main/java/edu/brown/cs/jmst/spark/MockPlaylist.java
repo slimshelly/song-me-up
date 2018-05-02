@@ -14,7 +14,7 @@ public class MockPlaylist implements TemplateViewRoute {
 	public ModelAndView handle(Request request, Response response) throws Exception {
 		// TODO Auto-generated method stub
 	    Map<String, Object> variables = new HashMap<>();
-	    return new ModelAndView(variables, "songmeup/join/join.ftl");
+	    return new ModelAndView(variables, "songmeup/join/mock_join.ftl");
 	}
 
 }

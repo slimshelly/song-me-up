@@ -22,12 +22,26 @@ import edu.brown.cs.jmst.spotify.SpotifyException;
  */
 public class SmuState {
 
+  private static SmuState instance = null;
+
   private List<String> listMessage;
   private String message;
   private Map<String, Party> parties =
       Collections.synchronizedMap(new HashMap<>());
   private Map<String, User> users =
       Collections.synchronizedMap(new HashMap<>());
+
+  private SmuState() {
+  }
+
+  public static SmuState getInstance() {
+    if (instance == null) {
+      instance = new SmuState();
+      return instance;
+    } else {
+      return instance;
+    }
+  }
 
   /**
    * Add a party to the set.

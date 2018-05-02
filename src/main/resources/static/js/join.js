@@ -2,9 +2,28 @@
 $(document).ready(() => {
 
 	/*
+	Toggle color for up and down buttons
+	*/
+	$("#down").click(function () {
+		console.log("hiii");
+		if (document.getElementById("up").classList.contains("upColor")) {
+			$("#up").toggleClass("upColor");
+		}
+		$("#down").toggleClass("downColor");
+	});
+
+	$("#up").click(function () {
+		if (document.getElementById("down").classList.contains("downColor")) {
+			$("#down").toggleClass("downColor");
+		}
+		$("#up").toggleClass("upColor");
+	});
+
+	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	$("#dropdown").hide();
+	// $("#dropdown").hide();
+	let $results = $("#dropdown");
     $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
     	console.log(song);
@@ -15,33 +34,110 @@ $(document).ready(() => {
 	    else {
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
-
-		    // Make a POST request to the "/suggestions" endpoint with the word information
+			$results.empty();
+		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
-		        // Parse the JSON response into a JavaScript object.
-		        const responseObject = JSON.parse(responseJSON);
-		        console.log(responseObject);
-		        
-		        let output = responseObject.suggestions;
-		   		
-		   		// set width of dropdown to be same width as input text box
-		   		// var dropdown = document.getElementById("dropdown").style.width = searchBarWidth + "px";
-		   		$("#dropdown").show();
+				const responseObject = JSON.parse(responseJSON);
+				console.log(responseObject);
+				let output = responseObject;
 
-		   		let suggestions = "";
-		        for (let i = 0; i <= output.length - 1; i++) {
-		        	suggestions += output[i] + "<br />";
-		        }
-		        $message.html(suggestions);
-
-		        // NEED TO MAKE SUGGESTIONS CLICKABLE
+				for(const sug of output){
+					$results.append("<a href='javascript:;' onclick='new_song(sug.id)'><div class='option'>" + sug.name + "</div></a>");
+				};
 		    });
 		}
     });
-
-    /*
-	Retrieve current list of coming up songs from backend to display on page.
-    */
-    
 });
+
+/*
+Open socket for web communication and deal with different messages
+*/
+const MESSAGE_TYPE = {
+  VOTESONG: 0,
+  ADDSONG: 1,
+  REMOVESONG: 2,
+  PLAYLIST: 3
+};
+
+let conn;
+let userId = $(".hidden").innerHTML;
+const $playlist = $("#displaySongs");
+
+// Setup the WebSocket connection for live updating of scores.
+const setup_live_playlist = () => {
+  // TODO Create the WebSocket connection and assign it to `conn`
+  conn = new WebSocket("ws://localhost:4567/join");
+
+  conn.onerror = err => {
+    console.log('Connection error:', err);
+  };
+
+  conn.onmessage = msg => {
+    const data = JSON.parse(msg.data);
+    console.log(data);
+    switch (data.type) {
+      default:
+        console.log('Unknown message type!', data.type);
+        break;
+
+      case MESSAGE_TYPE.VOTESONG:
+      	// update number of votes for a specific song on the playlist
+      	let song_id = data.payload.song_id;
+      	let votes = data.payload.votes; //number of votes the song has
+      	break;
+
+      case MESSAGE_TYPE.ADDSONG:
+        $playlist.append("<li id='" + userId + "'>" + "</li>");
+        $("#" + userId).append("<div id='playlistItem'>" + "</div>");
+        // add song information
+        $(".playlistItem").append("<div class='track'>" + "</div>");
+        $(".track").append("<div class='song'>" + data.payload.name + "</div>");
+        $(".track").append("<div class='artist'>" + data.payload.artists[0].name + "</div>");
+        // add number of votes
+
+        // add buttons
+        $(".playlistItem").append("<div id='buttons'>" + "</div>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        break;
+
+      case MESSAGE_TYPE.REMOVESONG:
+      	$playlist.remove($("#" + userId)); // removes li of ul, referenced by userId
+      	break;
+
+      case MESSAGE_TYPE.PLAYLIST:
+        // apend an entire list of li's to the displaySongs ul
+        break;
+    }
+  };
+}
+
+/*
+Send message to backend when a user votes on a song - params are boolean vote and song id
+*/
+const new_vote = (vote, songId) => {
+  // Send a VOTESONG message to the server using `conn`
+  console.log(myId);
+  let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
+        "id":userId, 
+        "song_id":songId,
+        "vote":vote}
+      };
+  conn.send(JSON.stringify(vote));
+}
+
+/*
+Send message to backend when a user adds a song
+*/
+const new_song = songId => {
+  // Send a VOTESONG message to the server using `conn`
+  console.log(myId);
+  let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
+        "id":userId, 
+        "song_id":songId}
+      };
+  conn.send(JSON.stringify(vote));
+}
+
+

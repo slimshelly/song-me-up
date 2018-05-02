@@ -17,12 +17,6 @@ import spark.TemplateViewRoute;
 
 public class CallbackHandler implements TemplateViewRoute {
 
-  private SmuState smu_state;
-
-  public CallbackHandler(SmuState state) {
-    this.smu_state = state;
-  }
-
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
     // User u = state.getUser(req.session().id());
@@ -36,7 +30,7 @@ public class CallbackHandler implements TemplateViewRoute {
     } else {
       res.removeCookie("spotify_auth_state");
       try {
-        User u = smu_state.addUser(code);
+        User u = SmuState.getInstance().addUser(code);
         req.session().attribute("user", u.getId());
       } catch (IllegalArgumentException e) {
         err = SparkErrorEnum.INVALID_TOKEN;
