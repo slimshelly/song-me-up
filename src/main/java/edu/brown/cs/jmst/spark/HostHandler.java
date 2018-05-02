@@ -30,9 +30,10 @@ public class HostHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
-    User u = state.getUser(req.session().id());
-    if (!u.loggedIn()) {
-      res.redirect("/login");
+    String userid = req.session().attribute("user");
+    User u = state.getUser(userid);
+    if (u == null || !u.loggedIn()) {
+      res.redirect("/songmeup");
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();

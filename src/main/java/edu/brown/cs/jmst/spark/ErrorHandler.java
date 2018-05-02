@@ -28,13 +28,8 @@ public class ErrorHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
-    User u = state.getUser(req.session().id());
-    String login;
-    if (u.loggedIn()) {
-      login = "SWITCH USER";
-    } else {
-      login = "LOG IN";
-    }
+    String userid = req.session().attribute("user");
+    User u = state.getUser(userid);
 
     QueryParamsMap qm = req.queryMap();
     String err = qm.value("error");
@@ -52,13 +47,12 @@ public class ErrorHandler implements TemplateViewRoute {
       } else {
         redirect_url = "\"/join?" + param + "\"";
       }
-      Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>().put("logchange", login)
-              .put("errmsg", errInfo).put("redirect", redirect_url).build();
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("errmsg", errInfo).put("redirect", redirect_url).build();
       return new ModelAndView(variables, "songmeup/error.ftl");
     } else {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("logchange", login).put("errmsg", errInfo).build();
+          .put("errmsg", errInfo).build();
       return new ModelAndView(variables, "songmeup/error.ftl");
     }
 
