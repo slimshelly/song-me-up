@@ -18,25 +18,24 @@ import com.google.gson.JsonParser;
 public class PartyWebSocket {
   private static final Gson GSON = new Gson();
   private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
-  private static int nextId = 0;
 
   private static enum MESSAGE_TYPE {
-    CONNECT, VOTESONG, ADDSONG, REMOVESONG, PLAYLIST
+    VOTESONG, ADDSONG, REMOVESONG, PLAYLIST
   }
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // Add the session to the queue
     sessions.add(session);
-    // Build the CONNECT message
-    JsonObject jpayload = new JsonObject();
-    jpayload.addProperty("id", nextId);
-    JsonObject jo = new JsonObject();
-    jo.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
-    jo.add("payload", jpayload);
-    nextId++;
-    // Send the CONNECT message
-    session.getRemote().sendString(GSON.toJson(jo));
+    // // Build the CONNECT message
+    // JsonObject jpayload = new JsonObject();
+    // jpayload.addProperty("id", nextId);
+    // JsonObject jo = new JsonObject();
+    // jo.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
+    // jo.add("payload", jpayload);
+    // nextId++;
+    // // Send the CONNECT message
+    // session.getRemote().sendString(GSON.toJson(jo));
   }
 
   @OnWebSocketClose
@@ -47,11 +46,24 @@ public class PartyWebSocket {
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
-    // JsonObject received = GSON.fromJson(message, JsonObject.class);
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    // JsonObject received = new JsonObject(message);
-    // assert received.get("type").getAsInt() == MESSAGE_TYPE.SCORE.ordinal();
+    assert received.get("type").getAsInt() < 4
+        && received.get("type").getAsInt() >= 0;
+    MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
+
+    switch (type) {
+      case VOTESONG:
+
+        break;
+      case ADDSONG:
+        break;
+      case REMOVESONG:
+        break;
+      case PLAYLIST:
+        break;
+    }
+
     JsonObject payload = received.get("payload").getAsJsonObject();
     // Compute the player's score
     int id = payload.get("id").getAsInt();
