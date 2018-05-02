@@ -9,6 +9,7 @@ import java.util.Set;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
+import edu.brown.cs.jmst.party.UserException;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
@@ -96,7 +97,7 @@ public class SmuState {
     // p.removePartyGoer(u);
     // party_people_ids.remove(u.getId());
     if (!parties.containsKey(partyId)) {
-      throw new IllegalArgumentException("Invalid party id.");
+      throw new PartyException("Invalid party id.");
     }
     parties.get(partyId).removePartyGoer(u);
   }
@@ -134,8 +135,14 @@ public class SmuState {
     return users.get(id);
   }
 
-  public void addUser(User u) {
+  public User addUser(String code) throws Exception, UserException {
+    User u = new User();
+    u.logIn(code);
+    if (users.containsKey(u.getId())) {
+      throw new UserException("User already exists.");
+    }
     users.put(u.getId(), u);
+    return u;
   }
 
   /**

@@ -4,7 +4,7 @@ public enum SparkErrorEnum {
   ALREADY_IN_PARTY("already_in_party"), NOT_IN_PARTY("not_in_party"),
   INVALID_PARTY_ID("invalid_party_id"), NEEDS_PREMIUM("needs_premium"),
   INVALID_TOKEN("invalid_token"), STATE_MISMATCH("state_mismatch"),
-  CLIENT_ERROR("client_error");
+  CLIENT_ERROR("client_error"), USER_ERROR("user_error");
 
   private String errstring;
 
@@ -38,6 +38,9 @@ public enum SparkErrorEnum {
         break;
       case "client_error":
         retval = "We aren't sure what went wrong... Maybe a Spotify error.";
+        break;
+      case "user_error":
+        retval = "It appears you are logged in somewhere else.";
         break;
       default:
         retval = "We really aren't sure what went wrong... Try again?";

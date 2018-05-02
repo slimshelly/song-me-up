@@ -16,6 +16,7 @@
 		<div class="title">${hostname}, you have made a party! Your party id is: ${party_id}.</div>
 		<div class="buttons">
 			<a class="btn" onclick="spotify_search()">ADD SUGGESTION</a>
+			<a class="btn" href="/main?leave=true">LEAVE PARTY</a>
 		</div>
 		
 	</body>

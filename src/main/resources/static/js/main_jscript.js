@@ -3,13 +3,13 @@ const root_dir = "http://localhost:4567"
 $(document).ready(() => {
 
 	/* REMOVE GREY OUT BUTTONS IF USER IS LOGGED IN */
-	let status = document.getElementById("userStatus").innerHTML;
-	if (status === "SWITCH USER") {
+	//let status = document.getElementById("premium").innerHTML;
+	if (document.getElementById("premium").innerHTML === "true") {
 		let host_button = document.getElementById("host");
-		let join_button = document.getElementById("join");
     	host_button.classList.remove("gray");
-    	join_button.classList.remove("gray");
 	}
+	let join_button = document.getElementById("join");
+	join_button.classList.remove("gray");
 
 	/* NAV BAR */
 	let $nav = $("nav-bar");
