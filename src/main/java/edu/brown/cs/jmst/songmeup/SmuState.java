@@ -137,8 +137,12 @@ public class SmuState {
 
   public void removeUser(String id) throws PartyException {
     User u = getUser(id);
-    leaveParty(u, u.getCurrentParty());
-    users.remove(id);
+    if (u != null) {
+      if (u.getCurrentParty() != null) {
+        leaveParty(u, u.getCurrentParty());
+      }
+      users.remove(id);
+    }
   }
 
   /**

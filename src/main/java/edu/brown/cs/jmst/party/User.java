@@ -39,7 +39,11 @@ public class User extends Entity {
     refresh_key = refresh;
     logged_in = true;
     JsonObject jo = getInfo(false);
-    display_name = jo.get("display_name").getAsString();
+    if (jo.get("display_name").isJsonNull()) {
+      display_name = jo.get("id").getAsString();
+    } else {
+      display_name = jo.get("display_name").getAsString();
+    }
     id = jo.get("id").getAsString();
     premium = jo.get("product").getAsString().equals("premium");
   }
