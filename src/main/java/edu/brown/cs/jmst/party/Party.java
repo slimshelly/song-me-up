@@ -5,13 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.brown.cs.jmst.beans.Entity;
+import edu.brown.cs.jmst.music.SongMeUpPlaylist;
+import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
 
   private User ph;
   private Set<User> partygoers;
-  private SongQueue suggestions;
+  private SongQueue suggestions; // object to hold all suggestions
+  private SongMeUpPlaylist partyPlaylist; // object to hold current playlist state
   public static final int ID_LENGTH = 6;
 
   public Party(User host, String id) throws PartyException, SpotifyException {
