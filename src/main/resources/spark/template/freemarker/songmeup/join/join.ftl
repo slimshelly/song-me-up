@@ -1,5 +1,3 @@
-<#include "playlist.ftl">
-
 <!DOCTYPE html>
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
@@ -53,7 +51,6 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
-					<div id="message">Lorem ipsum dolor.</div>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
