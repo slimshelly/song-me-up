@@ -72,7 +72,7 @@ public class PartyWebSocket {
         case VOTESONG:
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
-            p.voteOnSong(song_id, user_id, vote); //return ordered collection of suggestions (with votes)
+            p.voteOnSong(user_id, song_id, vote); //return ordered collection of suggestions (with votes)
             JsonObject jpayload = new JsonObject();
             jpayload.addProperty("song_id", song_id);
             //jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
