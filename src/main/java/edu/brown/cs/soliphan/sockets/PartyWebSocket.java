@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.google.gson.JsonArray;
+import edu.brown.cs.jmst.party.Suggestion;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -73,26 +75,24 @@ public class PartyWebSocket {
       Party p = state.getParty(partyId);
       switch (type) {
         case VOTESONG:
-        	  // retrieve boolean of vote (up or down)
+          // retrieve boolean of vote (up or down)
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
-        	    // retreive list of voting block songs from backend with updated vote from frontend
-        	    Collection<Suggestion> votingBlock = p.voteOnSong(user_id, song_id, vote);
-        	    // fill payload of json object to send to frontend
-        	    JsonArray jpayload = new JsonArray();
-        	    
-        	    
+            // record vote with party
+            // retrieve list of voting block songs from backend
+            Collection<Suggestion> votingBlock = p.voteOnSong(user_id, song_id, vote);
+            JsonArray orderedSuggestions = new JsonArray();
+            for (Suggestion s: votingBlock) {
+              try {
+                orderedSuggestions.add(s.toJson());
+              } catch (Exception e) {
+                General.printErr("Error accessing Track information. "
+                        + e.getMessage());
+              }
+            }
             JsonObject jo = new JsonObject();
             jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
-            jo.add("payload", jpayload);
-        	    
-        	    // send net number of votes on song back to frontend
-            // JsonObject jpayload = new JsonObject();
-            // jpayload.addProperty("song_id", song_id);
-            // jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
-            // JsonObject jo = new JsonObject();
-            // jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
-            // jo.add("payload", jpayload);
+            jo.add("payload", orderedSuggestions);
             for (Session s : sessions) {
               s.getRemote().sendString(GSON.toJson(jo));
             }
