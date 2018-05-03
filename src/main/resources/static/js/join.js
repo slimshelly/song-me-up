@@ -130,7 +130,7 @@ function new_vote(vote_boolean, songId){
 /*
 Send message to backend when a user adds a song
 */
-const new_song = songId => {
+function new_song(songId) {
   // Send a VOTESONG message to the server using `conn`
   console.log($("#user_id").val());
   let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
