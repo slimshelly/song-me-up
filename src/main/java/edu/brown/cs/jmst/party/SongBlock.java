@@ -75,27 +75,33 @@ class SongBlock {
     return null;
   }
 
-  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
-  protected Suggestion suggest(Track song, String userId) throws PartyException {
-    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
-    if (existingSuggestion == null) {
-      existingSuggestion = getSuggestionByTrack(song);
-    }
-    if (existingSuggestion != null) {
-      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
-        throw new PartyException("User may not submit the same suggestion more "
-                + "than once.");
-      }
-      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
-        vote(existingSuggestion, userId, true);
-      }
-      existingSuggestion.addSubmitter(userId);
-      return null;
-    }
+  protected Suggestion suggest(Track song, String userId) {
     Suggestion toReturn = new Suggestion(userId, song);
     suggestions.add(toReturn);
     return toReturn;
   }
+
+  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
+//  protected Suggestion suggest(Track song, String userId) throws PartyException {
+//    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
+//    if (existingSuggestion == null) {
+//      existingSuggestion = getSuggestionByTrack(song);
+//    }
+//    if (existingSuggestion != null) {
+//      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
+//        throw new PartyException("User may not submit the same suggestion more "
+//                + "than once.");
+//      }
+//      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
+//        vote(existingSuggestion, userId, true);
+//      }
+//      existingSuggestion.addSubmitter(userId);
+//      return null;
+//    }
+//    Suggestion toReturn = new Suggestion(userId, song);
+//    suggestions.add(toReturn);
+//    return toReturn;
+//  }
 
   protected int vote(Suggestion song, String userId, boolean isUpVote) {
     assert suggestions.contains(song);
