@@ -1,13 +1,10 @@
 package edu.brown.cs.jmst.party;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
+import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
@@ -61,7 +58,11 @@ public class Party extends Entity {
     return ph.getName();
   }
 
-  public int voteOnSongNEW(Suggestion voteOn, String userId, boolean isUpVote)
+  public Collection<Suggestion> suggestSong(Track song, String userId) throws Exception {
+    return suggestions.suggest(song, userId);
+  }
+
+  public Collection<Suggestion> voteOnSongNEW(Suggestion voteOn, String userId, boolean isUpVote)
           throws PartyException {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");

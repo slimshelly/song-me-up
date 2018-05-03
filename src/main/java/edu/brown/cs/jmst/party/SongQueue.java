@@ -36,8 +36,9 @@ public class SongQueue {
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
    */
-  public void suggest(Track song, String userId) throws PartyException {
+  public Collection<Suggestion> suggest(Track song, String userId) throws PartyException {
     suggestingBlock.suggest(song, userId);
+    return suggestingBlock.getSuggestions();
   }
 
   /**
@@ -45,8 +46,9 @@ public class SongQueue {
    * @param userId the ID string of the user voting on the suggestion
    * @param isUpVote true indicates an up-vote, false indicates a down-vote
    */
-  public int vote(Suggestion song, String userId, boolean isUpVote) {
-    return votingBlock.vote(song, userId, isUpVote);
+  public Collection<Suggestion> vote(Suggestion song, String userId, boolean isUpVote) {
+    votingBlock.vote(song, userId, isUpVote);
+    return votingBlock.getSuggestions();
   }
 
   /**
