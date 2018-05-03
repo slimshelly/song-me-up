@@ -85,17 +85,19 @@ public class Suggestion implements Comparable<Suggestion> {
   }
 
   // TODO: avoid race condition!
-  private void doVote(boolean isUpVote) {
+  private void doVote(String userId, boolean isUpVote) {
     if (isUpVote) {
       this.score += UP_VOTE_WEIGHT;
       this.upVotes += 1;
+      userVoteMap.put(userId, 1);
     } else {
       this.score -= DOWN_VOTE_WEIGHT;
       this.downVotes += 1;
+      userVoteMap.put(userId, -1);
     }
   } //TODO: if something was voted on (and not undone), set age to 0 before vote decay occurs
 
-  private void undoVote(boolean isUpVote) {
+  private void undoVote(String userId, boolean isUpVote) {
     if (isUpVote) {
       this.score -= UP_VOTE_WEIGHT;
       this.upVotes -= 1;
@@ -103,34 +105,17 @@ public class Suggestion implements Comparable<Suggestion> {
       this.score += DOWN_VOTE_WEIGHT;
       this.downVotes -= 1;
     }
+    userVoteMap.put(userId, 0);
   }
 
-  private void changeScore(boolean isUpVote, boolean isUndo) {
-    int plusOrMinusOne = 1;
-    if (isUndo) {
-      plusOrMinusOne = -1;
-    }
-    if (isUpVote) {
-      this.score += plusOrMinusOne * UP_VOTE_WEIGHT;
-      this.upVotes += plusOrMinusOne;
-    } else {
-      this.score -= plusOrMinusOne * DOWN_VOTE_WEIGHT;
-      this.downVotes += plusOrMinusOne;
-    }
-  }
-
-  public void vote(String userId, Integer voteValue) {
-    assert voteValue == 1 || voteValue == -1;
-    Boolean isUpVote = voteValue == 1;
+  public void vote(String userId, boolean isUpVote) {
     if (!userVoteMap.containsKey(userId) || userVoteMap.get(userId) == 0) {
-      doVote(isUpVote); //changeScore(isUpVote, false);
-      userVoteMap.put(userId, voteValue);
+      doVote(userId, isUpVote);
     } else {
-      undoVote(userVoteMap.get(userId).equals(1)); //changeScore(isUpVote, true);
-      userVoteMap.put(userId, 0);
-      if (!userVoteMap.get(userId).equals(voteValue)) {
-        doVote(isUpVote); //changeScore(isUpVote, false);
-        userVoteMap.put(userId, voteValue);
+      boolean existingVoteIsUpVote = userVoteMap.get(userId).equals(1);
+      undoVote(userId, existingVoteIsUpVote);
+      if (!(existingVoteIsUpVote == isUpVote)) {
+        doVote(userId, isUpVote);
       }
     }
   }
