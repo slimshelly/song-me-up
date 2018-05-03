@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.party;
 
+import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.music.Track;
 
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class Suggestion implements Comparable<Suggestion> {
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  public Suggestion(String userId, Track song) {
+  Suggestion(String userId, Track song) {
 	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
@@ -38,6 +39,11 @@ public class Suggestion implements Comparable<Suggestion> {
     this.userVoteMap = new ConcurrentHashMap<>();
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
+  }
+
+  public JsonObject toJSON() {
+    //TODO: make a JSON object that can be used by front end.
+    return null;
   }
 
   public Track getSong() { // TODO: does this need to be public?
