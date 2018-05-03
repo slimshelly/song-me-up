@@ -36,9 +36,8 @@ public class SongQueue {
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
    */
-  public Collection<Suggestion> suggest(Track song, String userId) throws PartyException {
-    suggestingBlock.suggest(song, userId);
-    return suggestingBlock.getSuggestions();
+  public Suggestion suggest(Track song, String userId) throws PartyException {
+    return suggestingBlock.suggest(song, userId);
   }
 
   /**
@@ -73,7 +72,7 @@ public class SongQueue {
    * @throws Exception if an error occurs while getting the audioFeatures info
    *                   about the track
    */
-  public List<Suggestion> getSongsToPlay() throws Exception {
+  public List<Suggestion> getSongsToPlay() {
     return playingBlock.getSongs();
   }
 

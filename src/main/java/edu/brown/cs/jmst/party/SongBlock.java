@@ -76,7 +76,7 @@ class SongBlock {
   }
 
   //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
-  protected void suggest(Track song, String userId) throws PartyException {
+  protected Suggestion suggest(Track song, String userId) throws PartyException {
     Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
     if (existingSuggestion == null) {
       existingSuggestion = getSuggestionByTrack(song);
@@ -90,9 +90,11 @@ class SongBlock {
         vote(existingSuggestion, userId, true);
       }
       existingSuggestion.addSubmitter(userId);
-      return;
+      return null;
     }
-    suggestions.add(new Suggestion(userId, song));
+    Suggestion toReturn = new Suggestion(userId, song);
+    suggestions.add(toReturn);
+    return toReturn;
   }
 
   protected int vote(Suggestion song, String userId, boolean isUpVote) {
@@ -124,7 +126,7 @@ class SongBlock {
   }
 
   // returns the top X songs in order of votes (increasing or decreasing?)
-  protected Collection<Suggestion> topSuggestionsQuantity() throws Exception {
+  protected Collection<Suggestion> topSuggestionsQuantity() {
     PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
     while (toPlay.size() < BLOCK_LENGTH_SONGS) {
       Suggestion next = suggestions.poll();
@@ -147,7 +149,7 @@ class SongBlock {
    * @throws Exception if an error occurs while getting the audioFeatures info
    *                   about the track
    */
-  protected List<Suggestion> getSongs() throws Exception {
+  protected List<Suggestion> getSongs() {
     //The line below ONLY pays attention to votes (which is obviously temporary)
     return new ArrayList<>(topSuggestionsQuantity());
   }

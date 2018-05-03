@@ -56,6 +56,13 @@ public class PartyWebSocket {
     sessions.remove(session);
   }
 
+//  public void updateView(JsonObject suggestBlock, JsonObject voteBlock,
+//                         JsonObject playBlock) {
+//    for (Session s : sessions) {
+//      s.getRemote().sendString(GSON.toJson(jo));
+//    }
+//  }
+
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
@@ -70,7 +77,7 @@ public class PartyWebSocket {
     User u = state.getUser(user_id);
     String partyId = u.getCurrentParty();
     if (partyId != null) {
-      Party p = state.getParty(partyId);
+      Party party = state.getParty(partyId);
       switch (type) {
         case VOTESONG:
           // retrieve boolean of vote (up or down)
@@ -78,7 +85,7 @@ public class PartyWebSocket {
           try {
             // record vote with party
             // retrieve list of voting block songs from backend
-            Collection<Suggestion> votingBlock = p.voteOnSong(user_id, song_id, vote);
+            Collection<Suggestion> votingBlock = party.voteOnSong(user_id, song_id, vote);
             JsonArray orderedSuggestions = new JsonArray();
             for (Suggestion s: votingBlock) {
               try {
@@ -104,19 +111,11 @@ public class PartyWebSocket {
       	    // build trackbean, which includes all spotify track fields and album art
       	    // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
-            Track suggested = new TrackBean(track, u.getAuth());
-            Collection<Suggestion> suggestingBlock = p.suggest(suggested, user_id);
-            JsonArray unorderedSuggestions = new JsonArray();
-            for (Suggestion s: suggestingBlock) {
-              try {
-                unorderedSuggestions.add(s.toJson());
-              } catch (Exception e) {
-                General.printErr("Error accessing Track information. "
-                        + e.getMessage());
-              }
-            }
+            Track song = new TrackBean(track, u.getAuth());
+            Suggestion suggested = party.suggest(song, user_id);
+            JsonObject suggestion = suggested.toJson(); //TODO: if it's null, we want to update votes, not add a suggestion
           	// build track object to send to frontend with message type ADDSONG
-            Collection<Suggestion> votingBlock = p.getSongsToVoteOn();
+            Collection<Suggestion> votingBlock = party.getSongsToVoteOn();
             JsonArray orderedSuggestions = new JsonArray();
             for (Suggestion s: votingBlock) {
               try {
@@ -128,7 +127,7 @@ public class PartyWebSocket {
             }
             JsonObject jo = new JsonObject();
           	jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
-            jo.add("payload", orderedSuggestions);
+            jo.add("payload", suggestion);
           	for (Session s : sessions) {
           		// sending song to all users
           		s.getRemote().sendString(GSON.toJson(jo));
@@ -140,6 +139,19 @@ public class PartyWebSocket {
         case REMOVESONG:
           break;
         case PLAYLIST:
+          Collection<Suggestion> playingBlock = party.getSongsToPlay();
+          JsonArray orderedSuggestions = new JsonArray();
+          for (Suggestion s: playingBlock) {
+            try {
+              orderedSuggestions.add(s.toJson());
+            } catch (Exception e) {
+              General.printErr("Error accessing Track information. "
+                      + e.getMessage());
+            }
+          }
+          JsonObject jo = new JsonObject();
+          jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
+          jo.add("payload", orderedSuggestions);
           break;
       }
     }
