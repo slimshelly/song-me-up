@@ -73,7 +73,7 @@ public class PartyWebSocket {
         	  // retrieve boolean of vote (up or down)
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
-        	    // retrieve
+        	    // retreive list of voting block songs from backend
         	    p.voteOnSong(user_id, song_id, vote);
         	  
         	    // send net number of votes on song back to frontend
