@@ -36,7 +36,7 @@ public class SongQueue {
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
    */
-  public void Suggest(Track song, String userId) {
+  public void suggest(Track song, String userId) {
     suggestingBlock.suggest(song, userId);
   }
 
@@ -45,7 +45,7 @@ public class SongQueue {
    * @param userId the ID string of the user voting on the suggestion
    * @param isUpVote true indicates an up-vote, false indicates a down-vote
    */
-  public void Vote(Suggestion song, String userId, boolean isUpVote) {
+  public void vote(Suggestion song, String userId, boolean isUpVote) {
     votingBlock.vote(song, userId, isUpVote);
   }
 
