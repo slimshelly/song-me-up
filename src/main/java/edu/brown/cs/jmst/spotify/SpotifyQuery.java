@@ -88,9 +88,10 @@ public class SpotifyQuery {
 
       String album_id =
           trackjo.get("album").getAsJsonObject().get("id").getAsString();
+      String album_art = getAlbumArt(album_id, access_token);
 
       songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-          artist_ids, album_id, uri, album_id));
+          artist_ids, album_id, uri, album_art));
     }
 
     return songs;
@@ -392,9 +393,10 @@ public class SpotifyQuery {
 
       String album_id =
           trackjo.get("album").getAsJsonObject().get("id").getAsString();
+      String album_art = getAlbumArt(album_id, access_token);
 
       songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-          artist_ids, album_id, uri));
+          artist_ids, album_id, uri, album_art));
     }
 
     return songs;
