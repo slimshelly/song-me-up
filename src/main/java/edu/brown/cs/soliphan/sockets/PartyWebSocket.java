@@ -15,6 +15,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.music.TrackBean;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
@@ -89,7 +91,10 @@ public class PartyWebSocket {
             JsonObject jo = new JsonObject();
             jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
             jo.add("payload", track);
+            Track suggested = new TrackBean(track, u.getAuth());
+            	p.suggest(suggested, user_id);
             for (Session s : sessions) {
+            	  // sending song to all users
               s.getRemote().sendString(GSON.toJson(jo));
             }
           } catch (Exception e) {

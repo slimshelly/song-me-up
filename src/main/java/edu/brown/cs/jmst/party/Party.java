@@ -57,6 +57,14 @@ public class Party extends Entity {
   public String getHostName() {
     return ph.getName();
   }
+  
+  /**
+   * @param song A Track to add to the current pool of suggestions
+   * @param userId the ID string of the user submitting the suggestion
+   */
+  public void suggest(Track song, String userId) {
+    suggestions.suggest(song, userId);
+  }
 
   public Collection<Suggestion> suggestSong(Track song, String userId) throws Exception {
     return suggestions.suggest(song, userId);

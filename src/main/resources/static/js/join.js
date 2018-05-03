@@ -135,11 +135,11 @@ Send message to backend when a user adds a song
 function new_song(songId) {
   // Send a VOTESONG message to the server using `conn`
   console.log($("#user_id").val());
-  let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
+  let userSuggestion = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId}
       };
-  conn.send(JSON.stringify(vote));
+  conn.send(JSON.stringify(userSuggestion));
 }
 
 
