@@ -51,8 +51,8 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
-					<a href="javascript:;"><div class="option">Lorem ipsum dolor.</div></a>
-					<a href="javascript:;"><div class="option">Lorem sdf dolor.</div></a>
+					<a class="option" href="javascript:;"><div>Lorem ipsum dolor.</div></a>
+					<a class="option" href="javascript:;"><div>Lorem sdf dolor.</div></a>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">

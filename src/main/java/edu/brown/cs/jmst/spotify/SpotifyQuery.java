@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -32,26 +31,6 @@ import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
-  public static JsonObject getRawTrack(String song_id, String access_token)
-      throws ParseException, IOException {
-    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      HttpGet get = new HttpGet(
-          "https://api.spotify.com/v1/https://api.spotify.com/v1/tracks/"
-              + song_id);
-      get.setHeader("Authorization", "Bearer " + access_token);
-
-      HttpResponse response = client.execute(get);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        String json_string = EntityUtils.toString(response.getEntity());
-        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-        return jo;
-      } else {
-        throw new ClientProtocolException(
-            "Failed to get track: " + response.getStatusLine().getStatusCode()
-                + " " + response.toString());
-      }
-    }
-  }
 
   public static JsonArray searchSongRaw(String keywords, String access_token)
       throws IOException, UnsupportedEncodingException,
@@ -62,6 +41,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "track"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      // want to add limit of 10! HELP
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
@@ -74,6 +54,7 @@ public class SpotifyQuery {
 
         JsonArray tracks =
             jo.get("tracks").getAsJsonObject().get("items").getAsJsonArray();
+
         return tracks;
       } else {
         throw new ClientProtocolException(
@@ -109,12 +90,52 @@ public class SpotifyQuery {
           trackjo.get("album").getAsJsonObject().get("id").getAsString();
 
       songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-          artist_ids, album_id, uri));
+          artist_ids, album_id, uri, album_id));
     }
 
     return songs;
   }
 
+  /**
+   * Accessor for song art. Returns a URL link to album art.
+ * @throws IOException 
+   */
+  public static String getAlbumArt(String albumId, String access_token) throws IOException {
+	  String albumURL = "";
+	  try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+    	    List<BasicNameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("id", albumId));
+
+        HttpGet get = new HttpGet("https://api.spotify.com/v1/albums/" + albumId + "?"
+            + URLEncodedUtils.format(pairs, "UTF-8"));
+        get.setHeader("Authorization", "Bearer " + access_token);
+
+        HttpResponse response = client.execute(get);
+        if (response.getStatusLine().getStatusCode() == 200) {
+            String json_string = EntityUtils.toString(response.getEntity());
+            JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+            JsonArray images =
+                jo.get("images").getAsJsonArray();
+            Iterator<JsonElement> iterator = images.iterator();
+            while (iterator.hasNext()) {
+              JsonObject image = iterator.next().getAsJsonObject();
+              // Integer height = image.get("height").getAsInt();
+              String url = image.get("url").getAsString();
+              albumURL = url; // maybe make albumArt object later
+              // Integer width = image.get("width").getAsInt();
+              break; // first one will be widest
+           }
+        }
+    } catch (UnsupportedEncodingException | ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+	  return albumURL;
+  }
+  
+  
   /**
    * Requires an ID.
    *
@@ -246,22 +267,22 @@ public class SpotifyQuery {
    *
    */
 
-  public static List<Album> searchAlbum(String keywords, String access_token)
-      throws Exception {
-
-    List<Album> returnAlbums = new ArrayList<>();
+  public static List<Album> searchAlbum(String keywords,
+      String access_token) throws Exception {
+    
+    List<Album> returnAlbums = new ArrayList<>();    
 
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-
+      
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "album"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
-
+      
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
-
+      
       HttpResponse response = client.execute(get);
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
@@ -272,9 +293,9 @@ public class SpotifyQuery {
         Iterator<JsonElement> iterator = albums.iterator();
 
         while (iterator.hasNext()) {
-
+          
           JsonObject albumjo = iterator.next().getAsJsonObject();
-
+          
           // uri
           String uri = albumjo.get("uri").getAsString();
           // artist ids
@@ -286,25 +307,24 @@ public class SpotifyQuery {
             JsonObject ajo = iterator2.next().getAsJsonObject();
             artist_ids.add(ajo.get("id").getAsString());
           }
-
+          
           // id
           String id = albumjo.get("id").getAsString();
-
+          
           // name
           String name = albumjo.get("name").getAsString();
-
+          
           // track ids
-
+          
           List<String> track_ids = new ArrayList<>();
-
-          // type
+     
+          //type
           String type = albumjo.get("type").getAsString();
-
-          returnAlbums
-              .add(new Album(uri, artist_ids, id, name, track_ids, type));
-
+          
+          returnAlbums.add(new Album(uri, artist_ids, id, name, track_ids, type));
+          
         }
-
+        
       } else {
         throw new ClientProtocolException(
             "Failed to get artists: " + response.getStatusLine().getStatusCode()

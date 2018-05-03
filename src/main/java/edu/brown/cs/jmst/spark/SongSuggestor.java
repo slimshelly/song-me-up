@@ -20,6 +20,7 @@ public class SongSuggestor implements Route {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     String query = req.queryMap().value("word");
+
     // List<Track> tracks = SpotifyQuery.searchSong(query, u.getAuth());
     // JsonArray ja = new JsonArray();
     // for (Track t : tracks) {

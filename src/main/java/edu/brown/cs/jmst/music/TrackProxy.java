@@ -94,4 +94,10 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
     }
     return bean.toString();
   }
+
+@Override
+public String getAlbumArt() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

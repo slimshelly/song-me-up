@@ -26,7 +26,7 @@ $(document).ready(() => {
 	*/
 	// $("#dropdown").hide();
 	let $results = $("#dropdown");
-    $("#playlist").keyup(event => {
+  $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
     	console.log(song);
 
@@ -47,9 +47,9 @@ $(document).ready(() => {
 				for(const sug of output){
 					$results.append("<a href='javascript:;' onclick='new_song(" + sug.id + ")'><div class='option'>" + sug.name + "</div></a>");
 				};
-		    });
+		  });
 		}
-    });
+  });
 });
 
 /*
@@ -66,8 +66,13 @@ const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
+<<<<<<< HEAD
+  // Create the WebSocket connection and assign it to `conn`
+  conn = new WebSocket("ws://localhost:4567/join");
+=======
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/songupdates");
+>>>>>>> a7a1dd2712d92ff5ce7958b248a06dcc93295b6e
 
   conn.onerror = err => {
     console.log('Connection error:', err);
