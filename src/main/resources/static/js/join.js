@@ -85,9 +85,13 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.VOTESONG:
       	// update number of votes for a specific song on the playlist
-      	let song_id = data.payload.song_id;
-      	let votes = data.payload.votes; //number of votes the song has
-		    console.log(votes);
+        let votingList = data.payload;
+        // loop through json objects in payload
+        for (vote : votingList) {
+          let song_id = vote.song_id;
+          
+
+        }
         // display number of votes for given song_id
       	break;
 
@@ -119,7 +123,7 @@ const setup_live_playlist = () => {
 
 
 /*
-Send message to backend when a user votes on a song - params are boolean vote and song id
+Send VOTESONG message to backend when a user votes on a song - params are boolean vote and song id
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
@@ -131,16 +135,27 @@ function new_vote(vote_boolean, songId){
   conn.send(JSON.stringify(vote));
 }
 /*
-Send message to backend when a user adds a song
+Send ADDSONG message to backend when a user adds a song
 */
 function new_song(songId) {
-  // Send a VOTESONG message to the server using `conn`
+  // Send a ADDSONG message to the server using `conn`
   console.log($("#user_id").val());
   let userSuggestion = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId}
       };
   conn.send(JSON.stringify(userSuggestion));
+}
+
+/*
+Send PLAYLIST message to backend when the last song in the playing block is 10 seconds from finishing
+*/
+function get_playlist(songId) {
+  // Send a PLAYLIST message to the server using `conn`
+  let playlistRequest = {"type":MESSAGE_TYPE.PLAYLIST, "payload": {
+        "id":$("#user_id").val()}
+      };
+  conn.send(JSON.stringify(playlistRequest));
 }
 
 

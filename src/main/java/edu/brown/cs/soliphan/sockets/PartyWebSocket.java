@@ -79,7 +79,7 @@ public class PartyWebSocket {
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
             // record vote with party
-            // retrieve list of voting block songs from backend
+            // retrieve list of voting block songs from backend, put in jsonarray
             Collection<Suggestion> votingBlock = p.voteOnSong(user_id, song_id, vote);
             JsonArray orderedSuggestions = new JsonArray();
             for (Suggestion s: votingBlock) {
