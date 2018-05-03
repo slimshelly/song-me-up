@@ -3,8 +3,8 @@ let $playlist;
 
 $(document).ready(() => {
 
+  // access playlist to add songs to later
   $playlist = $("#displaySongs");
-  $("#displaySongs").append("<li>BOB</li>");
 
 	/*
 	Toggle color for up and down buttons
@@ -185,6 +185,7 @@ function new_song(songId) {
         "id":$("#user_id").val(), 
         "song_id":songId}
       };
+  conn.send(JSON.stringify(userSuggestion));
 }
 
 /*

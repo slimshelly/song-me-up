@@ -65,66 +65,6 @@
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
-					<li>
-						<div class="playlistItem">
-							<div class="track">
-								<div class="song">Song name</div>
-								<div class="artist">Artist</div>
-							</div>
-							<div class="buttons">
-		    					<a href="javascript:;"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="javascript:;"><i class="fa fa-chevron-circle-up" id="up"></i></a>
-		    				</div>
-		    			</div>
-					</li>
-					<li>
-						<div class="playlistItem">
-							<div class="track">
-								<div class="song">Song name</div>
-								<div class="artist">Artist</div>
-							</div>
-							<div class="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
-		    				</div>
-		    			</div>
-					</li>
-					<li>
-						<div class="playlistItem">
-							<div class="track">
-								<div class="song">Song name</div>
-								<div class="artist">Artist</div>
-							</div>
-							<div class="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
-		    				</div>
-		    			</div>
-					</li>
-					<li>
-						<div class="playlistItem">
-							<div class="track">
-								<div class="song">Song name</div>
-								<div class="artist">Artist</div>
-							</div>
-							<div class="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
-		    				</div>
-		    			</div>
-					</li>
-					<li>
-						<div class="playlistItem">
-							<div class="track">
-								<div class="song">Song name</div>
-								<div class="artist">Artist</div>
-							</div>
-							<div class="buttons">
-		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
-		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
-		    				</div>
-		    			</div>
-					</li>
 				</ul>
 			</div>
 		</div>
