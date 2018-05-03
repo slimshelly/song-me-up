@@ -271,12 +271,14 @@ input[type=text] {
 
 /* CURRENTLY PLAYING */
 .nowPlaying {
+	border: 1px solid black;
 	clear: both;
 	display: flex;
 	justify-content: center;
 }
 
 .imgContainer {
+	border: 1px solid red;
 	width: 75%;
 	display: flex;
 	justify-content: flex-start;
@@ -289,6 +291,7 @@ input[type=text] {
 }
 
 .artistInfo {
+	border: 1px solid yellow;
 	margin-top: 5%;
 	display: block;
 	width: 100%;
@@ -307,6 +310,12 @@ input[type=text] {
 
 .trackName {
 	font-size: 30px;
+}
+
+.musicControls {
+	border: 1px solid green;
+	margin-top: 5%;
+	margin-left: 10%;
 }
 
 
