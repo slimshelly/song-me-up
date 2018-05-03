@@ -107,13 +107,30 @@ public class PartyWebSocket {
       	    // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
             Track suggested = new TrackBean(track, u.getAuth());
-          	p.suggest(suggested, user_id); //returns updated suggestions
-            //TODO: need to call p.getSongsToVoteOn() just in case a suggestion is duplicate and adjusts vote standing
-          	
+            Collection<Suggestion> suggestingBlock = p.suggest(suggested, user_id);
+            JsonArray unorderedSuggestions = new JsonArray();
+            for (Suggestion s: suggestingBlock) {
+              try {
+                unorderedSuggestions.add(s.toJson());
+              } catch (Exception e) {
+                General.printErr("Error accessing Track information. "
+                        + e.getMessage());
+              }
+            }
           	// build track object to send to frontend with message type ADDSONG
-          	JsonObject jo = new JsonObject();
+            Collection<Suggestion> votingBlock = p.getSongsToVoteOn();
+            JsonArray orderedSuggestions = new JsonArray();
+            for (Suggestion s: votingBlock) {
+              try {
+                orderedSuggestions.add(s.toJson());
+              } catch (Exception e) {
+                General.printErr("Error accessing Track information. "
+                        + e.getMessage());
+              }
+            }
+            JsonObject jo = new JsonObject();
           	jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
-          	jo.add("payload", track);
+            jo.add("payload", orderedSuggestions);
           	for (Session s : sessions) {
           		// sending song to all users
           		s.getRemote().sendString(GSON.toJson(jo));
