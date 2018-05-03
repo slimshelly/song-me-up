@@ -96,11 +96,6 @@ a {
 	border: 0.3em solid black;
 }
 
-/*.arrow:hover .bottom:after {
-	border-top: 0.3em solid white;
-	border-right: 0.3em solid white;
-}*/
-
 .bottom {
 	display: inline-block;
 	width: 2.5em;

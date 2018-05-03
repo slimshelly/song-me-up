@@ -6,6 +6,7 @@ import java.util.List;
 import edu.brown.cs.jmst.command.Command;
 import edu.brown.cs.jmst.command.Commander;
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.Album;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
@@ -27,6 +28,7 @@ public class SmuInputHandler implements Commander {
   public List<Command> getCommands() {
     List<Command> commands = new ArrayList<>();
     commands.add(new SongSearch());
+    commands.add(new AlbumSearch());
     commands.add(new MarcoPoloCommand());
     commands.add(new CapsCommand());
     return commands;
@@ -59,6 +61,67 @@ public class SmuInputHandler implements Commander {
     }
 
   }
+  
+
+  private class AlbumSearch extends Command {
+
+    public AlbumSearch() {
+      super("album " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      List<Album> albums =
+          SpotifyQuery.searchAlbum(toks.get(0), state.getAuth());
+
+      List<String> albuminfo = new ArrayList<>();
+      
+      for (Album t : albums) {
+        albuminfo.add(t.toString());
+        System.out.println(t.toString());
+      }
+      state.setListMessage(albuminfo);
+    }
+
+    @Override
+    public void print() {
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+  
+
+  private class AlbumSongSearch extends Command {
+
+    public AlbumSongSearch() {
+      super("album song " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      List<Track> tracks =
+          SpotifyQuery.searchSong(toks.get(0), state.getAuth());
+      List<String> trackinfo = new ArrayList<>();
+      for (Track t : tracks) {
+        trackinfo.add(t.toString());
+      }
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+
 
   /**
    * This is just an example command. The class defines the regex to match in

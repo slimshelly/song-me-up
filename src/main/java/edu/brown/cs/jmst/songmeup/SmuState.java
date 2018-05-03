@@ -2,14 +2,17 @@ package edu.brown.cs.jmst.songmeup;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.party.Party;
+import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
+import edu.brown.cs.jmst.party.UserException;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
+import edu.brown.cs.jmst.spotify.SpotifyException;
 
 /**
  * Storage class for references to all active parties, party hosts, etc.
@@ -19,28 +22,44 @@ import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
  */
 public class SmuState {
 
+  private static SmuState instance = null;
+
   private List<String> listMessage;
   private String message;
   private Map<String, Party> parties =
       Collections.synchronizedMap(new HashMap<>());
   private Map<String, User> users =
       Collections.synchronizedMap(new HashMap<>());
-  private Set<String> party_people_ids =
-      Collections.synchronizedSet(new HashSet<>());
+
+  private SmuState() {
+  }
+
+  public static SmuState getInstance() {
+    if (instance == null) {
+      instance = new SmuState();
+      return instance;
+    } else {
+      return instance;
+    }
+  }
 
   /**
    * Add a party to the set.
    *
    * @param party
    *          party to add
+   * @throws SpotifyException
+   * @throws PartyException
    */
-  public String addParty(Party party) {
-    String key = SpotifyAuthentication.randomString(6);
+  public Party startParty(User u) throws PartyException, SpotifyException {
+    String key = SpotifyAuthentication.randomReadableString(Party.ID_LENGTH);
     while (parties.containsKey(key)) {
-      key = SpotifyAuthentication.randomString(6);
+      key = SpotifyAuthentication.randomReadableString(Party.ID_LENGTH);
     }
+    SongMeUpPlaylist partyPlaylist = new SongMeUpPlaylist();
+    Party party = new Party(u, key, partyPlaylist);
     parties.put(key, party);
-    return key;
+    return party;
   }
 
   /**
@@ -61,18 +80,19 @@ public class SmuState {
    *          user
    * @param partyId
    *          party id to add to
+   * @throws PartyException
+   *           if user is already in a party
    */
-  public void addPartyPerson(User u, String partyId) {
-    if (party_people_ids.contains(u.getId())) {
-      throw new IllegalArgumentException(
-          "User cannot be in two parties at once.");
-    } else {
-      assert parties.containsKey(partyId);
-      Party p = parties.get(partyId);
-      assert !p.getPartyGoerIds().contains(u.getId());
-      p.addPartyGoer(u);
-      party_people_ids.add(u.getId());
+  public Party addPartyPerson(User u, String partyId)
+      throws PartyException, IllegalArgumentException {
+    if (!parties.containsKey(partyId)) {
+      throw new IllegalArgumentException("Invalid party id.");
     }
+    Party p = parties.get(partyId);
+    if (!partyId.equals(u.getCurrentParty())) {
+      p.addPartyGoer(u);
+    }
+    return p;
   }
 
   /**
@@ -82,14 +102,14 @@ public class SmuState {
    *          leaving user
    * @param partyId
    *          id of party they are leaving
+   * @throws PartyException
+   *           if u is not in a party.
    */
-  public void leaveParty(User u, String partyId) {
-    assert party_people_ids.contains(u.getId());
-    assert parties.containsKey(partyId);
-    Party p = parties.get(partyId);
-    assert p.getPartyGoerIds().contains(u.getId());
-    p.removePartyGoer(u);
-    party_people_ids.remove(u.getId());
+  public void leaveParty(User u, String partyId) throws PartyException {
+    if (!parties.containsKey(partyId)) {
+      throw new PartyException("Invalid party id.");
+    }
+    parties.get(partyId).removePartyGoer(u);
   }
 
   /**
@@ -97,19 +117,18 @@ public class SmuState {
    *
    * @param id
    *          id of party to end.
+   * @throws PartyException
    */
-  public void endParty(String id) {
-    assert parties.containsKey(id);
-    Party p = parties.get(id);
-    for (String s : p.getPartyGoerIds()) {
-      party_people_ids.remove(s);
+  public void endParty(String id) throws PartyException {
+    if (!parties.containsKey(id)) {
+      throw new IllegalArgumentException("Invalid party id.");
     }
-    parties.remove(id);
+    Party p = parties.remove(id);
+    p.end();
   }
 
   /**
-   * Will either create a new user with the given id, or return the user with
-   * the given id.
+   * Will return the user with the given Spotify id.
    *
    * @param id
    *          id of user
@@ -117,12 +136,26 @@ public class SmuState {
    */
   public User getUser(String id) {
     // General.printVal("Users", Integer.toString(users.size()));
-    if (users.containsKey(id)) {
-      return users.get(id);
-    } else {
-      User user = new User();
-      users.put(id, user);
-      return user;
+    return users.get(id);
+  }
+
+  public User addUser(String code) throws Exception, UserException {
+    User u = new User();
+    u.logIn(code);
+    if (users.containsKey(u.getId())) {
+      throw new UserException("User already exists.");
+    }
+    users.put(u.getId(), u);
+    return u;
+  }
+
+  public void removeUser(String id) throws PartyException {
+    User u = getUser(id);
+    if (u != null) {
+      if (u.getCurrentParty() != null) {
+        leaveParty(u, u.getCurrentParty());
+      }
+      users.remove(id);
     }
   }
 

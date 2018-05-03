@@ -76,11 +76,11 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
   }
 
   @Override
-  public String getUrl() throws Exception {
+  public String getUri() throws Exception {
     if (this.bean == null) {
       this.fill();
     }
-    return bean.getUrl();
+    return bean.getUri();
   }
 
   @Override
@@ -94,4 +94,10 @@ public class TrackProxy extends EntityProxy<TrackBean> implements Track {
     }
     return bean.toString();
   }
+
+@Override
+public String getAlbumArt() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

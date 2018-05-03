@@ -19,6 +19,8 @@ public interface Track {
 
   String getName() throws Exception;
 
-  String getUrl() throws Exception;
+  String getUri() throws Exception;
+  
+  String getAlbumArt() throws Exception;
 
 }
