@@ -54,8 +54,7 @@ public class Suggestion implements Comparable<Suggestion> {
     jo.addProperty("duration_ms", song.getDuration_ms());
     jo.addProperty("uri", song.getUri());
     jo.addProperty("score", score);
-    //TODO: consider adding album_ids
-    return null;
+    return jo;
   }
 
   public Track getSong() { // TODO: does this need to be public?
