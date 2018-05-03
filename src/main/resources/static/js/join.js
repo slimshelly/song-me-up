@@ -34,9 +34,10 @@ $(document).ready(() => {
 	    	$("#dropdown").hide();
 	    }
 	    else {
+        $("#dropdown").show();
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
-			$results.empty();
+			  $results.empty();
 		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
@@ -86,7 +87,7 @@ const setup_live_playlist = () => {
       	// update number of votes for a specific song on the playlist
       	let song_id = data.payload.song_id;
       	let votes = data.payload.votes; //number of votes the song has
-		console.log(votes);
+		    console.log(votes);
       	break;
 
       case MESSAGE_TYPE.ADDSONG:

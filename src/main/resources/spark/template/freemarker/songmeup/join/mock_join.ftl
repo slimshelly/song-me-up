@@ -38,6 +38,11 @@
 					<span class="now">Now Playing</span>
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
 					<span class="artistName">Flume — Skin</span>
+					<div class="musicControls">
+						<i class="fas fa-backward fa-4x"></i>
+						<i class="fas fa-play fa-3x"></i>
+						<i class="fas fa-forward fa-4x"></i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -51,8 +56,6 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
-					<a class="option" href="javascript:;"><div>Lorem ipsum dolor.</div></a>
-					<a class="option" href="javascript:;"><div>Lorem sdf dolor.</div></a>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
