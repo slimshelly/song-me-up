@@ -57,9 +57,18 @@ class SongBlock {
     return this.suggestions;
   }
 
-  protected Suggestion getSuggestionByTrack(Track song) {
+  Suggestion getSuggestionByTrack(Track song) {
     for (Suggestion s: suggestions) {
       if (s.getSong().equals(song)) {
+        return s;
+      }
+    }
+    return null;
+  }
+
+  Suggestion getSuggestionById(String songId) {
+    for (Suggestion s: suggestions) {
+      if (s.getSong().getId().equals(songId)) {
         return s;
       }
     }

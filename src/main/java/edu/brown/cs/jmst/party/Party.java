@@ -62,54 +62,55 @@ public class Party extends Entity {
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
    */
-  public void suggest(Track song, String userId) {
-    suggestions.suggest(song, userId);
-  }
-
-  public Collection<Suggestion> suggestSong(Track song, String userId) throws Exception {
+  public Collection<Suggestion> suggest(Track song, String userId) throws Exception {
     return suggestions.suggest(song, userId);
   }
 
-  public Collection<Suggestion> voteOnSongNEW(Suggestion voteOn, String userId, boolean isUpVote)
+  public Collection<Suggestion> getSongsToVoteOn() {
+    return suggestions.getSongsToVoteOn();
+  }
+
+  public Collection<Suggestion> voteOnSong(String songId, String userId, boolean isUpVote)
           throws PartyException {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
     }
+    Suggestion voteOn = suggestions.getSuggestionById(songId);
     return suggestions.vote(voteOn, userId, isUpVote);
   }
 
-  public int voteOnSong(String userid, String songid, boolean vote)
-      throws PartyException {
-    if (!votes.containsKey(userid)) {
-      throw new PartyException("User not found in party.");
-    } else {
-      Map<String, Integer> user_votes = votes.get(userid);
-      if (!user_votes.containsKey(songid)) {
-        user_votes.put(songid, 0);
-      }
-      if (!total_votes.containsKey(songid)) {
-        total_votes.put(songid, 0);
-      }
-      int val = user_votes.get(songid);
-      int newval;
-      if (vote) {
-        if (val != 1) {
-          newval = 1;
-        } else {
-          newval = 0;
-        }
-      } else {
-        if (val != -1) {
-          newval = -1;
-        } else {
-          newval = 0;
-        }
-      }
-      user_votes.put(songid, newval);
-      total_votes.put(songid, total_votes.get(songid) + (newval - val));
-      return total_votes.get(songid);
-    }
-  }
+//  public int voteOnSong(String userid, String songid, boolean vote)
+//      throws PartyException {
+//    if (!votes.containsKey(userid)) {
+//      throw new PartyException("User not found in party.");
+//    } else {
+//      Map<String, Integer> user_votes = votes.get(userid);
+//      if (!user_votes.containsKey(songid)) {
+//        user_votes.put(songid, 0);
+//      }
+//      if (!total_votes.containsKey(songid)) {
+//        total_votes.put(songid, 0);
+//      }
+//      int val = user_votes.get(songid);
+//      int newval;
+//      if (vote) {
+//        if (val != 1) {
+//          newval = 1;
+//        } else {
+//          newval = 0;
+//        }
+//      } else {
+//        if (val != -1) {
+//          newval = -1;
+//        } else {
+//          newval = 0;
+//        }
+//      }
+//      user_votes.put(songid, newval);
+//      total_votes.put(songid, total_votes.get(songid) + (newval - val));
+//      return total_votes.get(songid);
+//    }
+//  }
 
   public void end() throws PartyException {
     for (User u : partygoers) {

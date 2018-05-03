@@ -72,9 +72,10 @@ public class PartyWebSocket {
         case VOTESONG:
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
+            p.voteOnSong(song_id, user_id, vote); //return ordered collection of suggestions (with votes)
             JsonObject jpayload = new JsonObject();
             jpayload.addProperty("song_id", song_id);
-            jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
+            //jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
             JsonObject jo = new JsonObject();
             jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
             jo.add("payload", jpayload);
@@ -92,7 +93,8 @@ public class PartyWebSocket {
       	    // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
             Track suggested = new TrackBean(track, u.getAuth());
-          	p.suggest(suggested, user_id);
+          	p.suggest(suggested, user_id); //returns updated suggestions
+            //TODO: need to call p.getSongsToVoteOn() just in case a suggestion is duplicate and adjusts vote standing
           	
           	// build track object to send to frontend with message type ADDSONG
           	JsonObject jo = new JsonObject();

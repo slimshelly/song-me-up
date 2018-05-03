@@ -51,6 +51,15 @@ public class SongQueue {
     return votingBlock.getSuggestions();
   }
 
+  public Suggestion getSuggestionById(String songId) throws PartyException {
+    Suggestion toReturn = votingBlock.getSuggestionById(songId);
+    if (toReturn == null) {
+      throw new PartyException("No song found in current voting block with ID '"
+      + songId + "'.");
+    }
+    return toReturn;
+  }
+
   /**
    * @return a PriorityBlockingQueue of Suggestions that should be displayed for
    *         voting on. They are ordered based on number of votes
