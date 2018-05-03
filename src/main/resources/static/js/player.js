@@ -3,7 +3,7 @@ let player;
 $(document).ready(() => {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = 'BQC3szSha2Vgv13-lTDauc94N-8c3wJdOjSyOkT8wGBpTG_0mDpXRCs8_rRg6cwu_9b1nXMWHi-AFz002XRN-j9MQt08IPW4djPTHeDehVwFVVgxbExGBzRlTAioOvbA_jCJSoTSZjpkGX-5s7GLV0dHow5dFM9F6kDQGK5IxcGcUdLyz_PgLfPy3Q';
+        const token = 'BQDz1KLGOs2A9DHz2JaWJxlwO2-PCmzEKpEcvqWBGud-iz2QLc7GXN2C200DhnuQuGsoxbjNErmT03Sw6iqLp6M2yiLZ79ohPunS4xvPrx_e0B01MvvJ8K_95JgoEVKkg8-ARjBrqvnzmnjLZQc0yh_zEyfW6CZ2YNyBk123baoZPKpGfVglXSzP7w';
         player = new Spotify.Player({
             name: 'Test Player',
             getOAuthToken: cb => {
@@ -89,7 +89,7 @@ const play = ({
 
 function playSong() {
     play({
-        spotify_uri: 'spotify:track:3GCL1PydwsLodcpv0Ll1ch',
+        spotify_uri: 'spotify:track:2Th9BGKvfZG8bKQSACitwG',
         playerInstance: player
     });
 
@@ -104,8 +104,6 @@ function pauseSong() {
     });
 
 }
-
-
 
 
 function resumeSong() {
