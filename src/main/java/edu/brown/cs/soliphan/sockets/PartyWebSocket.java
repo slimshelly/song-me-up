@@ -19,6 +19,7 @@ import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
 @WebSocket
 public class PartyWebSocket {
@@ -60,14 +61,13 @@ public class PartyWebSocket {
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
-
+    String song_id = inputPayload.get("song_id").getAsString();
     User u = state.getUser(user_id);
     String partyId = u.getCurrentParty();
     if (partyId != null) {
       Party p = state.getParty(partyId);
       switch (type) {
         case VOTESONG:
-          String song_id = inputPayload.get("song_id").getAsString();
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
             JsonObject jpayload = new JsonObject();
@@ -84,23 +84,17 @@ public class PartyWebSocket {
           }
           break;
         case ADDSONG:
-
-          // String song_id = inputPayload.get("song_id").getAsString();
-          // boolean vote = inputPayload.get("vote").getAsBoolean();
-          // try {
-          // JsonObject jpayload = new JsonObject();
-          // jpayload.addProperty("song_id", song_id);
-          // jpayload.addProperty("votes", p.voteOnSong(user_id, song_id,
-          // vote));
-          // JsonObject jo = new JsonObject();
-          // jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
-          // jo.add("payload", jpayload);
-          // for (Session s : sessions) {
-          // s.getRemote().sendString(GSON.toJson(jo));
-          // }
-          // } catch (PartyException e) {
-          // return;
-          // }
+          try {
+            JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
+            JsonObject jo = new JsonObject();
+            jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
+            jo.add("payload", track);
+            for (Session s : sessions) {
+              s.getRemote().sendString(GSON.toJson(jo));
+            }
+          } catch (Exception e) {
+            General.printErr(e.getMessage());
+          }
           break;
         case REMOVESONG:
           break;
