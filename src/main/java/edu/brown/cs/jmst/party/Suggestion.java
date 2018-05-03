@@ -120,15 +120,15 @@ public class Suggestion implements Comparable<Suggestion> {
     }
   }
 
-  public boolean userHasVotedOnThis(String userId) {
+  public boolean hasBeenVotedOnByUser(String userId) {
     return userVoteMap.containsKey(userId) && userVoteMap.get(userId) != 0;
   }
 
-  public boolean userHasUpVotedThis(String userId) {
+  public boolean hasBeenUpVotedByUser(String userId) {
     return userVoteMap.get(userId).equals(1);
   }
 
-  public boolean userHasSubmittedThis(String userId) {
+  public boolean hasBeenSubmittedByUser(String userId) {
     return userSubmittedSet.contains(userId);
   }
 

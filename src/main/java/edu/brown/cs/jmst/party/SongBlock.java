@@ -73,12 +73,12 @@ class SongBlock {
       existingSuggestion = getSuggestionByTrack(song);
     }
     if (existingSuggestion != null) {
-      if (existingSuggestion.userHasSubmittedThis(userId)) {
+      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
         //TODO: report that user is trying to submit something twice
         return;
       }
-      if (!existingSuggestion.userHasUpVotedThis(userId)) {
-        vote(existingSuggestion, userId, 1);
+      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
+        vote(existingSuggestion, userId, true);
       }
       existingSuggestion.addSubmitter(userId);
       return;
@@ -86,10 +86,10 @@ class SongBlock {
     suggestions.add(new Suggestion(userId, song));
   }
 
-  protected void vote(Suggestion song, String userId, Integer voteValue) {
+  protected void vote(Suggestion song, String userId, boolean isUpVote) {
     assert suggestions.contains(song);
     suggestions.remove(song); //update ordering
-    song.vote(userId, voteValue);
+    song.vote(userId, isUpVote);
     suggestions.add(song); //update ordering
   }
 

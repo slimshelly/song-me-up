@@ -43,10 +43,10 @@ public class SongQueue {
   /**
    * @param song A Suggestion to vote on
    * @param userId the ID string of the user voting on the suggestion
-   * @param voteValue 1 indicates an up-vote, -1 indicates a down-vote
+   * @param isUpVote true indicates an up-vote, false indicates a down-vote
    */
-  public void Vote(Suggestion song, String userId, Integer voteValue) {
-    votingBlock.vote(song, userId, voteValue);
+  public void Vote(Suggestion song, String userId, boolean isUpVote) {
+    votingBlock.vote(song, userId, isUpVote);
   }
 
   /**
