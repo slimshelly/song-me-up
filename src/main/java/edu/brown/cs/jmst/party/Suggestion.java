@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.party;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.music.Track;
 
@@ -41,8 +42,19 @@ public class Suggestion implements Comparable<Suggestion> {
     userSubmittedSet.add(userId);
   }
 
-  public JsonObject toJSON() {
-    //TODO: make a JSON object that can be used by front end.
+  public JsonObject toJson() throws Exception {
+    JsonObject jo = new JsonObject();
+    jo.addProperty("song_id", song.getId());
+    jo.addProperty("song_name", song.getName());
+    JsonArray artistIds = new JsonArray();
+    for (String artist_id : song.getArtistIds()) {
+      artistIds.add(artist_id);
+    }
+    jo.add("artist_ids", artistIds);
+    jo.addProperty("duration_ms", song.getDuration_ms());
+    jo.addProperty("uri", song.getUri());
+    jo.addProperty("score", score);
+    //TODO: consider adding album_ids
     return null;
   }
 
