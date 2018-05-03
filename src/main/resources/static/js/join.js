@@ -27,31 +27,28 @@ $(document).ready(() => {
 	// $("#dropdown").hide();
 	let $results = $("#dropdown");
   $("#playlist").keyup(event => {
+    	let song = document.getElementById('songName').value;
+    	console.log(song);
 
-  	let song = document.getElementById('songName').value;
-  	console.log(song);
+	    if (song.length === 0) {
+	    	$("#dropdown").hide();
+	    }
+	    else {
+		   	const postParameters = {word: song};
+		    console.log(postParameters);
+			$results.empty();
+		    // send input to backend to generate song suggestions
+		    $.post("/suggestions", postParameters, responseJSON => {
 
-    if (song.length === 0) {
-    	$("#dropdown").hide();
-    }
-    else {
-      $("#dropdown").show();
-	   	const postParameters = {word: song};
-	    console.log(postParameters);
-		  $results.empty(); // clear results list
+				const responseObject = JSON.parse(responseJSON);
+				console.log(responseObject);
+				let output = responseObject;
 
-	    // send input to backend to generate song suggestions
-	    $.post("/suggestions", postParameters, responseJSON => {
-
-  			const responseObject = JSON.parse(responseJSON);
-  			console.log(responseObject);
-  			let output = responseObject;
-
-  			for(const sug of output){
-  				$results.append("<a href='javascript:;' onclick='new_song(" + sug.song_id + ")'><div class='option'>" + sug.song_name + "</div></a>");
-  			}
-      });
-	  }
+				for(const sug of output){
+					$results.append("<a href='javascript:;' onclick='new_song(" + sug.id + ")'><div class='option'>" + sug.name + "</div></a>");
+				};
+		  });
+		}
   });
 });
 
