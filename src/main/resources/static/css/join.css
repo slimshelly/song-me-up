@@ -236,13 +236,13 @@ input[type=text] {
 	margin-left: 10%;
 }
 
-#playlistItem {
+.playlistItem {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-#buttons {
+.buttons {
 	margin-right: 10px;
 }
 

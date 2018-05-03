@@ -11,6 +11,9 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+		<ul id="stf"> HELO </ul>
+
+
 		<input type="hidden" id="user_id" value="${user_id}">
 		<!--<div id="hidden" hidden>${user_id}</div>-->
 		<nav role="navigation" id="navvy">
@@ -63,60 +66,60 @@
 				<!-- SONGS -->
 				<ul id="displaySongs">
 					<li>
-						<div id="playlistItem">
+						<div class="playlistItem">
 							<div class="track">
 								<div class="song">Song name</div>
 								<div class="artist">Artist</div>
 							</div>
-							<div id="buttons">
+							<div class="buttons">
 		    					<a href="javascript:;"><i class="fa fa-chevron-circle-down" id="down"></i></a>
 		    					<a href="javascript:;"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>
 					<li>
-						<div id="playlistItem">
+						<div class="playlistItem">
 							<div class="track">
 								<div class="song">Song name</div>
 								<div class="artist">Artist</div>
 							</div>
-							<div id="buttons">
+							<div class="buttons">
 		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
 		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>
 					<li>
-						<div id="playlistItem">
+						<div class="playlistItem">
 							<div class="track">
 								<div class="song">Song name</div>
 								<div class="artist">Artist</div>
 							</div>
-							<div id="buttons">
+							<div class="buttons">
 		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
 		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>
 					<li>
-						<div id="playlistItem">
+						<div class="playlistItem">
 							<div class="track">
 								<div class="song">Song name</div>
 								<div class="artist">Artist</div>
 							</div>
-							<div id="buttons">
+							<div class="buttons">
 		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
 		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>
 		    			</div>
 					</li>
 					<li>
-						<div id="playlistItem">
+						<div class="playlistItem">
 							<div class="track">
 								<div class="song">Song name</div>
 								<div class="artist">Artist</div>
 							</div>
-							<div id="buttons">
+							<div class="buttons">
 		    					<a href="#"><i class="fa fa-chevron-circle-down" id="down"></i></a>
 		    					<a href="#"><i class="fa fa-chevron-circle-up" id="up"></i></a>
 		    				</div>

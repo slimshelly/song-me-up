@@ -1,5 +1,10 @@
 
+let $playlist;
+
 $(document).ready(() => {
+
+  $playlist = $("#displaySongs");
+  $("#displaySongs").append("<li>BOB</li>");
 
 	/*
 	Toggle color for up and down buttons
@@ -46,9 +51,9 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-          console.log(sug.id);
-					$results.append("<a href='javascript:;' onclick='new_song(\"2NyrXRn4tancYPW6JwtTl2\")'><div class='option'>" + sug.name + "</div></a>");
-          // $results.append("<a href='javascript:;' onclick='new_song(" + sug.id.toString() + ")'><div class='option'>" + sug.name + "</div></a>");
+
+					// $results.append("<a href='javascript:;' onclick='new_song(\"2NyrXRn4tancYPW6JwtTl2\")'><div class='option'>" + sug.name + "</div></a>");
+          $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\")'><div class='option'>" + sug.name + "</div></a>");
         };
 		  });
 		}
@@ -65,11 +70,11 @@ const MESSAGE_TYPE = {
   PLAYLIST: 3
 };
 let conn;
-const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
+  console.log("ASLBDLKFA");
   conn = new WebSocket("ws://localhost:4567/songupdates");
 
 
@@ -94,18 +99,54 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
-        $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
-        $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
+
+        $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+          + "<div class='playlistItem'>"
+          + "<div class='track'>" 
+          + "<div class='song'>" + data.payload.song_name + "</div>"
+          + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "</div>"
+          + "</div>"
+
+          + "</li>");
+
+        // $("#" + $("#user_id").val()).append("<div class='playlistItem'>"
+        //   + "<div class='track'>" 
+        //   + "<div class='song'>" + data.payload.song_name + "</div>"
+        //   + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
+        //   + "</div>"
+        //   + "<div class='buttons'>"
+        //   + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+        //   + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+        //   + "</div>"
+        //   + "</div>");
         // add song information
-        $(".playlistItem").append("<div class='track'>" + "</div>");
-        $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
-        $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
+        // $(".playlistItem").append("<div class='track'>" + "</div>");
+        // $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
+        // $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
         // add number of votes
 
         // add buttons
-        $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        // $(".playlistItem").append("<div id='buttons'>" + "</div>");
+        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+
+        // $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
+        // $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
+        // // add song information
+        // $(".playlistItem").append("<div class='track'>" + "</div>");
+        // $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
+        // $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
+        // // add number of votes
+
+        // // add buttons
+        // $(".playlistItem").append("<div id='buttons'>" + "</div>");
+        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
@@ -144,7 +185,6 @@ function new_song(songId) {
         "id":$("#user_id").val(), 
         "song_id":songId}
       };
-  conn.send(JSON.stringify(userSuggestion));
 }
 
 /*
