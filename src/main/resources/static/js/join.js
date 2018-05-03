@@ -66,13 +66,9 @@ const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
-<<<<<<< HEAD
-  // Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/join");
-=======
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/songupdates");
->>>>>>> a7a1dd2712d92ff5ce7958b248a06dcc93295b6e
+
 
   conn.onerror = err => {
     console.log('Connection error:', err);
