@@ -75,7 +75,7 @@ public class PartyWebSocket {
           try {
         	    // retreive list of voting block songs from backend
         	    p.voteOnSong(user_id, song_id, vote);
-        	  
+
         	    // send net number of votes on song back to frontend
             JsonObject jpayload = new JsonObject();
             jpayload.addProperty("song_id", song_id);

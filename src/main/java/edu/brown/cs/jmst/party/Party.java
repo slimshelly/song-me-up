@@ -71,7 +71,7 @@ public class Party extends Entity {
     return suggestions.getSongsToVoteOn();
   }
 
-  public Collection<Suggestion> voteOnSong(String songId, String userId, boolean isUpVote)
+  public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
           throws PartyException {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
