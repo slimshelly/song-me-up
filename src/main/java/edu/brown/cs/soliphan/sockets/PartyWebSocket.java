@@ -87,16 +87,21 @@ public class PartyWebSocket {
           break;
         case ADDSONG:
           try {
+      	    // get track object from spotify (access to all spotify track fields)
+      	    // build trackbean, which includes all spotify track fields and album art
+      	    // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
-            JsonObject jo = new JsonObject();
-            jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
-            jo.add("payload", track);
             Track suggested = new TrackBean(track, u.getAuth());
-            	p.suggest(suggested, user_id);
-            for (Session s : sessions) {
-            	  // sending song to all users
-              s.getRemote().sendString(GSON.toJson(jo));
-            }
+          	p.suggest(suggested, user_id);
+          	
+          	// build track object to send to frontend with message type ADDSONG
+          	JsonObject jo = new JsonObject();
+          	jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
+          	jo.add("payload", track);
+          	for (Session s : sessions) {
+          		// sending song to all users
+          		s.getRemote().sendString(GSON.toJson(jo));
+          	}
           } catch (Exception e) {
             General.printErr(e.getMessage());
           }
