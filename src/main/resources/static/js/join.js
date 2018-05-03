@@ -45,7 +45,7 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-					$results.append("<a href='javascript:;' onclick='new_song(sug.id)'><div class='option'>" + sug.name + "</div></a>");
+					$results.append("<a href='javascript:;' onclick='new_song(" + sug.id + ")'><div class='option'>" + sug.name + "</div></a>");
 				};
 		    });
 		}
