@@ -45,7 +45,7 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-					$results.append("<a href='javascript:;' onclick='new_song(sug.id)'><div class='option'>" + sug.name + "</div></a>");
+					$results.append("<a href='javascript:;' onclick='new_song(" + sug.id + ")'><div class='option'>" + sug.name + "</div></a>");
 				};
 		    });
 		}
@@ -61,9 +61,7 @@ const MESSAGE_TYPE = {
   REMOVESONG: 2,
   PLAYLIST: 3
 };
-
 let conn;
-let userId = $(".hidden").innerHTML;
 const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
@@ -91,8 +89,8 @@ const setup_live_playlist = () => {
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
-        $playlist.append("<li id='" + userId + "'>" + "</li>");
-        $("#" + userId).append("<div id='playlistItem'>" + "</div>");
+        $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
+        $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
         // add song information
         $(".playlistItem").append("<div class='track'>" + "</div>");
         $(".track").append("<div class='song'>" + data.payload.name + "</div>");
@@ -106,7 +104,7 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
-      	$playlist.remove($("#" + userId)); // removes li of ul, referenced by userId
+      	$playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
       	break;
 
       case MESSAGE_TYPE.PLAYLIST:
@@ -122,9 +120,8 @@ Send message to backend when a user votes on a song - params are boolean vote an
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  console.log(userId);
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
-        "id":userId, 
+        "id":$("#user_id").val(), 
         "song_id":songId,
         "vote":vote_boolean}
       };
@@ -133,11 +130,11 @@ function new_vote(vote_boolean, songId){
 /*
 Send message to backend when a user adds a song
 */
-const new_song = songId => {
+function new_song(songId) {
   // Send a VOTESONG message to the server using `conn`
-  console.log(userId);
+  console.log($("#user_id").val());
   let song = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
-        "id":userId, 
+        "id":$("#user_id").val(), 
         "song_id":songId}
       };
   conn.send(JSON.stringify(vote));
