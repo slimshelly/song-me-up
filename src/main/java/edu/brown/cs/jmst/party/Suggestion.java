@@ -108,7 +108,7 @@ public class Suggestion implements Comparable<Suggestion> {
     userVoteMap.put(userId, 0);
   }
 
-  public void vote(String userId, boolean isUpVote) {
+  public int vote(String userId, boolean isUpVote) {
     if (!userVoteMap.containsKey(userId) || userVoteMap.get(userId) == 0) {
       doVote(userId, isUpVote);
     } else {
@@ -118,6 +118,7 @@ public class Suggestion implements Comparable<Suggestion> {
         doVote(userId, isUpVote);
       }
     }
+    return this.score;
   }
 
   public boolean hasBeenVotedOnByUser(String userId) {

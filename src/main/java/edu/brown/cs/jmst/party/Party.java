@@ -14,7 +14,8 @@ public class Party extends Entity {
 
   private User ph;
   private Set<User> partygoers;
-  private SongQueue suggestions; // object to hold all suggestions
+  private Set<String> userIds; // just user ID strings
+  private SongQueue suggestions; // object to hold all suggestions. NOTE: at this point, SongQueue does much more than hold suggestions
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
@@ -32,6 +33,7 @@ public class Party extends Entity {
     host.joinParty(this.id);
     ph = host;
     partygoers = Collections.synchronizedSet(new HashSet<>());
+    userIds = Collections.synchronizedSet(new HashSet<>());
     votes = Collections.synchronizedMap(new HashMap<>());
     total_votes = Collections.synchronizedMap(new HashMap<>());
     suggestions = new SongQueue();
@@ -45,16 +47,26 @@ public class Party extends Entity {
   public void addPartyGoer(User pg) throws PartyException {
     pg.joinParty(this.id);
     partygoers.add(pg);
+    userIds.add(pg.getId());
     votes.put(pg.getId(), Collections.synchronizedMap(new HashMap<>()));
   }
 
   public void removePartyGoer(User u) throws PartyException {
     u.leaveParty();
     partygoers.remove(u);
+    userIds.remove(u.getId());
   }
 
   public String getHostName() {
     return ph.getName();
+  }
+
+  public int voteOnSongNEW(Suggestion voteOn, String userId, boolean isUpVote)
+          throws PartyException {
+    if (!userIds.contains(userId)) {
+      throw new PartyException("User not found in party.");
+    }
+    return suggestions.vote(voteOn, userId, isUpVote);
   }
 
   public int voteOnSong(String userid, String songid, boolean vote)
