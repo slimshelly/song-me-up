@@ -2,6 +2,7 @@ package edu.brown.cs.jmst.spotify;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,9 +35,9 @@ public class SpotifyQuery {
   public static JsonObject getRawTrack(String song_id, String access_token)
       throws IOException {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      HttpGet get = new HttpGet(
+    	  HttpGet get = new HttpGet(
           "https://api.spotify.com/v1/https://api.spotify.com/v1/tracks/"
-              + song_id);
+              + URLEncoder.encode(song_id, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
 
       HttpResponse response = client.execute(get);

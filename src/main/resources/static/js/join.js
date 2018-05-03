@@ -46,8 +46,10 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-					$results.append("<a href='javascript:;' onclick='new_song(" + sug.id + ")'><div class='option'>" + sug.name + "</div></a>");
-				};
+          console.log(sug.id);
+					$results.append("<a href='javascript:;' onclick='new_song(\"2NyrXRn4tancYPW6JwtTl2\")'><div class='option'>" + sug.name + "</div></a>");
+          // $results.append("<a href='javascript:;' onclick='new_song(" + sug.id.toString() + ")'><div class='option'>" + sug.name + "</div></a>");
+        };
 		  });
 		}
   });
@@ -87,27 +89,23 @@ const setup_live_playlist = () => {
       	// update number of votes for a specific song on the playlist
         let votingList = data.payload;
         // loop through json objects in payload
-        for (vote : votingList) {
-          let song_id = vote.song_id;
-          
-
-        }
         // display number of votes for given song_id
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
+        console.log("Addsonging");
         $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
         $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
         // add song information
         $(".playlistItem").append("<div class='track'>" + "</div>");
-        $(".track").append("<div class='song'>" + data.payload.name + "</div>");
-        $(".track").append("<div class='artist'>" + data.payload.artists[0].name + "</div>");
+        $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
+        $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
         // add number of votes
 
         // add buttons
         $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
+        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
@@ -139,6 +137,8 @@ Send ADDSONG message to backend when a user adds a song
 */
 function new_song(songId) {
   // Send a ADDSONG message to the server using `conn`
+  console.log("i want to add a song");
+  console.log(songId);
   console.log($("#user_id").val());
   let userSuggestion = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
         "id":$("#user_id").val(), 

@@ -63,12 +63,16 @@ public class Party extends Entity {
    * @param userId the ID string of the user submitting the suggestion
  * @throws PartyException 
    */
-  public Collection<Suggestion> suggest(Track song, String userId) throws PartyException {
+  public Suggestion suggest(Track song, String userId) throws PartyException {
     return suggestions.suggest(song, userId);
   }
 
   public Collection<Suggestion> getSongsToVoteOn() {
     return suggestions.getSongsToVoteOn();
+  }
+
+  public Collection<Suggestion> getSongsToPlay() {
+    return suggestions.getSongsToPlay();
   }
 
   public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
