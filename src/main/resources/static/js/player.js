@@ -3,7 +3,7 @@ let player;
 $(document).ready(() => {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = 'BQDz1KLGOs2A9DHz2JaWJxlwO2-PCmzEKpEcvqWBGud-iz2QLc7GXN2C200DhnuQuGsoxbjNErmT03Sw6iqLp6M2yiLZ79ohPunS4xvPrx_e0B01MvvJ8K_95JgoEVKkg8-ARjBrqvnzmnjLZQc0yh_zEyfW6CZ2YNyBk123baoZPKpGfVglXSzP7w';
+        const token = 'BQApOrqNHoYpLhTN51cw8Pfon_0mcc7qlfdI5HAm0BGKguH4ei1QqPLCWMrYDJFmthWyTwkRW7YT_Y1kPolyz8KJO8hmI1PzXoAIdcmsyBIk9ooYoHrPeND3wPENRJPBOzrQA9SyRghxOh4HywVkSFeDx6HWsZrjIRzP6jWbFgsCexM6g3w0N-KG_g';
         player = new Spotify.Player({
             name: 'Test Player',
             getOAuthToken: cb => {
