@@ -72,7 +72,6 @@ public class SmuInputHandler implements Commander {
     @Override
     public void execute(List<String> toks) throws Exception {
       assert toks.size() == 1;
-      System.out.println("hello");
       List<Album> albums =
           SpotifyQuery.searchAlbum(toks.get(0), state.getAuth());
 
@@ -87,6 +86,35 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+  
+
+  private class AlbumSongSearch extends Command {
+
+    public AlbumSongSearch() {
+      super("album song " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      List<Track> tracks =
+          SpotifyQuery.searchSong(toks.get(0), state.getAuth());
+      List<String> trackinfo = new ArrayList<>();
+      for (Track t : tracks) {
+        trackinfo.add(t.toString());
+      }
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }
