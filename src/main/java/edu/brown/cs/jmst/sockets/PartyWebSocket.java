@@ -1,4 +1,4 @@
-package edu.brown.cs.soliphan.sockets;
+package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
 import java.util.Collection;

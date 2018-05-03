@@ -35,9 +35,7 @@ public class SpotifyQuery {
   public static JsonObject getRawTrack(String song_id, String access_token)
       throws IOException {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-    	  HttpGet get = new HttpGet(
-          "https://api.spotify.com/v1/https://api.spotify.com/v1/tracks/"
-              + URLEncoder.encode(song_id, "UTF-8"));
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/tracks/" + song_id);
       get.setHeader("Authorization", "Bearer " + access_token);
 
       HttpResponse response = client.execute(get);

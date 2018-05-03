@@ -2,8 +2,8 @@ package edu.brown.cs.jmst.spark;
 
 import com.google.gson.Gson;
 
+import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
-import edu.brown.cs.soliphan.sockets.PartyWebSocket;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
