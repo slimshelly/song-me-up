@@ -73,6 +73,7 @@ public class Suggestion implements Comparable<Suggestion> {
   }
 
   //TODO: avoid race condition!
+  //TODO: make self voting optional!!!! (in case of small parties)
   public void voteUp() {
     this.score += UP_VOTE_WEIGHT;
     this.upVotes += 1;

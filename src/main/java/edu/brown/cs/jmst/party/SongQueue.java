@@ -1,5 +1,8 @@
 package edu.brown.cs.jmst.party;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author tvanderm
  */
@@ -27,17 +30,43 @@ public class SongQueue {
     this.playingBlock = blockB;
   }
 
+  /**
+   * @param song A Suggestion to add to the current pool of suggestions
+   */
   public void Suggest(Suggestion song) {
     suggestingBlock.suggest(song);
   }
 
+  /**
+   * @param song A Suggestion to vote on
+   * @param isUpVote true indicates an up-vote, false indicates a down-vote
+   */
   public void Vote(Suggestion song, Boolean isUpVote) {
     votingBlock.vote(song, isUpVote);
+  }
+
+  /**
+   * @return a PriorityBlockingQueue of Suggestions that should be displayed for
+   *         voting on. They are ordered based on number of votes
+   */
+  public Collection<Suggestion> getSongsToVoteOn() {
+    return votingBlock.getSuggestions();
+  }
+
+  /**
+   * @return A List of Suggestions in the order they should be played
+   * @throws Exception if an error occurs while getting the audioFeatures info
+   *                   about the track
+   */
+  public List<Suggestion> getSongsToPlay() throws Exception {
+    return playingBlock.getSongs();
   }
 
   public void Play() {
     this.playingBlock.passSuggestions();
     //TODO: play songs from playingBlock
+    //TODO: while a song is playing, if there are enough vetoes then stop the
+    //todo~  current song and move on to the next.
     Cycle();
   }
 
