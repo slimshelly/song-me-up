@@ -88,6 +88,7 @@ const setup_live_playlist = () => {
       	let song_id = data.payload.song_id;
       	let votes = data.payload.votes; //number of votes the song has
 		    console.log(votes);
+        // display number of votes for given song_id
       	break;
 
       case MESSAGE_TYPE.ADDSONG:

@@ -61,8 +61,9 @@ public class Party extends Entity {
   /**
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
+ * @throws PartyException 
    */
-  public void suggest(Track song, String userId) {
+  public void suggest(Track song, String userId) throws PartyException {
     suggestions.suggest(song, userId);
   }
 

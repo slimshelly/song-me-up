@@ -70,8 +70,13 @@ public class PartyWebSocket {
       Party p = state.getParty(partyId);
       switch (type) {
         case VOTESONG:
+        	  // retrieve boolean of vote (up or down)
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
+        	    // retrieve
+        	    p.voteOnSong(user_id, song_id, vote);
+        	  
+        	    // send net number of votes on song back to frontend
             JsonObject jpayload = new JsonObject();
             jpayload.addProperty("song_id", song_id);
             jpayload.addProperty("votes", p.voteOnSong(user_id, song_id, vote));
