@@ -16,9 +16,10 @@ public class TrackBean extends EntityBean implements Track {
   private List<String> artistIds;
   private String album_id;
   private String uri;
+  private String album_cover;
 
   public TrackBean(String id, String name, Boolean explicit, int popularity,
-      int duration_ms, List<String> artistIds, String album_id, String uri) {
+      int duration_ms, List<String> artistIds, String album_id, String uri, String album_cover) {
     this.id = id;
     this.uri = uri;
     this.explicit = explicit;
@@ -78,4 +79,10 @@ public class TrackBean extends EntityBean implements Track {
   public String toString() {
     return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
   }
+
+  @Override
+  public String getAlbumArt() {
+    return album_cover;
+  }
+
 }

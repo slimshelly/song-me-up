@@ -199,10 +199,14 @@ input[type=text] {
 	outline: none;
 }
 
-.option {
+#dropdown {
 	position: absolute;
-	width: 75%;
-	/*border: 1px solid black;*/
+	width: inherit;
+	background: rgb(160, 160, 205, 0.95);
+}
+
+.option {
+	padding: 5px 5px;
 }
 
 .option:hover {

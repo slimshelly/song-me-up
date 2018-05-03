@@ -33,9 +33,11 @@ $(document).ready(() => {
 	    	$("#dropdown").hide();
 	    }
 	    else {
+        $("#dropdown").show();
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
-			$results.empty();
+			  $results.empty(); // clear results list
+
 		    // send input to backend to generate song suggestions
 		    $.post("/suggestions", postParameters, responseJSON => {
 
@@ -67,7 +69,7 @@ const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
-  // TODO Create the WebSocket connection and assign it to `conn`
+  // Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/join");
 
   conn.onerror = err => {

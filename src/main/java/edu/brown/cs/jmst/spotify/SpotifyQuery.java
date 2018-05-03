@@ -40,6 +40,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "track"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      // want to add limit of 10! HELP
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
@@ -72,9 +73,10 @@ public class SpotifyQuery {
 
           String album_id =
               trackjo.get("album").getAsJsonObject().get("id").getAsString();
+          String album_art = getAlbumArt(album_id, access_token);
 
           songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-              artist_ids, album_id, uri));
+              artist_ids, album_id, uri, album_art));
         }
       } else {
         throw new ClientProtocolException(
@@ -92,6 +94,46 @@ public class SpotifyQuery {
     return songs;
   }
 
+  /**
+   * Accessor for song art. Returns a URL link to album art.
+ * @throws IOException 
+   */
+  public static String getAlbumArt(String albumId, String access_token) throws IOException {
+	  String albumURL = "";
+	  try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+    	    List<BasicNameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("id", albumId));
+
+        HttpGet get = new HttpGet("https://api.spotify.com/v1/albums/" + albumId + "?"
+            + URLEncodedUtils.format(pairs, "UTF-8"));
+        get.setHeader("Authorization", "Bearer " + access_token);
+
+        HttpResponse response = client.execute(get);
+        if (response.getStatusLine().getStatusCode() == 200) {
+            String json_string = EntityUtils.toString(response.getEntity());
+            JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+            JsonArray images =
+                jo.get("images").getAsJsonArray();
+            Iterator<JsonElement> iterator = images.iterator();
+            while (iterator.hasNext()) {
+              JsonObject image = iterator.next().getAsJsonObject();
+              // Integer height = image.get("height").getAsInt();
+              String url = image.get("url").getAsString();
+              albumURL = url; // maybe make albumArt object later
+              // Integer width = image.get("width").getAsInt();
+              break; // first one will be widest
+           }
+        }
+    } catch (UnsupportedEncodingException | ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+	  return albumURL;
+  }
+  
+  
   /**
    * Requires an ID.
    *
