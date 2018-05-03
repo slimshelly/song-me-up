@@ -2,6 +2,12 @@ package edu.brown.cs.jmst.party;
 
 import edu.brown.cs.jmst.music.Track;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author tvanderm
  */
@@ -15,15 +21,22 @@ public class Suggestion implements Comparable<Suggestion> {
 
   // private Boolean votedOn;
 
+  private Map<String, Integer> userVoteMap;
+  private Set<String> userSubmittedSet;
+
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  public Suggestion(Track song) {
+  public Suggestion(String userId, Track song) {
     this.song = song;
     this.age = 0;
     this.score = UP_VOTE_WEIGHT;
     this.upVotes = 1;
     this.downVotes = 0;
+
+    this.userVoteMap = new ConcurrentHashMap<>();
+    this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
+    userSubmittedSet.add(userId);
   }
 
   public Track getSong() { // TODO: does this need to be public?
@@ -66,25 +79,76 @@ public class Suggestion implements Comparable<Suggestion> {
         score = (score / 2);
       }
       default: {
-        score = 0;
+        score = 0; //TODO: maybe this should be -1?
       }
     }
   }
 
-  //TODO: avoid race condition!
-  //TODO: make self voting optional!!!! (in case of small parties)
-  public void voteUp() {
-    this.score += UP_VOTE_WEIGHT;
-    this.upVotes += 1;
-    this.age = 0;
+  // TODO: avoid race condition!
+  private void doVote(boolean isUpVote) {
+    if (isUpVote) {
+      this.score += UP_VOTE_WEIGHT;
+      this.upVotes += 1;
+    } else {
+      this.score -= DOWN_VOTE_WEIGHT;
+      this.downVotes += 1;
+    }
+  } //TODO: if something was voted on (and not undone), set age to 0 before vote decay occurs
+
+  private void undoVote(boolean isUpVote) {
+    if (isUpVote) {
+      this.score -= UP_VOTE_WEIGHT;
+      this.upVotes -= 1;
+    } else {
+      this.score += DOWN_VOTE_WEIGHT;
+      this.downVotes -= 1;
+    }
   }
 
-  public void undoVoteUp() {
-    this.score -= UP_VOTE_WEIGHT;
-    this.upVotes -= 1;
+  private void changeScore(boolean isUpVote, boolean isUndo) {
+    int plusOrMinusOne = 1;
+    if (isUndo) {
+      plusOrMinusOne = -1;
+    }
+    if (isUpVote) {
+      this.score += plusOrMinusOne * UP_VOTE_WEIGHT;
+      this.upVotes += plusOrMinusOne;
+    } else {
+      this.score -= plusOrMinusOne * DOWN_VOTE_WEIGHT;
+      this.downVotes += plusOrMinusOne;
+    }
   }
 
-  // TODO: make undoVoteDown()
+  public void vote(String userId, Integer voteValue) {
+    assert voteValue == 1 || voteValue == -1;
+    Boolean isUpVote = voteValue == 1;
+    if (!userVoteMap.containsKey(userId) || userVoteMap.get(userId) == 0) {
+      doVote(isUpVote); //changeScore(isUpVote, false);
+    } else {
+      undoVote(isUpVote); //changeScore(isUpVote, true);
+      if (!userVoteMap.get(userId).equals(voteValue)) {
+        doVote(isUpVote); //changeScore(isUpVote, false);
+      }
+    }
+    userVoteMap.put(userId, voteValue);
+  }
+
+  public boolean userHasVotedOnThis(String userId) {
+    return userVoteMap.containsKey(userId) && userVoteMap.get(userId) != 0;
+  }
+
+  public boolean userHasUpVotedThis(String userId) {
+    return userVoteMap.get(userId).equals(1);
+  }
+
+  public boolean userHasSubmittedThis(String userId) {
+    return userSubmittedSet.contains(userId);
+  }
+
+
+  public void addSubmitter(String userId) {
+    userSubmittedSet.add(userId);
+  }
 
 //   /**
 //   * Method to decay the score of a suggestion over time. If a song is voted
@@ -112,20 +176,8 @@ public class Suggestion implements Comparable<Suggestion> {
 //   }
 //   votedOn = false;
 //   }
-//
-//   //TODO: avoid race condition!
-//   public void voteUp() {
-//   this.votes += UP_VOTE_WEIGHT;
-//   if (this.age != 0) {
-//   this.votedOn = true;
-//   }
-//   }
 
-  // TODO: avoid race condition!
-  public void voteDown() {
-    this.score -= DOWN_VOTE_WEIGHT;
-    this.downVotes += 1;
-  }
+
 
   /**
    * Compares this object with the specified object for order.  Returns a

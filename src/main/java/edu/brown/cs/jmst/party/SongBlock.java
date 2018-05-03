@@ -1,5 +1,7 @@
 package edu.brown.cs.jmst.party;
 
+import edu.brown.cs.jmst.music.Track;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,17 +37,6 @@ class SongBlock {
   private static final int NO_VOTES = 3;
   private static final int ORDER = 4;
 
-  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
-  protected void suggest(Suggestion song) {
-    if (nextBlock.suggestions.contains(song)) {
-      song.voteUp();
-    } else if (suggestions.contains(song)) {
-      song.voteUp();
-    } else {
-      suggestions.add(song); //TODO: use add, or use one of the blocking alternatives?
-    }
-  }
-
   protected SongBlock getNextBlock() {
     return this.nextBlock;
   }
@@ -66,13 +57,40 @@ class SongBlock {
     return this.suggestions;
   }
 
-  protected void vote(Suggestion song, Boolean isUpVote) {
-    assert suggestions.contains(song);
-    if (isUpVote) {
-      song.voteUp();
-    } else {
-      song.voteDown();
+  protected Suggestion getSuggestionByTrack(Track song) {
+    for (Suggestion s: suggestions) {
+      if (s.getSong().equals(song)) {
+        return s;
+      }
     }
+    return null;
+  }
+
+  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
+  protected void suggest(Track song, String userId) {
+    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
+    if (existingSuggestion == null) {
+      existingSuggestion = getSuggestionByTrack(song);
+    }
+    if (existingSuggestion != null) {
+      if (existingSuggestion.userHasSubmittedThis(userId)) {
+        //TODO: report that user is trying to submit something twice
+        return;
+      }
+      if (!existingSuggestion.userHasUpVotedThis(userId)) {
+        vote(existingSuggestion, userId, 1);
+      }
+      existingSuggestion.addSubmitter(userId);
+      return;
+    }
+    suggestions.add(new Suggestion(userId, song));
+  }
+
+  protected void vote(Suggestion song, String userId, Integer voteValue) {
+    assert suggestions.contains(song);
+    suggestions.remove(song); //update ordering
+    song.vote(userId, voteValue);
+    suggestions.add(song); //update ordering
   }
 
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
@@ -114,7 +132,13 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
+  /**
+   * @return A list of songs in the order they should be played
+   * @throws Exception if an error occurs while getting the audioFeatures info
+   *                   about the track
+   */
   protected List<Suggestion> getSongs() throws Exception {
+    //The line below ONLY pays attention to votes
     return new ArrayList<>(topSuggestionsQuantity());
   }
 
@@ -154,22 +178,26 @@ class SongBlock {
 
 
   //maybe find a path between songs that minimizes the total distance traveled
-  //playing music with friends:
 
   // Method that decays the votes on the not-selected suggestions, then adds the
   //  suggestions to the next block's collection of suggestions.
+
+
+  /**
+   * Decays the score of the unplayed Suggestions from the current playing block
+   * and removes Suggestions with a sufficiently low score. The remaining
+   * Suggestions are then added to the next SongBlock's suggestions queue.
+   */
   protected void passSuggestions() {
     for (Suggestion s: this.suggestions) {
       s.decayScore();
     }
-    suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);
-    //TODO: make thread-safe by ensuring new suggestions go to the correct block
-    //TODO: maybe have a single suggestion receiver that passes suggestions to block currently in suggestion phase, so there is no apparent downtime
+    suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     suggestions.drainTo(nextBlock.suggestions);
     assert(suggestions.isEmpty()); //TODO: temporary!
   }
-
-  //want an 'ordered' but not sorted data structure--alternating
+  //TODO: make the above thread-safe by ensuring new suggestions go to the correct block
+  //TODO: maybe have a single suggestion receiver that passes suggestions to block currently in suggestion phase, so there is no apparent downtime
 
   //  Add Vote Play
   //  A
