@@ -2,6 +2,7 @@
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
 		<script src="js/join.js"></script>
+		<script src="js/player.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -39,9 +40,9 @@
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
 					<span class="artistName">Flume — Skin</span>
 					<div class="musicControls">
-						<i class="fas fa-backward fa-4x"></i>
-						<i class="fas fa-play fa-3x"></i>
-						<i class="fas fa-forward fa-4x"></i>
+						<i class="fas fa-backward fa-4x" onclick="switchToPrevious()"></i>
+						<i class="fas fa-play fa-3x" onclick="playSong()"></i>
+						<i class="fas fa-forward fa-4x" onclick="switchToNext()"></i>
 					</div>
 				</div>
 			</div>

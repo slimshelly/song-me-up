@@ -28,6 +28,7 @@ public class Suggestion implements Comparable<Suggestion> {
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
   public Suggestion(String userId, Track song) {
+	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
     this.score = UP_VOTE_WEIGHT;

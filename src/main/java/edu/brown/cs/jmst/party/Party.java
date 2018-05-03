@@ -8,6 +8,7 @@ import java.util.Set;
 
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
+import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
@@ -55,6 +56,14 @@ public class Party extends Entity {
 
   public String getHostName() {
     return ph.getName();
+  }
+  
+  /**
+   * @param song A Track to add to the current pool of suggestions
+   * @param userId the ID string of the user submitting the suggestion
+   */
+  public void suggest(Track song, String userId) {
+    suggestions.suggest(song, userId);
   }
 
   public int voteOnSong(String userid, String songid, boolean vote)
