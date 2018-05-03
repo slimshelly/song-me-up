@@ -93,6 +93,7 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.VOTESONG:
       	// update number of votes for a specific song on the playlist
+        console.log("A VOTE HAPPENED");
         let votingList = data.payload;
         // loop through json objects in payload
         // display number of votes for given song_id
@@ -104,8 +105,8 @@ const setup_live_playlist = () => {
           + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
           + "</div>"
           + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
           + "</div>"
           + "</div>"
 
@@ -123,8 +124,8 @@ const setup_live_playlist = () => {
           + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
           + "</div>"
           + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
           + "</div>"
           + "</div>"
 
@@ -148,6 +149,7 @@ Send VOTESONG message to backend when a user votes on a song - params are boolea
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
+  console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
