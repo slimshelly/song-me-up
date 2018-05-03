@@ -126,7 +126,7 @@ public class Suggestion implements Comparable<Suggestion> {
       doVote(isUpVote); //changeScore(isUpVote, false);
       userVoteMap.put(userId, voteValue);
     } else {
-      undoVote(isUpVote); //changeScore(isUpVote, true);
+      undoVote(userVoteMap.get(userId).equals(1)); //changeScore(isUpVote, true);
       userVoteMap.put(userId, 0);
       if (!userVoteMap.get(userId).equals(voteValue)) {
         doVote(isUpVote); //changeScore(isUpVote, false);
