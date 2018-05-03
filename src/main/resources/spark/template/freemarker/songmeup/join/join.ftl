@@ -11,9 +11,6 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-		<ul id="stf"> HELO </ul>
-
-
 		<input type="hidden" id="user_id" value="${user_id}">
 		<!--<div id="hidden" hidden>${user_id}</div>-->
 		<nav role="navigation" id="navvy">
@@ -65,7 +62,14 @@
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
+					<div id="playing">
+					</div>
+					<div id="voting">
+					</div>
+					<div id="suggestions">
+					</div>
 				</ul>
+
 			</div>
 		</div>
 	</body>

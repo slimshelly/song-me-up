@@ -1,16 +1,19 @@
 
 let $playlist;
+let $votingBlock;
+let $playingBlock;
 
 $(document).ready(() => {
 
   // access playlist to add songs to later
-  $playlist = $("#displaySongs");
+  $playlist = $("#suggestions");
+  $votingBlock = $("#voting");
+  $playingBlock = $("#playing");
 
 	/*
 	Toggle color for up and down buttons
 	*/
 	$("#down").click(function () {
-		console.log("hiii");
 		new_vote(false,"SongId");
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
@@ -51,8 +54,6 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-
-					// $results.append("<a href='javascript:;' onclick='new_song(\"2NyrXRn4tancYPW6JwtTl2\")'><div class='option'>" + sug.name + "</div></a>");
           $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\")'><div class='option'>" + sug.name + "</div></a>");
         };
 		  });
@@ -95,11 +96,26 @@ const setup_live_playlist = () => {
         let votingList = data.payload;
         // loop through json objects in payload
         // display number of votes for given song_id
+        votingList.forEach(function(suggestion) {
+        $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+          + "<div class='votingItem'>"
+          + "<div class='track'>" 
+          + "<div class='song'>" + data.payload.song_name + "</div>"
+          + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "</div>"
+          + "</div>"
+
+          + "</li>");
+        });
+
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
-
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
           + "<div class='playlistItem'>"
           + "<div class='track'>" 
@@ -113,40 +129,6 @@ const setup_live_playlist = () => {
           + "</div>"
 
           + "</li>");
-
-        // $("#" + $("#user_id").val()).append("<div class='playlistItem'>"
-        //   + "<div class='track'>" 
-        //   + "<div class='song'>" + data.payload.song_name + "</div>"
-        //   + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
-        //   + "</div>"
-        //   + "<div class='buttons'>"
-        //   + "<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-        //   + "<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-        //   + "</div>"
-        //   + "</div>");
-        // add song information
-        // $(".playlistItem").append("<div class='track'>" + "</div>");
-        // $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
-        // $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
-        // add number of votes
-
-        // add buttons
-        // $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
-
-        // $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
-        // $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
-        // // add song information
-        // $(".playlistItem").append("<div class='track'>" + "</div>");
-        // $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
-        // $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
-        // // add number of votes
-
-        // // add buttons
-        // $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        // $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:

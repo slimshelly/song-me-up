@@ -242,6 +242,13 @@ input[type=text] {
 	justify-content: space-between;
 }
 
+.votingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: green;
+}
+
 .buttons {
 	margin-right: 10px;
 }
