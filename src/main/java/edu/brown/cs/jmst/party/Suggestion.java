@@ -124,13 +124,15 @@ public class Suggestion implements Comparable<Suggestion> {
     Boolean isUpVote = voteValue == 1;
     if (!userVoteMap.containsKey(userId) || userVoteMap.get(userId) == 0) {
       doVote(isUpVote); //changeScore(isUpVote, false);
+      userVoteMap.put(userId, voteValue);
     } else {
       undoVote(isUpVote); //changeScore(isUpVote, true);
+      userVoteMap.put(userId, 0);
       if (!userVoteMap.get(userId).equals(voteValue)) {
         doVote(isUpVote); //changeScore(isUpVote, false);
+        userVoteMap.put(userId, voteValue);
       }
     }
-    userVoteMap.put(userId, voteValue);
   }
 
   public boolean userHasVotedOnThis(String userId) {
