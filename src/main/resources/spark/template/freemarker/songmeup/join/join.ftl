@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 	<head>
+		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/player.js"></script>
 		<script src="js/join.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
@@ -39,6 +41,11 @@
 					<span class="now">Now Playing</span>
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
 					<span class="artistName">Flume — Skin</span>
+					<div class="musicControls">
+						<i class="fas fa-backward fa-4x" onclick="switchToPrevious()"></i>
+						<i class="fas fa-play fa-3x" onclick="playSong()"></i>
+						<i class="fas fa-forward fa-4x" onclick="switchToNext()"></i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -52,8 +59,6 @@
 				</div>
 				<!-- SUGGESTIONS -->
 				<div id="dropdown">
-					<a href="javascript:;"><div class="option">Lorem ipsum dolor.</div></a>
-					<a href="javascript:;"><div class="option">Lorem sdf dolor.</div></a>
 				</div>
 				<!-- SONGS -->
 				<ul id="displaySongs">
