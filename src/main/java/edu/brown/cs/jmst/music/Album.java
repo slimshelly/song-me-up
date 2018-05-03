@@ -6,12 +6,10 @@ import edu.brown.cs.jmst.beans.Entity;
 
 public class Album extends Entity {
   
-  public Album(String uri, List<String> artistIds, List<String> genres, String id, String name, Integer popularity, List<String> trackIds, String type) {
+  public Album(String uri, List<String> artistIds, String id, String name,  List<String> trackIds, String type) {
     this.artistIds = artistIds;
-    this.genres = genres;
     this.id = id;
     this.name = name;
-    this.popularity = popularity;
     this.trackIds = trackIds;
     this.type = type;
     this.uri = uri;
@@ -19,10 +17,13 @@ public class Album extends Entity {
   
   String uri;
   List<String> artistIds;
-  List<String> genres;
   String id;
   String name;
-  Integer popularity;
   List<String> trackIds;
   String type;
+  
+  @Override
+  public String toString() {
+    return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
+  }
 }

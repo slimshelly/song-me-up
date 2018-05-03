@@ -9,7 +9,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-		<div class="hidden" hidden>${user_id}</div>
+		<input type="hidden" id="user_id" value="${user_id}">
+		<!--<div id="hidden" hidden>${user_id}</div>-->
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
