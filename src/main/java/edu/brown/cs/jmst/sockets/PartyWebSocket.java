@@ -108,7 +108,6 @@ public class PartyWebSocket {
           }
           break;
         case ADDSONG:
-        	System.out.println("case addsong");
           try {
       	    // get track object from spotify (access to all spotify track fields)
       	    // build trackbean, which includes all spotify track fields and album art

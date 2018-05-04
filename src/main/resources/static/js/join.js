@@ -1,11 +1,19 @@
 
+let $playlist;
+let $votingBlock;
+let $playingBlock;
+
 $(document).ready(() => {
+
+  // access playlist to add songs to later
+  $playlist = $("#suggestions");
+  $votingBlock = $("#voting");
+  $playingBlock = $("#playing");
 
 	/*
 	Toggle color for up and down buttons
 	*/
 	$("#down").click(function () {
-		console.log("hiii");
 		new_vote(false,"SongId");
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
@@ -46,9 +54,7 @@ $(document).ready(() => {
 				let output = responseObject;
 
 				for(const sug of output){
-          console.log(sug.id);
-					$results.append("<a href='javascript:;' onclick='new_song(\"2NyrXRn4tancYPW6JwtTl2\")'><div class='option'>" + sug.name + "</div></a>");
-          // $results.append("<a href='javascript:;' onclick='new_song(" + sug.id.toString() + ")'><div class='option'>" + sug.name + "</div></a>");
+          $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\")'><div class='option'>" + sug.name + "</div></a>");
         };
 		  });
 		}
@@ -65,11 +71,11 @@ const MESSAGE_TYPE = {
   PLAYLIST: 3
 };
 let conn;
-const $playlist = $("#displaySongs");
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
+  console.log("ASLBDLKFA");
   conn = new WebSocket("ws://localhost:4567/songupdates");
 
 
@@ -87,25 +93,43 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.VOTESONG:
       	// update number of votes for a specific song on the playlist
+        console.log("A VOTE HAPPENED");
         let votingList = data.payload;
         // loop through json objects in payload
         // display number of votes for given song_id
+        votingList.forEach(function(suggestion) {
+        $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+          + "<div class='votingItem'>"
+          + "<div class='track'>" 
+          + "<div class='song'>" + suggestion.song_name + "</div>"
+          + "<div class='artist'>" + suggestion.artist_ids[0] + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "</div>"
+          + "</div>"
+
+          + "</li>");
+        });
+
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
-        $playlist.append("<li id='" + $("#user_id").val() + "'>" + "</li>");
-        $("#" + $("#user_id").val()).append("<div id='playlistItem'>" + "</div>");
-        // add song information
-        $(".playlistItem").append("<div class='track'>" + "</div>");
-        $(".track").append("<div class='song'>" + data.payload.song_name + "</div>");
-        $(".track").append("<div class='artist'>" + data.payload.artist_ids[0] + "</div>");
-        // add number of votes
+        $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+          + "<div class='playlistItem'>"
+          + "<div class='track'>" 
+          + "<div class='song'>" + data.payload.song_name + "</div>"
+          + "<div class='artist'>" + data.payload.artist_ids[0] + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "</div>"
+          + "</div>"
 
-        // add buttons
-        $(".playlistItem").append("<div id='buttons'>" + "</div>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(false, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-down' id='down'></i></a>");
-        $("#buttons").append("<a href='javascript:;' onclick='new_vote(true, " + data.payload.song_id + ")'><i class='fa fa-chevron-circle-up' id='up'></i></a>");
+          + "</li>");
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
@@ -125,6 +149,7 @@ Send VOTESONG message to backend when a user votes on a song - params are boolea
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
+  console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
