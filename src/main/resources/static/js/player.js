@@ -1,4 +1,4 @@
-let freshToken = 'BQAWcog5nXcxm9Vpkz_gmkNGURIGxjTvtWlOkx-69GV8XnnTQyg4_kBLIwkhTBdVwmszsehGircKUajwU5wYeQf5hWiZPwI_BtHhLfkBZ9-UgFag3xreKLi0mMyh6v2lo72YVSs2_Du8fhlzD2nMgZ0ynvvffxeuDWs';
+let freshToken = 'BQB3CqWXLu5QDsBpCTeMeVDUnsSW74HOBouH-nkcz20dOIZRbAKCPsstVOrsViQSuivgWDvNMmdk3CuKZw48PoH6NzFudHclaKdj7IqPMUhLlteLNZpXQwbvDNPOFu5Tk8Y4zGxwyDLPaOKYIqfga1T3c00JFuRJg0CUTTULDLCG9qu25X43GUA-wA';
 let player;
 let song_list = ['spotify:track:2Th9BGKvfZG8bKQSACitwG','spotify:track:4pYd8dIohiqc3KsxSRqf0w'];
 
