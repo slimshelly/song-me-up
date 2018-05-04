@@ -1,10 +1,9 @@
 
 let freshToken = 'BQAWcog5nXcxm9Vpkz_gmkNGURIGxjTvtWlOkx-69GV8XnnTQyg4_kBLIwkhTBdVwmszsehGircKUajwU5wYeQf5hWiZPwI_BtHhLfkBZ9-UgFag3xreKLi0mMyh6v2lo72YVSs2_Du8fhlzD2nMgZ0ynvvffxeuDWs';
+
 let player;
 let song_list = ['spotify:track:2Th9BGKvfZG8bKQSACitwG','spotify:track:4pYd8dIohiqc3KsxSRqf0w'];
 
-
-// if song left to play is 0, then 1. update list, and play
 
 function updateSongList() {
     song_list = ['spotify:track:087OBLtoeS3Q6j0k6tMNAI','spotify:track:7E390nZTMqEbrNC1TmHd42'];

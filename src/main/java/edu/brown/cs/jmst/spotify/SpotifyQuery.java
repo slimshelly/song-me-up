@@ -99,11 +99,12 @@ public class SpotifyQuery {
       // General.printInfo(artists.toString());
       List<String> artist_ids = new ArrayList<>();
       List<String> artist_names = new ArrayList<>();
+      
       Iterator<JsonElement> iterator2 = artists.iterator();
       while (iterator2.hasNext()) {
         JsonObject ajo = iterator2.next().getAsJsonObject();
         artist_ids.add(ajo.get("id").getAsString());
-        artist_names.add(ajo.get("name").getAsString());
+        artist_names.add(ajo.get("id").getAsString());
       }
 
       String album_id =
@@ -433,5 +434,4 @@ public class SpotifyQuery {
     return returnPlaylists;
   }
 
- 
 }

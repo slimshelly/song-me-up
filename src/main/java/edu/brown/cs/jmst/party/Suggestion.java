@@ -47,19 +47,21 @@ public class Suggestion implements Comparable<Suggestion> {
     JsonObject jo = new JsonObject();
     jo.addProperty("song_id", song.getId());
     jo.addProperty("song_name", song.getName());
-    
     JsonArray artistIds = new JsonArray();
-    JsonArray artistNames = new JsonArray();
     for (String artist_id : song.getArtistIds()) {
       artistIds.add(artist_id);
     }
+    
+    
     jo.add("artist_ids", artistIds);
     
+    JsonArray artistNames = new JsonArray();
     for (String artist_name : song.getArtistNames()) {
       artistNames.add(artist_name);
     }
-    jo.add("artist_names", artistNames);
     
+    
+    jo.add("artist_names", artistNames);
     jo.addProperty("duration_ms", song.getDuration_ms());
     jo.addProperty("uri", song.getUri());
     jo.addProperty("score", score);

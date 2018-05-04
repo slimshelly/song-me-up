@@ -102,7 +102,6 @@ const setup_live_playlist = () => {
           + "<div class='votingItem'>"
           + "<div class='track'>" 
           + "<div class='song'>" + suggestion.song_name + "</div>"
-
           + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
           + "</div>"
