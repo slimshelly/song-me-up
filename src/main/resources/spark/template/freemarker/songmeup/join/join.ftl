@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 	<head>
-		<!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
+		
 		<script src="js/jquery-3.1.1.js"></script>
+		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<script src="js/player.js"></script>
 		<script src="js/join.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
@@ -31,7 +32,6 @@
 		
 		<div class="party">
 			<div class="title">Listening to ${hostname}'s Party</div>
-			<!-- replace Bob with $hostname -->
 		</div>
 
 		<div class="nowPlaying">
