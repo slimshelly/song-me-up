@@ -1,14 +1,15 @@
 package edu.brown.cs.jmst.party;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import edu.brown.cs.jmst.music.Track;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import edu.brown.cs.jmst.music.Track;
 
 /**
  * @author tvanderm
@@ -50,7 +51,19 @@ public class Suggestion implements Comparable<Suggestion> {
     for (String artist_id : song.getArtistIds()) {
       artistIds.add(artist_id);
     }
+    
+    
     jo.add("artist_ids", artistIds);
+    
+    JsonArray artistNames = new JsonArray();
+    for (String artist_name : song.getArtistNames()) {
+      artistNames.add(artist_name);
+    }
+    
+    jo.addProperty("album_cover", song.getAlbumArt());
+    
+    
+    jo.add("artist_names", artistNames);
     jo.addProperty("duration_ms", song.getDuration_ms());
     jo.addProperty("uri", song.getUri());
     jo.addProperty("score", score);

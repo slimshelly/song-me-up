@@ -14,7 +14,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -23,7 +22,6 @@ import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
-import edu.brown.cs.jmst.party.Suggestion;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
@@ -108,18 +106,14 @@ public class PartyWebSocket {
           }
           break;
         case ADDSONG:
-        	System.out.println("case addsong");
           try {
       	    // get track object from spotify (access to all spotify track fields)
       	    // build trackbean, which includes all spotify track fields and album art
       	    // suggest the song to the current party
-        	    System.out.println("in try bloc");
-        	    System.out.println(u.getAuth());
-        	    System.out.println(song_id);
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
-            System.out.println("got le track!");
             Track song = new TrackBean(track, u.getAuth());
             Suggestion suggested = party.suggest(song, user_id);
+            // System.out.println(suggested.getSong().getAlbumArt());
             JsonObject suggestion = suggested.toJson(); //TODO: if it's null, we want to update votes, not add a suggestion
           	// build track object to send to frontend with message type ADDSONG
             Collection<Suggestion> votingBlock = party.getSongsToVoteOn();

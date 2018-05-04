@@ -58,7 +58,6 @@ public class HostHandler implements TemplateViewRoute {
         res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
       }
     }
-
     return null;
   }
 

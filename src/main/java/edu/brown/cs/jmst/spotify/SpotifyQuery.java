@@ -2,7 +2,6 @@ package edu.brown.cs.jmst.spotify;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +26,7 @@ import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Album;
 import edu.brown.cs.jmst.music.Artist;
 import edu.brown.cs.jmst.music.AudioFeatures;
+import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 
@@ -98,10 +98,13 @@ public class SpotifyQuery {
       JsonArray artists = trackjo.get("artists").getAsJsonArray();
       // General.printInfo(artists.toString());
       List<String> artist_ids = new ArrayList<>();
+      List<String> artist_names = new ArrayList<>();
+      
       Iterator<JsonElement> iterator2 = artists.iterator();
       while (iterator2.hasNext()) {
         JsonObject ajo = iterator2.next().getAsJsonObject();
         artist_ids.add(ajo.get("id").getAsString());
+        artist_names.add(ajo.get("id").getAsString());
       }
 
       String album_id =
@@ -109,7 +112,7 @@ public class SpotifyQuery {
       String album_art = getAlbumArt(album_id, access_token);
 
       songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-          artist_ids, album_id, uri, album_art));
+          artist_ids, artist_names, album_id, uri, album_art));
     }
 
     return songs;
@@ -347,7 +350,7 @@ public class SpotifyQuery {
 
       } else {
         throw new ClientProtocolException(
-            "Failed to get artists: " + response.getStatusLine().getStatusCode()
+            "Failed to get albums: " + response.getStatusLine().getStatusCode()
                 + " " + response.toString());
       }
     } catch (UnsupportedEncodingException e) {
@@ -360,16 +363,21 @@ public class SpotifyQuery {
     return returnAlbums;
   }
 
-  public static JsonArray searchAlbumSongRaw(String album_id,
-      String access_token) throws IOException, UnsupportedEncodingException,
-      ClientProtocolException {
+
+  public static List<SpotifyPlaylist> searchPlaylist(String keywords, String access_token)
+      throws Exception {
+
+    List<SpotifyPlaylist> returnPlaylists = new ArrayList<>();
 
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      List<BasicNameValuePair> pairs = new ArrayList<>();
-      pairs.add(new BasicNameValuePair("id", album_id));
 
-      HttpGet get = new HttpGet("https://api.spotify.com/v1/albums/"
-          + URLEncodedUtils.format(pairs, "UTF-8") + "/tracks");
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("q", keywords));
+      pairs.add(new BasicNameValuePair("type", "playlist"));
+      pairs.add(new BasicNameValuePair("market", "from_token"));
+
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
+          + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
 
       HttpResponse response = client.execute(get);
@@ -377,48 +385,53 @@ public class SpotifyQuery {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 
-        JsonArray tracks =
-            jo.get("tracks").getAsJsonObject().get("items").getAsJsonArray();
-        return tracks;
+        JsonArray playlists =
+            jo.get("playlists").getAsJsonObject().get("items").getAsJsonArray();
+        Iterator<JsonElement> iterator = playlists.iterator();
+
+        while (iterator.hasNext()) {
+
+          JsonObject playlistjo = iterator.next().getAsJsonObject();
+
+          // uri
+          String uri = playlistjo.get("uri").getAsString();
+
+          // id
+          String id = playlistjo.get("id").getAsString();
+
+          
+          // name
+          String name = playlistjo.get("name").getAsString();
+          
+          // track ids
+          
+          JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
+         
+          String track_link = tracks.get("href").getAsString();
+          
+          List<String> track_ids = new ArrayList<>();
+          
+          // type
+          String type = playlistjo.get("type").getAsString();
+
+          returnPlaylists
+              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
+          
+        }
+
       } else {
         throw new ClientProtocolException(
-            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+            "Failed to get playlists: " + response.getStatusLine().getStatusCode()
                 + " " + response.toString());
       }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
     }
-  }
-
-  public static List<Track> searchAlbumSong(String keywords,
-      String access_token) throws Exception {
-    List<Track> songs = new ArrayList<>();
-    JsonArray ja = searchSongRaw(keywords, access_token);
-    Iterator<JsonElement> iterator = ja.iterator();
-    while (iterator.hasNext()) {
-      JsonObject trackjo = iterator.next().getAsJsonObject();
-      String id = trackjo.get("id").getAsString();
-      String name = trackjo.get("name").getAsString();
-      String uri = trackjo.get("uri").getAsString();
-      boolean explicit = trackjo.get("explicit").getAsBoolean();
-      int popularity = trackjo.get("popularity").getAsInt();
-      int duration_ms = trackjo.get("duration_ms").getAsInt();
-      JsonArray artists = trackjo.get("artists").getAsJsonArray();
-      // General.printInfo(artists.toString());
-      List<String> artist_ids = new ArrayList<>();
-      Iterator<JsonElement> iterator2 = artists.iterator();
-      while (iterator2.hasNext()) {
-        JsonObject ajo = iterator2.next().getAsJsonObject();
-        artist_ids.add(ajo.get("id").getAsString());
-      }
-
-      String album_id =
-          trackjo.get("album").getAsJsonObject().get("id").getAsString();
-      String album_art = getAlbumArt(album_id, access_token);
-
-      songs.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-          artist_ids, album_id, uri, album_art));
-    }
-
-    return songs;
+    return returnPlaylists;
   }
 
 }

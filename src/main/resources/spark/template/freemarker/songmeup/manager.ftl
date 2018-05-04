@@ -3,8 +3,7 @@
 
 <body>
     <script src="js/jquery-3.1.1.js"></script>
-    <!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
-    <script src="js/untitled.js"></script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="js/player.js"></script>
 
     <div class="title">Song Me Up</div>
@@ -16,6 +15,9 @@
         <a class="btn" onclick="togglePlaySong()">Toggle Play Song</a><br>
         <a class="btn" onclick="switchToPrevious()">Previous Song</a><br>
         <a class="btn" onclick="switchToNext()">Next Song</a><br>
+        <a class="btn" onclick="seekPosition()">Move to a minute</a><br>
+        <a class="btn" onclick="updateSongList()">UpdateList</a><br>
+        <a class="btn" onclick="showCurrentState()">showState</a><br>
     </div>
 </body>
 

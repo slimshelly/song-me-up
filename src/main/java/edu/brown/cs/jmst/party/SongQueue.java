@@ -21,12 +21,14 @@ public class SongQueue {
     this.blockA = new SongBlock();
     this.blockB = new SongBlock();
     this.blockC = new SongBlock();
-    blockA.setNextBlock(blockB);
-    blockA.setPrevBlock(blockC);
-    blockB.setNextBlock(blockC);
-    blockB.setPrevBlock(blockA);
-    blockC.setNextBlock(blockA);
-    blockC.setPrevBlock(blockB);
+    blockA.setNextBlock(blockA);
+    blockA.setPrevBlock(blockA);
+//    blockA.setNextBlock(blockB);
+//    blockA.setPrevBlock(blockC);
+    //blockB.setNextBlock(blockC);
+    //blockB.setPrevBlock(blockA);
+    //blockC.setNextBlock(blockA);
+    //blockC.setPrevBlock(blockB);
     this.suggestingBlock = blockA;
     this.votingBlock = blockC;
     this.playingBlock = blockB;
@@ -47,6 +49,7 @@ public class SongQueue {
    */
   public Collection<Suggestion> vote(Suggestion song, String userId, boolean isUpVote) {
     votingBlock.vote(song, userId, isUpVote);
+    System.out.println("Is votingBlock empty? : [" + votingBlock.getSuggestions().isEmpty() + "]");
     return votingBlock.getSuggestions();
   }
 

@@ -21,18 +21,21 @@ public class PlaylistHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+	System.out.println("in handle");
     SmuState state = SmuState.getInstance();
     // Pass list
-    Party currParty = state.getParty(request.session().id()); // is this right?
-    // SongMeUpPlaylist playlist = currParty.getPlaylist();
-    // List<Track> playlistSongs = playlist.getSongs();
-    String userId = request.session().attribute("user");
-    User u = state.getUser(userId);
-    String partyId = u.getCurrentParty();
-    // Party currParty = state.getParty(partyId);
+    String userid = request.session().attribute("user");
+    User u = state.getUser(userid);
+    String partyId = u.getCurrentParty(); // retrieve party id
+    System.out.println("partyid: " + partyId);
+    Party currParty = state.getParty(partyId); // retrieve party from id
+    
+    System.out.println("about to get playlist");
     SongMeUpPlaylist playlist = currParty.getPlaylist();
     List<Track> playlistSongs = playlist.getSongs();
-
+    System.out.println("playlist size: " + playlistSongs.size());
+    
+    System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("songs", playlistSongs);
     return GSON.toJson(variables); // only sending info, not reloading page
   }

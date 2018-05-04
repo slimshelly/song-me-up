@@ -1,7 +1,5 @@
 # cs0320 Term Project 2018
 
-
-
 **all ideas approved** however given that javascript is a group weakness, project one might be a mistake. I would also add features to your dj application, but it's a solid idea. -adehovit
 
 **Team Members:**
@@ -58,8 +56,12 @@ Tvanderm - ranking algorithm
 mbecker09 - front end, web design
 Soliphant - bridging front end and back end, authorization token.
 
-
 **Adversary Checkpoint:** _(Schedule once you are assigned an adversary TA)_
+- jyang80: 
+-- web playback: successfully adapted the functions specified in the API to javascript functions
+- 
+
+
 
 ## Project Specs, Mockup, and Design (March 16)
 _A link to your specifications, mockup, and your design presentation will go here!_

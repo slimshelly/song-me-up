@@ -4,19 +4,7 @@ let $votingBlock;
 let $playingBlock;
 
 $(document).ready(() => {
-
-  /*
-  On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
-  */
-  // $.post("/playlist", responseJSON => {
-  //   const responseObject = JSON.parse(responseJSON);
-  //   console.log(responseObject);
-  //   let output = responseObject;
-  //   for(const sug of output){
-  //     $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
-  //   };
-  // });
-
+  console.log("hello");
   // access playlist to add songs to later
   $playlist = $("#suggestions");
   $votingBlock = $("#voting");
@@ -44,7 +32,7 @@ $(document).ready(() => {
 	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	$("#dropdown").hide();
+	// $("#dropdown").hide();
 	let $results = $("#dropdown");
   $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
@@ -93,7 +81,9 @@ let conn;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
+  console.log("ASLBDLKFA");
   conn = new WebSocket("ws://localhost:4567/songupdates");
+
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -114,32 +104,29 @@ const setup_live_playlist = () => {
         // loop through json objects in payload
         // display number of votes for given song_id
         votingList.forEach(function(suggestion) {
-          $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
-            + "<div class='votingItem'>"
-            + "<div class='track'>" 
-            + "<div class='song'>" + suggestion.song_name + "</div>"
-            + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
+        $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+          + "<div class='votingItem'>"
+          + "<div class='track'>" 
+          + "<div class='song'>" + suggestion.song_name + "</div>"
+          + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
-            + "</div>"
-            + "<div class='buttons'>"
-            + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-            + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-            + "</div>"
-            + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "</div>"
+          + "</div>"
 
-            + "</li>");
+          + "</li>");
         });
 
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
-        console.log("inside"); // NOT WORKING
-        console.log(data.payload);
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
           + "<div class='playlistItem'>"
-          + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-          + "<div class='track'>"
+          + "<div class='track'>" 
           + "<div class='song'>" + data.payload.song_name + "</div>"
 
           + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
@@ -179,7 +166,6 @@ function new_vote(vote_boolean, songId){
       };
   conn.send(JSON.stringify(vote));
 }
-
 /*
 Send ADDSONG message to backend when a user adds a song
 */
