@@ -13,6 +13,7 @@ import edu.brown.cs.jmst.io.Repl;
 import edu.brown.cs.jmst.songmeup.SmuInputHandler;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spark.SparkInitializer;
+import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import freemarker.template.Configuration;
 import freemarker.template.Version;
 import joptsimple.OptionParser;
@@ -33,7 +34,12 @@ import spark.template.freemarker.FreeMarkerEngine;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
+  private static final String DEFAULT_IP = "0.0.0.0";
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
+  public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
+  public static final String WEB_ROOT_URI = "https://cs.hiram.edu";
+  public static final int WEB_PORT = 4582;
+  public static final String WEB_IP = "127.0.0.1";
   private final SmuInputHandler smuHandler =
       new SmuInputHandler(SmuState.getInstance());
 
@@ -59,15 +65,25 @@ public final class Main {
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
         .defaultsTo(DEFAULT_PORT);
+    parser.accepts("ip").withRequiredArg().ofType(String.class)
+        .defaultsTo(DEFAULT_IP);
+    parser.accepts("web").withRequiredArg().ofType(Boolean.class)
+        .defaultsTo(false);
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
       try {
-        runSparkServer((int) options.valueOf("port"));
+        if ((boolean) options.valueOf("web")) {
+          runSparkServer(WEB_PORT, WEB_IP, WEB_ROOT_URI);
+        } else {
+          runSparkServer((int) options.valueOf("port"),
+              (String) options.valueOf("ip"), DEFAULT_ROOT_URI);
+        }
+
         runRepl();
         General.printInfo("Stopping server...");
         Spark.stop();
-      } catch (IOException e) {
+      } catch (Exception e) {
         General.printErr(e.getMessage());
         General.printInfo("Shutting down...");
       }
@@ -95,13 +111,16 @@ public final class Main {
     return new FreeMarkerEngine(config);
   }
 
-  private void runSparkServer(int port) throws IOException {
+  private void runSparkServer(int port, String ip, String rootUri)
+      throws Exception {
     Spark.port(port);
+    Spark.ipAddress(ip);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-    SparkInitializer.setHandlers(freeMarker);
+    SpotifyAuthentication.setRootUri(rootUri);
+    SparkInitializer.setHandlers(freeMarker, "");
   }
 
   /**
