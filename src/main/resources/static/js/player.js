@@ -1,13 +1,25 @@
+let freshToken;
 
-let freshToken = 'BQAWcog5nXcxm9Vpkz_gmkNGURIGxjTvtWlOkx-69GV8XnnTQyg4_kBLIwkhTBdVwmszsehGircKUajwU5wYeQf5hWiZPwI_BtHhLfkBZ9-UgFag3xreKLi0mMyh6v2lo72YVSs2_Du8fhlzD2nMgZ0ynvvffxeuDWs';
+function refresher() {
+
+    $.post("/refresh", responseJSON => {
+        const responseObject = JSON.parse(responseJSON);
+
+        freshToken = '\'' + responseObject.access_token + '\'';
+        console.log(freshToken);
+    });
+
+}
+
+
 
 let player;
-let song_list = ['spotify:track:2Th9BGKvfZG8bKQSACitwG','spotify:track:4pYd8dIohiqc3KsxSRqf0w'];
+let song_list = ['spotify:track:2Th9BGKvfZG8bKQSACitwG', 'spotify:track:4pYd8dIohiqc3KsxSRqf0w'];
 
 
 function updateSongList() {
-    song_list = ['spotify:track:087OBLtoeS3Q6j0k6tMNAI','spotify:track:7E390nZTMqEbrNC1TmHd42'];
-        play({
+    song_list = ['spotify:track:087OBLtoeS3Q6j0k6tMNAI', 'spotify:track:7E390nZTMqEbrNC1TmHd42'];
+    play({
         spotify_uri: song_list,
         playerInstance: player
     });
@@ -15,7 +27,12 @@ function updateSongList() {
 
 $(document).ready(() => {
 
+
+    console.log(player + "before player is initialized");
+
+
     window.onSpotifyWebPlaybackSDKReady = () => {
+        refresher();
         const token = freshToken;
         player = new Spotify.Player({
             name: 'Test Player',
@@ -23,6 +40,9 @@ $(document).ready(() => {
                 cb(token);
             }
         });
+
+
+        console.log(player + "after player is initialized");
 
         // Connect to the player!
         player.connect();
@@ -51,7 +71,10 @@ $(document).ready(() => {
         player.addListener('authentication_error', ({
             message
         }) => {
+
             console.error(message);
+            refresher();
+            console.log("called refresher");
         });
         player.addListener('account_error', ({
             message
@@ -68,10 +91,6 @@ $(document).ready(() => {
         player.addListener('player_state_changed', state => {
             console.log(state.position);
             console.log(state.duration);
-
-                    if (state.position == state.duration && state.track_window.next_tracks.length) {
-            updateSongList();
-        }
         });
 
 
@@ -136,7 +155,7 @@ function resumeSong() {
 
 function togglePlaySong() {
 
-// if song is playing - toggle play song. else, start playing song
+    // if song is playing - toggle play song. else, start playing song
 
     player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -152,33 +171,31 @@ function switchToNext() {
 
 function switchToPrevious() {
     player.previousTrack().then(() => {
-  console.log('Set to previous track!');
-});
+        console.log('Set to previous track!');
+    });
 }
 
 function showCurrentState() {
 
     player.getCurrentState().then(state => {
-  if (!state) {
-    console.error('User is not playing music through the Web Playback SDK');
-    return;
-  }
+        if (!state) {
+            console.error('User is not playing music through the Web Playback SDK');
+            return;
+        }
 
-  let {
-    current_track,
-    next_tracks: [next_track]
-  } = state.track_window;
+        let {
+            current_track,
+            next_tracks: [next_track]
+        } = state.track_window;
 
-  console.log(state.position);
-  console.log(state.track_window.next_tracks.length);
-  console.log('Currently Playing', current_track);
-  console.log('Playing Next', next_track);
+        console.log(state.position);
+        console.log(state.track_window.next_tracks.length);
+        console.log('Currently Playing', current_track);
+        console.log('Playing Next', next_track);
 
-  // if (next_track == null && ) {
-  //   updateSongList();
-  // } 
-});
+        // if (next_track == null && ) {
+        //   updateSongList();
+        // } 
+    });
 
 }
-
-

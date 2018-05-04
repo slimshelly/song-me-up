@@ -18,6 +18,10 @@ public class AdminPageHandler implements TemplateViewRoute {
 	    SmuState state = SmuState.getInstance();
 	    String userid = request.session().attribute("user");
 	    User u = state.getUser(userid);
+	    if (u.isPremium()) {
+	      System.out.println("host token");
+	    }
+	    
 	    Map<String,
 	    Object> variables = new ImmutableMap.Builder<String, Object>().put("user_id", u.getId()).build();
 	    return new ModelAndView(variables, "songmeup/host/host_join.ftl");
