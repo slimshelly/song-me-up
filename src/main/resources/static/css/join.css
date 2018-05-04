@@ -320,9 +320,12 @@ input[type=text] {
 }
 
 .musicControls {
-	border: 1px solid green;
 	margin-top: 5%;
 	margin-left: 10%;
+}
+
+.musicControls i {
+	margin-right: 4%;
 }
 
 

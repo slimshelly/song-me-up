@@ -62,6 +62,15 @@ public class SongQueue {
     }
     return toReturn;
   }
+  
+  /**
+   * @return A List of Suggestions an arbitrary order? help tom
+   * @throws Exception if an error occurs while getting the audioFeatures info
+   *                   about the track
+   */
+  public List<Suggestion> getSongsToSuggest() {
+    return suggestingBlock.getSongs();
+  }
 
 
   /**

@@ -66,7 +66,11 @@ public class Party extends Entity {
   public Suggestion suggest(Track song, String userId) throws PartyException {
     return suggestions.suggest(song, userId);
   }
-
+  
+  public SongQueue getSuggestions() {
+	return this.suggestions; // currently holds 3 song blocks inside
+  }
+  
   public Collection<Suggestion> getSongsToVoteOn() {
     return suggestions.getSongsToVoteOn();
   }
