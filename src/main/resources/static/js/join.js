@@ -44,17 +44,17 @@ $(document).ready(() => {
 	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	$("#dropdown").hide();
-	let $results = $("#dropdown");
+    let $results = $("#dropdown");
+	$results.hide();
   $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
     	console.log(song);
 
 	    if (song.length === 0) {
-	    	$("#dropdown").hide();
+	    	$results.hide();
 	    }
 	    else {
-        $("#dropdown").show();
+        $results.show();
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
 			  $results.empty();
@@ -72,8 +72,8 @@ $(document).ready(() => {
 		}
   });
 
-  $("#dropdown").click(function () {
-    $("#dropdown").hide(); // MAKE SMOOTH
+  $results.click(function () {
+    $results.hide(); // MAKE SMOOTH
   });
 
 

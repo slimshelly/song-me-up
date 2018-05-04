@@ -245,7 +245,7 @@ input[type=text] {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	color: green;
+	background-color: green; /*temporary, just to visually distinguish*/
 }
 
 .buttons {

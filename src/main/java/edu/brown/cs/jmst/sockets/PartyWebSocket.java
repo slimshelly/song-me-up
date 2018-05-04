@@ -151,7 +151,7 @@ public class PartyWebSocket {
             }
           }
           JsonObject jo = new JsonObject();
-          jo.addProperty("type", MESSAGE_TYPE.ADDSONG.ordinal());
+          jo.addProperty("type", MESSAGE_TYPE.PLAYLIST.ordinal());
           jo.add("payload", orderedSuggestions);
           break;
       }
