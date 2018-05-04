@@ -51,7 +51,6 @@ public class TrackBean extends EntityBean implements Track {
     this.popularity = track.get("popularity").getAsInt();
     this.duration_ms = track.get("duration_ms").getAsInt();
     
-    	// 
     JsonArray artists = track.get("artists").getAsJsonArray();
     List<String> artist_ids = new ArrayList<>();
     List<String> artist_names = new ArrayList<>();

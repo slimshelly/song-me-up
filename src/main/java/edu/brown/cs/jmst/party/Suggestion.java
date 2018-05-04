@@ -60,6 +60,8 @@ public class Suggestion implements Comparable<Suggestion> {
       artistNames.add(artist_name);
     }
     
+    jo.addProperty("album_cover", song.getAlbumArt());
+    
     
     jo.add("artist_names", artistNames);
     jo.addProperty("duration_ms", song.getDuration_ms());

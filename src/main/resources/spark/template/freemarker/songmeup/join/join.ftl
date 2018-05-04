@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
-		<script src="https://sdk.scdn.co/spotify-player.js"></script>
-		<script src="js/player.js"></script>
 		<script src="js/join.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
@@ -12,7 +10,6 @@
 	</head>
 	<body>
 		<input type="hidden" id="user_id" value="${user_id}">
-		<!--<div id="hidden" hidden>${user_id}</div>-->
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
@@ -39,12 +36,7 @@
 				<div class="artistInfo">
 					<span class="now">Now Playing</span>
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
-					<span class="artistName">Flume — Skin</span>
-					<div class="musicControls">
-						<i class="fas fa-backward fa-4x" onclick="switchToPrevious()"></i>
-						<i class="fas fa-play fa-3x" onclick="playSong()"></i>
-						<i class="fas fa-forward fa-4x" onclick="switchToNext()"></i>
-					</div>
+					<span class="artistName">Flume</span>
 				</div>
 			</div>
 		</div>
@@ -73,9 +65,3 @@
 		</div>
 	</body>
 </html>
-
-<script>
-	$(document).ready(function() {
-	  setup_live_playlist();
-	});
-</script>

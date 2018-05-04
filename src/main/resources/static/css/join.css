@@ -230,10 +230,9 @@ input[type=text] {
 	text-transform: uppercase;
 }
 
-
-/* UP AND DOWN BUTTONS */
+/* PLAYLIST APPEARANCE */
 .track {
-	margin-left: 10%;
+	margin-right: 65%;
 }
 
 .playlistItem {
@@ -260,6 +259,10 @@ input[type=text] {
 	transition-duration: 0.3s;
 }
 
+.albumCover {
+	width: 8%;
+}
+
 /*#down:hover {
 	color: red;
 }
@@ -278,14 +281,12 @@ input[type=text] {
 
 /* CURRENTLY PLAYING */
 .nowPlaying {
-	border: 1px solid black;
 	clear: both;
 	display: flex;
 	justify-content: center;
 }
 
 .imgContainer {
-	border: 1px solid red;
 	width: 75%;
 	display: flex;
 	justify-content: flex-start;
@@ -298,7 +299,6 @@ input[type=text] {
 }
 
 .artistInfo {
-	border: 1px solid yellow;
 	margin-top: 5%;
 	display: block;
 	width: 100%;

@@ -113,6 +113,7 @@ public class PartyWebSocket {
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
             Track song = new TrackBean(track, u.getAuth());
             Suggestion suggested = party.suggest(song, user_id);
+            // System.out.println(suggested.getSong().getAlbumArt());
             JsonObject suggestion = suggested.toJson(); //TODO: if it's null, we want to update votes, not add a suggestion
           	// build track object to send to frontend with message type ADDSONG
             Collection<Suggestion> votingBlock = party.getSongsToVoteOn();
