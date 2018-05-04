@@ -100,4 +100,12 @@ public String getAlbumArt() throws Exception {
 	// TODO Auto-generated method stub
 	return null;
 }
+
+@Override
+public List<String> getArtistNames() throws Exception {
+  if (this.bean == null) {
+    this.fill();
+  }
+  return bean.getArtistNames();
+}
 }

@@ -22,5 +22,7 @@ public interface Track {
   String getUri() throws Exception;
   
   String getAlbumArt() throws Exception;
+  
+  List<String> getArtistNames() throws Exception;
 
 }

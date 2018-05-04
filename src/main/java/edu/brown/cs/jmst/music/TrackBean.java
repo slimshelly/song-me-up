@@ -21,18 +21,20 @@ public class TrackBean extends EntityBean implements Track {
   private int duration_ms;
   private String name;
   private List<String> artistIds;
+  private List<String> artistNames;
   private String album_id;
   private String uri;
   private String album_cover;
 
   public TrackBean(String id, String name, Boolean explicit, int popularity,
-      int duration_ms, List<String> artistIds, String album_id, String uri, String album_cover) {
+      int duration_ms, List<String> artistIds, List<String> artistNames, String album_id, String uri, String album_cover) {
     this.id = id;
     this.uri = uri;
     this.explicit = explicit;
     this.popularity = popularity;
     this.duration_ms = duration_ms;
     this.artistIds = artistIds;
+    this.setArtistNames(artistNames);
     // this.playable = playable;
     this.album_id = album_id;
     this.name = name;
@@ -48,12 +50,15 @@ public class TrackBean extends EntityBean implements Track {
     	// 
     JsonArray artists = track.get("artists").getAsJsonArray();
     List<String> artist_ids = new ArrayList<>();
+    List<String> artist_names = new ArrayList<>();
     Iterator<JsonElement> iterator2 = artists.iterator();
     while (iterator2.hasNext()) {
     		JsonObject ajo = iterator2.next().getAsJsonObject();
     		artist_ids.add(ajo.get("id").getAsString());
+    		artist_names.add(ajo.get("name").getAsString());
     }
     
+    this.setArtistNames(artist_names);
     this.artistIds = artist_ids;
     this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
     // ALBUM ART!!!
@@ -113,6 +118,14 @@ public class TrackBean extends EntityBean implements Track {
   @Override
   public String getAlbumArt() {
     return album_cover;
+  }
+
+  public List<String> getArtistNames() {
+    return artistNames;
+  }
+
+  public void setArtistNames(List<String> artistNames) {
+    this.artistNames = artistNames;
   }
 
 }
