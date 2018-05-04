@@ -8,14 +8,14 @@ $(document).ready(() => {
   /*
   On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
   */
-  $.post("/playlist", responseJSON => {
-    const responseObject = JSON.parse(responseJSON);
-    console.log(responseObject);
-    let output = responseObject;
-    for(const sug of output){
-      $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
-    };
-  });
+  // $.post("/playlist", responseJSON => {
+  //   const responseObject = JSON.parse(responseJSON);
+  //   console.log(responseObject);
+  //   let output = responseObject;
+  //   for(const sug of output){
+  //     $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
+  //   };
+  // });
 
   // access playlist to add songs to later
   $playlist = $("#suggestions");
@@ -179,6 +179,7 @@ function new_vote(vote_boolean, songId){
       };
   conn.send(JSON.stringify(vote));
 }
+
 /*
 Send ADDSONG message to backend when a user adds a song
 */

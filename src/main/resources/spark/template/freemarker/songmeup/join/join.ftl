@@ -64,3 +64,9 @@
 		</div>
 	</body>
 </html>
+
+<script>
+	$(document).ready(function() {
+	  setup_live_playlist();
+	});
+</script>
