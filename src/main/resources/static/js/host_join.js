@@ -2,69 +2,86 @@
 let $playlist;
 let $votingBlock;
 let $playingBlock;
+let $results;
 
 $(document).ready(() => {
-  console.log("hello");
+
   // access playlist to add songs to later
   $playlist = $("#suggestions");
   $votingBlock = $("#voting");
   $playingBlock = $("#playing");
+  $results = $("#dropdown");
 
-	/*
-	Toggle color for up and down buttons
-	*/
-	$("#down").click(function () {
-		new_vote(false,"SongId");
-		if (document.getElementById("up").classList.contains("upColor")) {
-			$("#up").toggleClass("upColor");
-		}
-		$("#down").toggleClass("downColor");
-	});
-
-	$("#up").click(function () {
-		new_vote(true,"SongId");
-		if (document.getElementById("down").classList.contains("downColor")) {
-			$("#down").toggleClass("downColor");
-		}
-		$("#up").toggleClass("upColor");
-	});
-
-	/*
-	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
-	*/
-	// $("#dropdown").hide();
-	let $results = $("#dropdown");
-  $("#playlist").keyup(event => {
-    	let song = document.getElementById('songName').value;
-    	console.log(song);
-
-	    if (song.length === 0) {
-	    	$("#dropdown").hide();
-	    }
-	    else {
-        $("#dropdown").show();
-		   	const postParameters = {word: song};
-		    console.log(postParameters);
-			  $results.empty();
-		    // send input to backend to generate song suggestions
-		    $.post("/suggestions", postParameters, responseJSON => {
-
-				const responseObject = JSON.parse(responseJSON);
-				console.log(responseObject);
-				let output = responseObject;
-
-				for(const sug of output){
-          $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
-        };
-		  });
-		}
+  /*
+  On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
+  POST REQUEST IS EMPTY AFTER 2 REFRESHES - this is BAD
+  */
+  $.post("/playlist", responseJSON => {
+    const responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    let output = responseObject;
+    refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
+    refresh_voting_block(output.vote);
+    refresh_playing_block(output.play);
   });
 
+  /*
+  Toggle color for up and down buttons
+  */
+  $("#down").click(function () {
+    new_vote(false,"SongId");
+    if (document.getElementById("up").classList.contains("upColor")) {
+      $("#up").toggleClass("upColor");
+    }
+    $("#down").toggleClass("downColor");
+  });
+
+  $("#up").click(function () {
+    new_vote(true,"SongId");
+    if (document.getElementById("down").classList.contains("downColor")) {
+      $("#down").toggleClass("downColor");
+    }
+    $("#up").toggleClass("upColor");
+  });
+
+  /*
+  Generate song suggestions based on user input. Send POST request on each key press inside search bar.
+  */
+  $("#playlist").keyup(event => {
+      let song = document.getElementById('songName').value;
+      console.log(song);
+
+      if (song.length === 0) {
+        $("#dropdown").hide();
+      }
+      else {
+        $("#dropdown").show();
+        const postParameters = {word: song};
+        console.log(postParameters);
+        $results.empty();
+        // send input to backend to generate song suggestions
+        $.post("/suggestions", postParameters, responseJSON => {
+
+        const responseObject = JSON.parse(responseJSON);
+        console.log(responseObject);
+        let output = responseObject;
+
+        for(const sug of output){
+          $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
+        };
+      });
+    }
+  });
+
+  // hide dropdown if user clicks a suggestion on it
   $("#dropdown").click(function () {
     $("#dropdown").hide(); // MAKE SMOOTH
   });
 
-
+  // toggle play and pause buttons on click
+  // $("#playPause").click(function () {
+  //   if($("#playPause").classList.contains(class);
+  // });
 });
 
 /*
@@ -81,9 +98,7 @@ let conn;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  console.log("ASLBDLKFA");
   conn = new WebSocket("ws://localhost:4567/songupdates");
-
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -98,35 +113,39 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.VOTESONG:
-      	// update number of votes for a specific song on the playlist
+        // update number of votes for a specific song on the playlist
         console.log("A VOTE HAPPENED");
         let votingList = data.payload;
         // loop through json objects in payload
         // display number of votes for given song_id
         votingList.forEach(function(suggestion) {
-        $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
-          + "<div class='votingItem'>"
-          + "<div class='track'>" 
-          + "<div class='song'>" + suggestion.song_name + "</div>"
-          + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
+          $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+            + "<div class='votingItem'>"
+            + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
+            + "<div class='track'>" 
+            + "<div class='song'>" + suggestion.song_name + "</div>"
+            + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
-          + "</div>"
-          + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-          + "</div>"
-          + "</div>"
+            + "</div>"
+            + "<div class='buttons'>"
+            + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+            + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+            + "</div>"
+            + "</div>"
 
-          + "</li>");
+            + "</li>");
         });
 
-      	break;
+        break;
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
+        console.log("inside"); // NOT WORKING
+        console.log(data.payload);
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
           + "<div class='playlistItem'>"
-          + "<div class='track'>" 
+          + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
+          + "<div class='track'>"
           + "<div class='song'>" + data.payload.song_name + "</div>"
 
           + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
@@ -142,8 +161,8 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
-      	$playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
-      	break;
+        $playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
+        break;
 
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
@@ -166,6 +185,7 @@ function new_vote(vote_boolean, songId){
       };
   conn.send(JSON.stringify(vote));
 }
+
 /*
 Send ADDSONG message to backend when a user adds a song
 */
@@ -192,4 +212,82 @@ function get_playlist(songId) {
   conn.send(JSON.stringify(playlistRequest));
 }
 
+/*
+Refresh suggestions in the playlist (bottom block)
+*/
+function refresh_suggestions_block(toSuggest) {
+  toSuggest.forEach(function(suggestion) {
+    console.log(suggestion);
+    $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+    + "<div class='playlistItem'>"
+    + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
+    + "<div class='track'>" 
+    + "<div class='song'>" + suggestion.song.name + "</div>"
+    + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
+
+    + "</div>"
+    + "<div class='buttons'>"
+    + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+    + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+    + "</div>"
+    + "</div>"
+
+    + "</li>");
+  });
+}
+
+/*
+Refresh songs being voted on in the playlist (middle block)
+*/
+function refresh_voting_block(toVote) {
+  toVote.forEach(function(voteSong) {
+    $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+      + "<div class='votingItem'>"
+      + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
+      + "<div class='track'>" 
+      + "<div class='song'>" + voteSong.song.name + "</div>"
+      + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
+
+      + "</div>"
+      + "<div class='buttons'>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "</div>"
+      + "</div>"
+
+      + "</li>");
+  });
+}
+
+/*
+Refresh songs being played in the playlist (top block)
+*/
+function refresh_playing_block(toPlay) {
+  toPlay.forEach(function(playSong) {
+    $playingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+      + "<div class='votingItem'>"
+      + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
+      + "<div class='track'>" 
+      + "<div class='song'>" + playSong.song.name + "</div>"
+      + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
+
+      + "</div>"
+      + "<div class='buttons'>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "</div>"
+      + "</div>"
+
+      + "</li>");
+  });
+}
+
+function togglePlay() {
+  console.log("in");
+  let element = document.getElementById("playPause");
+  element.classList.toggle("fa-play");
+  element.classList.toggle("fa-pause");
+  // element.setAttribute("style", "font-size:55px;");
+  // element.classList.toggle("fa-pause");
+}
 

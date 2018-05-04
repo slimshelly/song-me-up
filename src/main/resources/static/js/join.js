@@ -2,25 +2,28 @@
 let $playlist;
 let $votingBlock;
 let $playingBlock;
+let $results;
 
 $(document).ready(() => {
-
-  /*
-  On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
-  */
-  // $.post("/playlist", responseJSON => {
-  //   const responseObject = JSON.parse(responseJSON);
-  //   console.log(responseObject);
-  //   let output = responseObject;
-  //   for(const sug of output){
-  //     $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
-  //   };
-  // });
 
   // access playlist to add songs to later
   $playlist = $("#suggestions");
   $votingBlock = $("#voting");
   $playingBlock = $("#playing");
+  $results = $("#dropdown");
+
+  /*
+  On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
+  POST REQUEST IS EMPTY AFTER 2 REFRESHES - this is BAD
+  */
+  $.post("/playlist", responseJSON => {
+    const responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    let output = responseObject;
+    refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
+    refresh_voting_block(output.vote);
+    refresh_playing_block(output.play);
+  });
 
 	/*
 	Toggle color for up and down buttons
@@ -44,8 +47,6 @@ $(document).ready(() => {
 	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	$("#dropdown").hide();
-	let $results = $("#dropdown");
   $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;
     	console.log(song);
@@ -116,6 +117,7 @@ const setup_live_playlist = () => {
         votingList.forEach(function(suggestion) {
           $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
             + "<div class='votingItem'>"
+            + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
             + "<div class='track'>" 
             + "<div class='song'>" + suggestion.song_name + "</div>"
             + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
@@ -204,6 +206,76 @@ function get_playlist(songId) {
         "id":$("#user_id").val()}
       };
   conn.send(JSON.stringify(playlistRequest));
+}
+
+/*
+Refresh suggestions in the playlist (bottom block)
+*/
+function refresh_suggestions_block(toSuggest) {
+  toSuggest.forEach(function(suggestion) {
+    console.log(suggestion);
+    $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+    + "<div class='playlistItem'>"
+    + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
+    + "<div class='track'>" 
+    + "<div class='song'>" + suggestion.song.name + "</div>"
+    + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
+
+    + "</div>"
+    + "<div class='buttons'>"
+    + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+    + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+    + "</div>"
+    + "</div>"
+
+    + "</li>");
+  });
+}
+
+/*
+Refresh songs being voted on in the playlist (middle block)
+*/
+function refresh_voting_block(toVote) {
+  toVote.forEach(function(voteSong) {
+    $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+      + "<div class='votingItem'>"
+      + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
+      + "<div class='track'>" 
+      + "<div class='song'>" + voteSong.song.name + "</div>"
+      + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
+
+      + "</div>"
+      + "<div class='buttons'>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "</div>"
+      + "</div>"
+
+      + "</li>");
+  });
+}
+
+/*
+Refresh songs being played in the playlist (top block)
+*/
+function refresh_playing_block(toPlay) {
+  toPlay.forEach(function(playSong) {
+    $playingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+      + "<div class='votingItem'>"
+      + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
+      + "<div class='track'>" 
+      + "<div class='song'>" + playSong.song.name + "</div>"
+      + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
+
+      + "</div>"
+      + "<div class='buttons'>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "</div>"
+      + "</div>"
+
+      + "</li>");
+  });
 }
 
 
