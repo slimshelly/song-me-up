@@ -235,17 +235,25 @@ input[type=text] {
 	margin-right: 65%;
 }
 
-.playlistItem {
+
+.playingItem {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	background-color: lightblue; /*temporary, just to visually distinguish*/
 }
 
 .votingItem {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: green; /*temporary, just to visually distinguish*/
+	background-color: lightgreen; /*temporary, just to visually distinguish*/
+}
+
+.suggestingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .buttons {
@@ -257,6 +265,14 @@ input[type=text] {
 	font-size: 30px;
 	transition-property: color;
 	transition-duration: 0.3s;
+}
+
+#down_disabled, #up_disabled {
+	margin-right: 5px;
+	font-size: 30px;
+	transition-property: color;
+	transition-duration: 0.3s;
+	color: lightgray;
 }
 
 .albumCover {
