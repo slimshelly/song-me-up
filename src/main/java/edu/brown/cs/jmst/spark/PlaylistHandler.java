@@ -33,8 +33,11 @@ public class PlaylistHandler implements Route {
     // get all 3 song blocks, then extract individual song blocks to send to frontend
     SongQueue songBlocks = currParty.getSuggestions();
     List<Suggestion> suggestingBlock = songBlocks.getSongsToPlay();
+    System.out.println("songs in suggest: " + suggestingBlock.size());
     List<Suggestion> votingBlock = songBlocks.getSongsToPlay();
+    System.out.println("songs in vote: " + votingBlock.size());
     List<Suggestion> playingBlock = songBlocks.getSongsToPlay();
+    System.out.println("songs in play: " + playingBlock.size());
     
     System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);
