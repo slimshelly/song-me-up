@@ -2,24 +2,29 @@ package edu.brown.cs.jmst.music;
 
 import java.util.List;
 
-public class SpotifyPlaylist {
+import edu.brown.cs.jmst.beans.Entity;
+
+public class SpotifyPlaylist extends Entity {
 	
-	private String description;
 	private String id;
 	private String uri;
-  
-	private List<Track> songs;
+  private String type;
+  private String track_link;
+	private List<String> track_ids;
 	private String name;
 	
-	public SpotifyPlaylist(String description, String id, String uri, List<Track> songs, String name) {
-		this.setDescription(description);
+	public SpotifyPlaylist(String id, String uri, String track_link, List<String> track_ids, String name, String type) {
+
 		this.id = id;
 		this.uri = uri;
-		this.songs = songs;
+		this.track_link = track_link;
+		this.track_ids = track_ids;
 		this.name = name;
+		this.type = type;
 	}
 	
-	public String getId() {
+
+  public String getId() {
 		return id;
 	}
 	
@@ -28,28 +33,35 @@ public class SpotifyPlaylist {
 	}
 	
 	public String getUrl() {
-		return uri;
+		return this.uri;
 	}
 	
+	public String getType() {
+	  return this.type;
+	}
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
 	
-	public List<Track> getSongs() {
-		return songs;
+	public String getLink() {
+	  return this.track_link;
 	}
 	
-	public void setSongs(List<Track> songs) {
-		this.songs = songs;
+	public List<String> getSongs() {
+		return this.track_ids;
 	}
 	
-	public void addSong(Track song) {
-		this.songs.add(song);
+	public void setSongs(List<String> track_ids) {
+		this.track_ids = track_ids;
+	}
+	
+	public void addSong(String song_id) {
+		this.track_ids.add(song_id);
 	}
 	
 	// for use when an admin adds a playlist to get the party started
-	public void addSongs(List<Track> songs) {
-		this.songs.addAll(songs);
+	public void addSongs(List<String> songs) {
+		this.track_ids.addAll(songs);
 	}
 	
 	public String getName() {
@@ -60,12 +72,12 @@ public class SpotifyPlaylist {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
+  @Override
+  public String toString() {
+    return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
+  }
+	
  
 }

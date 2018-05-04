@@ -15,6 +15,9 @@
         <a class="btn" onclick="togglePlaySong()">Toggle Play Song</a><br>
         <a class="btn" onclick="switchToPrevious()">Previous Song</a><br>
         <a class="btn" onclick="switchToNext()">Next Song</a><br>
+        <a class="btn" onclick="seekPosition()">Move to a minute</a><br>
+        <a class="btn" onclick="updateSongList()">UpdateList</a><br>
+        <a class="btn" onclick="showCurrentState()">showState</a><br>
     </div>
 </body>
 

@@ -7,6 +7,7 @@ import edu.brown.cs.jmst.command.Command;
 import edu.brown.cs.jmst.command.Commander;
 import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Album;
+import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
@@ -29,6 +30,7 @@ public class SmuInputHandler implements Commander {
     List<Command> commands = new ArrayList<>();
     commands.add(new SongSearch());
     commands.add(new AlbumSearch());
+    commands.add(new PlaylistSearch());
     commands.add(new MarcoPoloCommand());
     commands.add(new CapsCommand());
     return commands;
@@ -93,6 +95,36 @@ public class SmuInputHandler implements Commander {
 
   }
   
+
+  private class PlaylistSearch extends Command {
+
+    public PlaylistSearch() {
+      super("playlist" + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      List<SpotifyPlaylist> playlists =
+          SpotifyQuery.searchPlaylist(toks.get(0), state.getAuth());
+
+      List<String> playlistinfo = new ArrayList<>();
+      
+      for (SpotifyPlaylist t : playlists) {
+        playlistinfo.add(t.toString());
+        System.out.println(t.toString());
+      }
+      state.setListMessage(playlistinfo);
+    }
+
+    @Override
+    public void print() {
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
 
   private class AlbumSongSearch extends Command {
 
