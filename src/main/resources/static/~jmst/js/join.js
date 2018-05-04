@@ -95,7 +95,8 @@ let conn;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/~jmst/songupdates");
+  let host = window.location.host;
+  conn = new WebSocket("ws://"+ host + "/~jmst/songupdates");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
