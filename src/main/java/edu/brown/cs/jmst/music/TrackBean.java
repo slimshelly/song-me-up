@@ -48,15 +48,18 @@ public class TrackBean extends EntityBean implements Track {
     this.explicit = track.get("explicit").getAsBoolean();
     this.popularity = track.get("popularity").getAsInt();
     this.duration_ms = track.get("duration_ms").getAsInt();
+    
     	// 
     JsonArray artists = track.get("artists").getAsJsonArray();
     List<String> artist_ids = new ArrayList<>();
+    List<String> artist_names = new ArrayList<>();
     Iterator<JsonElement> iterator2 = artists.iterator();
     while (iterator2.hasNext()) {
-    		JsonObject ajo = iterator2.next().getAsJsonObject();
-    		artist_ids.add(ajo.get("id").getAsString());
+      JsonObject ajo = iterator2.next().getAsJsonObject();
+      artist_ids.add(ajo.get("id").getAsString());
+      artist_names.add(ajo.get("name").getAsString());
     }
-    
+    this.artistNames = artist_names;
     this.artistIds = artist_ids;
     this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
     // ALBUM ART!!!
