@@ -1,4 +1,3 @@
-const root_dir = "http://localhost:4567"
 
 $(document).ready(() => {
 
@@ -39,7 +38,7 @@ $(document).ready(() => {
 function join_id(){
 	let party_id = prompt("Enter the party code:", "######");
 	const postParameters = {"party_id": party_id};
-	window.location = root_dir + "/join?" + jQuery.param(postParameters);
+	window.location.href = "./join?" + jQuery.param(postParameters);
 	console.log(jQuery.param(postParameters));
 }
 

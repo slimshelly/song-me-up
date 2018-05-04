@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.party.UserException;
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -23,7 +24,10 @@ public class CallbackHandler implements TemplateViewRoute {
     QueryParamsMap qm = req.queryMap();
     String code = qm.value("code");
     String state = qm.value("state");
+
     String storedState = req.cookies().get("spotify_auth_state");
+    General.printInfo("State: " + state);
+    General.printInfo("Stored: " + storedState);
     SparkErrorEnum err = null;
     if (state == null || !state.equals(storedState)) {
       err = SparkErrorEnum.STATE_MISMATCH;
@@ -32,6 +36,7 @@ public class CallbackHandler implements TemplateViewRoute {
       try {
         User u = SmuState.getInstance().addUser(code);
         req.session().attribute("user", u.getId());
+        General.printInfo(u.getId());
       } catch (IllegalArgumentException e) {
         err = SparkErrorEnum.INVALID_TOKEN;
       } catch (UserException e) {
@@ -43,9 +48,9 @@ public class CallbackHandler implements TemplateViewRoute {
     if (err != null) {
       List<BasicNameValuePair> pair = new ArrayList<>();
       pair.add(new BasicNameValuePair("error", err.toString()));
-      res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
+      res.redirect("/~jmst/error?" + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
-      res.redirect("/main");
+      res.redirect("/~jmst/main");
     }
     return null;
   }

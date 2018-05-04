@@ -7,9 +7,9 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<a class="logout" href="/logout">LOG OUT</a>
-			<a id="faqs" href="/faq">FAQS</a>
-			<a id="home" href="/main">HOME</a>
+			<a class="logout" href="logout">LOG OUT</a>
+			<a id="faqs" href="faq">FAQS</a>
+			<a id="home" href="main">HOME</a>
 		</div>
 		<div class="title">Error!</div>
 		<div class="section">

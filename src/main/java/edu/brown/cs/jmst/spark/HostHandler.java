@@ -28,7 +28,7 @@ public class HostHandler implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect("/songmeup");
+      res.redirect("/~jmst/songmeup");
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();
@@ -44,7 +44,7 @@ public class HostHandler implements TemplateViewRoute {
           Party p = state.startParty(u);
           List<BasicNameValuePair> pair = new ArrayList<>();
           pair.add(new BasicNameValuePair("party_id", p.getId()));
-          res.redirect("/host?" + URLEncodedUtils.format(pair, "UTF-8"));
+          res.redirect("/~jmst/host?" + URLEncodedUtils.format(pair, "UTF-8"));
         }
       } catch (PartyException pe) {
         err = SparkErrorEnum.ALREADY_IN_PARTY;
@@ -55,7 +55,7 @@ public class HostHandler implements TemplateViewRoute {
       if (err != null) {
         List<BasicNameValuePair> pair = new ArrayList<>();
         pair.add(new BasicNameValuePair("error", err.toString()));
-        res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
+        res.redirect("/~jmst/error?" + URLEncodedUtils.format(pair, "UTF-8"));
       }
     }
     return null;

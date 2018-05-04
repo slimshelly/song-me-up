@@ -7,13 +7,13 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<a class="logout" href="/logout">LOG OUT</a>
-			<a id="faqs" href="/faq">FAQS</a>
-			<a id="home" href="/main">HOME</a>
+			<a class="logout" href="logout">LOG OUT</a>
+			<a id="faqs" href="faq">FAQS</a>
+			<a id="home" href="main">HOME</a>
 		</div>
 		<div class="title">Fill out this form to get your party started!</div>
 		<div class="buttons">
-			<a class="btn" href="/host">SUBMIT</a>
+			<a class="btn" href="host">SUBMIT</a>
 		</div>
 		
 	</body>

@@ -30,19 +30,13 @@ public class SmuState {
       Collections.synchronizedMap(new HashMap<>());
   private Map<String, User> users =
       Collections.synchronizedMap(new HashMap<>());
-  private boolean onWeb;
 
-  private SmuState(boolean onWeb) {
-    this.onWeb = onWeb;
+  private SmuState() {
   }
 
   public static SmuState getInstance() {
-    return instance;
-  }
-
-  public static SmuState getInstance(boolean onWeb) {
     if (instance == null) {
-      instance = new SmuState(onWeb);
+      instance = new SmuState();
       return instance;
     } else {
       return instance;
