@@ -57,7 +57,7 @@ class SongBlock {
     return this.suggestions;
   }
 
-  protected Suggestion getSuggestionByTrack(Track song) {
+  Suggestion getSuggestionByTrack(Track song) {
     for (Suggestion s: suggestions) {
       if (s.getSong().equals(song)) {
         return s;
@@ -66,31 +66,49 @@ class SongBlock {
     return null;
   }
 
-  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
-  protected void suggest(Track song, String userId) {
-    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
-    if (existingSuggestion == null) {
-      existingSuggestion = getSuggestionByTrack(song);
-    }
-    if (existingSuggestion != null) {
-      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
-        //TODO: report that user is trying to submit something twice
-        return;
+  Suggestion getSuggestionById(String songId) {
+    for (Suggestion s: suggestions) {
+      if (s.getSong().getId().equals(songId)) {
+        return s;
       }
-      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
-        vote(existingSuggestion, userId, true);
-      }
-      existingSuggestion.addSubmitter(userId);
-      return;
     }
-    suggestions.add(new Suggestion(userId, song));
+    return null;
   }
 
-  protected void vote(Suggestion song, String userId, boolean isUpVote) {
+  protected Suggestion suggest(Track song, String userId) {
+    Suggestion toReturn = new Suggestion(userId, song);
+    suggestions.add(toReturn);
+    return toReturn;
+  }
+
+  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
+//  protected Suggestion suggest(Track song, String userId) throws PartyException {
+//    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
+//    if (existingSuggestion == null) {
+//      existingSuggestion = getSuggestionByTrack(song);
+//    }
+//    if (existingSuggestion != null) {
+//      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
+//        throw new PartyException("User may not submit the same suggestion more "
+//                + "than once.");
+//      }
+//      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
+//        vote(existingSuggestion, userId, true);
+//      }
+//      existingSuggestion.addSubmitter(userId);
+//      return null;
+//    }
+//    Suggestion toReturn = new Suggestion(userId, song);
+//    suggestions.add(toReturn);
+//    return toReturn;
+//  }
+
+  protected int vote(Suggestion song, String userId, boolean isUpVote) {
     assert suggestions.contains(song);
     suggestions.remove(song); //update ordering
-    song.vote(userId, isUpVote);
+    int toReturn = song.vote(userId, isUpVote);
     suggestions.add(song); //update ordering
+    return toReturn;
   }
 
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
@@ -114,7 +132,7 @@ class SongBlock {
   }
 
   // returns the top X songs in order of votes (increasing or decreasing?)
-  protected Collection<Suggestion> topSuggestionsQuantity() throws Exception {
+  protected Collection<Suggestion> topSuggestionsQuantity() {
     PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
     while (toPlay.size() < BLOCK_LENGTH_SONGS) {
       Suggestion next = suggestions.poll();
@@ -137,8 +155,8 @@ class SongBlock {
    * @throws Exception if an error occurs while getting the audioFeatures info
    *                   about the track
    */
-  protected List<Suggestion> getSongs() throws Exception {
-    //The line below ONLY pays attention to votes
+  protected List<Suggestion> getSongs() {
+    //The line below ONLY pays attention to votes (which is obviously temporary)
     return new ArrayList<>(topSuggestionsQuantity());
   }
 

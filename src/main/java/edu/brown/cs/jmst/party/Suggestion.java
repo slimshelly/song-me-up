@@ -1,5 +1,7 @@
 package edu.brown.cs.jmst.party;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.music.Track;
 
 import java.util.Collections;
@@ -27,7 +29,8 @@ public class Suggestion implements Comparable<Suggestion> {
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  public Suggestion(String userId, Track song) {
+  Suggestion(String userId, Track song) {
+	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
     this.score = UP_VOTE_WEIGHT;
@@ -37,6 +40,21 @@ public class Suggestion implements Comparable<Suggestion> {
     this.userVoteMap = new ConcurrentHashMap<>();
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
+  }
+
+  public JsonObject toJson() throws Exception {
+    JsonObject jo = new JsonObject();
+    jo.addProperty("song_id", song.getId());
+    jo.addProperty("song_name", song.getName());
+    JsonArray artistIds = new JsonArray();
+    for (String artist_id : song.getArtistIds()) {
+      artistIds.add(artist_id);
+    }
+    jo.add("artist_ids", artistIds);
+    jo.addProperty("duration_ms", song.getDuration_ms());
+    jo.addProperty("uri", song.getUri());
+    jo.addProperty("score", score);
+    return jo;
   }
 
   public Track getSong() { // TODO: does this need to be public?
@@ -108,7 +126,7 @@ public class Suggestion implements Comparable<Suggestion> {
     userVoteMap.put(userId, 0);
   }
 
-  public void vote(String userId, boolean isUpVote) {
+  public int vote(String userId, boolean isUpVote) {
     if (!userVoteMap.containsKey(userId) || userVoteMap.get(userId) == 0) {
       doVote(userId, isUpVote);
     } else {
@@ -118,6 +136,7 @@ public class Suggestion implements Comparable<Suggestion> {
         doVote(userId, isUpVote);
       }
     }
+    return this.score;
   }
 
   public boolean hasBeenVotedOnByUser(String userId) {

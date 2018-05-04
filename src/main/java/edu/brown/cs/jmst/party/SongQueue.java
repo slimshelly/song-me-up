@@ -17,7 +17,7 @@ public class SongQueue {
   private SongBlock votingBlock;
   private SongBlock playingBlock;
 
-  public SongQueue() {
+  SongQueue() {
     this.blockA = new SongBlock();
     this.blockB = new SongBlock();
     this.blockC = new SongBlock();
@@ -28,16 +28,18 @@ public class SongQueue {
     blockC.setNextBlock(blockA);
     blockC.setPrevBlock(blockB);
     this.suggestingBlock = blockA;
-    this.votingBlock = blockC;
-    this.playingBlock = blockB;
+    this.votingBlock = blockA;
+    this.playingBlock = blockA;
+    //this.votingBlock = blockC;
+    //this.playingBlock = blockB;
   }
 
   /**
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
    */
-  public void Suggest(Track song, String userId) {
-    suggestingBlock.suggest(song, userId);
+  public Suggestion suggest(Track song, String userId) throws PartyException {
+    return suggestingBlock.suggest(song, userId);
   }
 
   /**
@@ -45,8 +47,18 @@ public class SongQueue {
    * @param userId the ID string of the user voting on the suggestion
    * @param isUpVote true indicates an up-vote, false indicates a down-vote
    */
-  public void Vote(Suggestion song, String userId, boolean isUpVote) {
+  public Collection<Suggestion> vote(Suggestion song, String userId, boolean isUpVote) {
     votingBlock.vote(song, userId, isUpVote);
+    return votingBlock.getSuggestions();
+  }
+
+  public Suggestion getSuggestionById(String songId) throws PartyException {
+    Suggestion toReturn = votingBlock.getSuggestionById(songId);
+    if (toReturn == null) {
+      throw new PartyException("No song found in current voting block with ID '"
+      + songId + "'.");
+    }
+    return toReturn;
   }
 
   /**
@@ -62,7 +74,7 @@ public class SongQueue {
    * @throws Exception if an error occurs while getting the audioFeatures info
    *                   about the track
    */
-  public List<Suggestion> getSongsToPlay() throws Exception {
+  public List<Suggestion> getSongsToPlay() {
     return playingBlock.getSongs();
   }
 

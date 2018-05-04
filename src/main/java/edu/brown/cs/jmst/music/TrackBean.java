@@ -1,9 +1,16 @@
 package edu.brown.cs.jmst.music;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import edu.brown.cs.jmst.beans.EntityBean;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
 public class TrackBean extends EntityBean implements Track {
   // NOTE: because this extends EntityBean, it already extends Entity. getId()
@@ -29,6 +36,29 @@ public class TrackBean extends EntityBean implements Track {
     // this.playable = playable;
     this.album_id = album_id;
     this.name = name;
+    this.album_cover = album_cover;
+  }
+  
+  public TrackBean(JsonObject track, String access_token) throws IOException {
+    this.id = track.get("id").getAsString();
+    this.uri = track.get("uri").getAsString();
+    this.explicit = track.get("explicit").getAsBoolean();
+    this.popularity = track.get("popularity").getAsInt();
+    this.duration_ms = track.get("duration_ms").getAsInt();
+    	// 
+    JsonArray artists = track.get("artists").getAsJsonArray();
+    List<String> artist_ids = new ArrayList<>();
+    Iterator<JsonElement> iterator2 = artists.iterator();
+    while (iterator2.hasNext()) {
+    		JsonObject ajo = iterator2.next().getAsJsonObject();
+    		artist_ids.add(ajo.get("id").getAsString());
+    }
+    
+    this.artistIds = artist_ids;
+    this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
+    // ALBUM ART!!!
+    this.album_cover = SpotifyQuery.getAlbumArt(album_id, access_token);
+    this.name = track.get("name").getAsString();
   }
   
 
