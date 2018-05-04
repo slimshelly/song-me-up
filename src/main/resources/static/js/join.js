@@ -18,6 +18,7 @@ $(document).ready(() => {
   */
   $.post("/playlist", responseJSON => {
     const responseObject = JSON.parse(responseJSON);
+    console.log("/playlist post request");
     console.log(responseObject);
     let output = responseObject;
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects

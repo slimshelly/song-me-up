@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.spark;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -30,11 +31,9 @@ public class PlaylistHandler implements Route {
     Party currParty = state.getParty(partyId); // retrieve party from id
     
     System.out.println("about to get playlist");
-    // get all 3 song blocks, then extract individual song blocks to send to frontend
-    SongQueue songBlocks = currParty.getSuggestions();
-    List<Suggestion> suggestingBlock = songBlocks.getSongsToPlay();
-    List<Suggestion> votingBlock = songBlocks.getSongsToPlay();
-    List<Suggestion> playingBlock = songBlocks.getSongsToPlay();
+    Collection<Suggestion> suggestingBlock = currParty.getSuggestedSongs();
+    Collection<Suggestion> votingBlock = currParty.getSongsToVoteOn();
+    Collection<Suggestion> playingBlock = currParty.getSongsToPlay();
     
     System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);

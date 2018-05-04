@@ -12,7 +12,7 @@ public class Party extends Entity {
   private User ph;
   private Set<User> partygoers;
   private Set<String> userIds; // just user ID strings
-  private SongQueue suggestions; // object to hold all suggestions. NOTE: at this point, SongQueue does much more than hold suggestions
+  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this point, SongQueue does much more than hold songQueue
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
@@ -33,7 +33,7 @@ public class Party extends Entity {
     userIds = Collections.synchronizedSet(new HashSet<>());
     votes = Collections.synchronizedMap(new HashMap<>());
     total_votes = Collections.synchronizedMap(new HashMap<>());
-    suggestions = new SongQueue();
+    songQueue = new SongQueue();
     this.partyPlaylist = partyPlaylist;
   }
 
@@ -64,19 +64,19 @@ public class Party extends Entity {
    * @throws PartyException
    */
   public Suggestion suggest(Track song, String userId) throws PartyException {
-    return suggestions.suggest(song, userId);
+    return songQueue.suggest(song, userId);
   }
-  
-  public SongQueue getSuggestions() {
-	return this.suggestions; // currently holds 3 song blocks inside
+
+  public Collection<Suggestion> getSuggestedSongs() {
+    return songQueue.getSuggestedSongs();
   }
   
   public Collection<Suggestion> getSongsToVoteOn() {
-    return suggestions.getSongsToVoteOn();
+    return songQueue.getSongsToVoteOn();
   }
 
   public Collection<Suggestion> getSongsToPlay() {
-    return suggestions.getSongsToPlay();
+    return songQueue.getSongsToPlay();
   }
 
   public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
@@ -84,8 +84,8 @@ public class Party extends Entity {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
     }
-    Suggestion voteOn = suggestions.getSuggestionById(songId);
-    return suggestions.vote(voteOn, userId, isUpVote);
+    Suggestion voteOn = songQueue.getSuggestionById(songId);
+    return songQueue.vote(voteOn, userId, isUpVote);
   }
 
 //  public int voteOnSong(String userid, String songid, boolean vote)
