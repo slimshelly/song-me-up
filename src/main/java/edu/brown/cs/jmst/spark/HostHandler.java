@@ -58,8 +58,11 @@ public class HostHandler implements TemplateViewRoute {
         res.redirect("/error?" + URLEncodedUtils.format(pair, "UTF-8"));
       }
     }
-
-    return null;
+    // send frontend user_id
+    Map<String,
+    Object> variables = new ImmutableMap.Builder<String, Object>()
+        .put("user_id", u.getId()).build();
+    return new ModelAndView(variables, "songmeup/host/host_page.ftl");
   }
 
 }

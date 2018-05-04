@@ -112,11 +112,8 @@ public class PartyWebSocket {
       	    // get track object from spotify (access to all spotify track fields)
       	    // build trackbean, which includes all spotify track fields and album art
       	    // suggest the song to the current party
-        	    System.out.println("in try bloc");
-        	    System.out.println(u.getAuth());
         	    System.out.println(song_id);
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
-            System.out.println("got le track!");
             Track song = new TrackBean(track, u.getAuth());
             Suggestion suggested = party.suggest(song, user_id);
             JsonObject suggestion = suggested.toJson(); //TODO: if it's null, we want to update votes, not add a suggestion

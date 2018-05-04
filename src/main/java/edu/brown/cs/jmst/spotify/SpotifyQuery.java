@@ -31,7 +31,14 @@ import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
-
+  
+	/**
+	 * Gets spotify track object.
+	 * @param song_id
+	 * @param access_token
+	 * @return
+	 * @throws IOException
+	 */
   public static JsonObject getRawTrack(String song_id, String access_token)
       throws IOException {
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {

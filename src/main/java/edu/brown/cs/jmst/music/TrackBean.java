@@ -20,22 +20,22 @@ public class TrackBean extends EntityBean implements Track {
   private int popularity;
   private int duration_ms;
   private String name;
-  private List<String> artistIds;
-  private List<String> artistNames;
+  private List<String> artist_ids;
+  private List<String> artist_names;
   private String album_id;
   private String uri;
   private String album_cover;
   
 
   public TrackBean(String id, String name, Boolean explicit, int popularity,
-      int duration_ms, List<String> artistIds, List<String> artistNames, String album_id, String uri, String album_cover) {
+      int duration_ms, List<String> artist_ids, List<String> artist_names, String album_id, String uri, String album_cover) {
     this.id = id;
     this.uri = uri;
     this.explicit = explicit;
     this.popularity = popularity;
     this.duration_ms = duration_ms;
-    this.artistIds = artistIds;
-    this.artistNames = artistNames;
+    this.artist_ids = artist_ids;
+    this.artist_names = artist_names;
     // this.playable = playable;
     this.album_id = album_id;
     this.name = name;
@@ -48,10 +48,9 @@ public class TrackBean extends EntityBean implements Track {
     this.explicit = track.get("explicit").getAsBoolean();
     this.popularity = track.get("popularity").getAsInt();
     this.duration_ms = track.get("duration_ms").getAsInt();
-    
-    	// 
+
     JsonArray artists = track.get("artists").getAsJsonArray();
-    List<String> artist_ids = new ArrayList<>();
+    List<String> artist_ids = new ArrayList<>();    
     List<String> artist_names = new ArrayList<>();
     Iterator<JsonElement> iterator2 = artists.iterator();
     while (iterator2.hasNext()) {
@@ -59,8 +58,8 @@ public class TrackBean extends EntityBean implements Track {
       artist_ids.add(ajo.get("id").getAsString());
       artist_names.add(ajo.get("name").getAsString());
     }
-    this.artistNames = artist_names;
-    this.artistIds = artist_ids;
+    this.artist_names = artist_names;
+    this.artist_ids = artist_ids;
     this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
     this.album_cover = SpotifyQuery.getAlbumArt(album_id, access_token);
     this.name = track.get("name").getAsString();
@@ -76,7 +75,7 @@ public class TrackBean extends EntityBean implements Track {
   public List<String> getArtistIds() throws Exception {
     //TODO: why are we returning a new list instead of this.artistIds?
     List<String> artists = new ArrayList<>();
-    artists.addAll(this.artistIds);
+    artists.addAll(this.artist_ids);
     return artists;
   }
 
@@ -122,7 +121,7 @@ public class TrackBean extends EntityBean implements Track {
 
   @Override
   public List<String> getArtistNames() throws Exception {
-    return this.artistNames;
+    return this.artist_names;
   }
 
 }
