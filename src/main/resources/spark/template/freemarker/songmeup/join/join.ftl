@@ -60,7 +60,6 @@
 					<div id="suggestions">
 					</div>
 				</ul>
-
 			</div>
 		</div>
 	</body>

@@ -11,7 +11,7 @@ import spark.Request;
 import spark.Response;
 import spark.TemplateViewRoute;
 
-public class AdminPageHandler implements TemplateViewRoute {
+public class PartyFormHandler implements TemplateViewRoute {
 
 	@Override
 	public ModelAndView handle(Request request, Response response) throws Exception {
@@ -20,7 +20,7 @@ public class AdminPageHandler implements TemplateViewRoute {
 	    User u = state.getUser(userid);
 	    Map<String,
 	    Object> variables = new ImmutableMap.Builder<String, Object>().put("user_id", u.getId()).build();
-	    return new ModelAndView(variables, "songmeup/host/host_join.ftl");
+	    return new ModelAndView(variables, "songmeup/host/party_form.ftl");
 	}
 
 }

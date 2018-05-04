@@ -5,6 +5,18 @@ let $playingBlock;
 
 $(document).ready(() => {
 
+  /*
+  On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
+  */
+  $.post("/playlist", responseJSON => {
+    const responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    let output = responseObject;
+    for(const sug of output){
+      $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
+    };
+  });
+
   // access playlist to add songs to later
   $playlist = $("#suggestions");
   $votingBlock = $("#voting");
@@ -32,7 +44,7 @@ $(document).ready(() => {
 	/*
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
-	// $("#dropdown").hide();
+	$("#dropdown").hide();
 	let $results = $("#dropdown");
   $("#playlist").keyup(event => {
     	let song = document.getElementById('songName').value;

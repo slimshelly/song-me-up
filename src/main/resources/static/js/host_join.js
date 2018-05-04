@@ -4,7 +4,7 @@ let $votingBlock;
 let $playingBlock;
 
 $(document).ready(() => {
-
+  console.log("hello");
   // access playlist to add songs to later
   $playlist = $("#suggestions");
   $votingBlock = $("#voting");
