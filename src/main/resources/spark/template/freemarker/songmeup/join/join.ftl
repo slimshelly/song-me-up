@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 	<head>
-		
 		<script src="js/jquery-3.1.1.js"></script>
 		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<script src="js/player.js"></script>

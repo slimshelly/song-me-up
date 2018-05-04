@@ -62,7 +62,6 @@ public class TrackBean extends EntityBean implements Track {
     this.artistNames = artist_names;
     this.artistIds = artist_ids;
     this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
-    // ALBUM ART!!!
     this.album_cover = SpotifyQuery.getAlbumArt(album_id, access_token);
     this.name = track.get("name").getAsString();
   }
