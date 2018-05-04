@@ -27,6 +27,8 @@ public class SparkInitializer {
     Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(),
         freeMarker);
+    
+    Spark.get("/admin", new HostHandler(), freeMarker);
 
     Spark.get("/host", new HostHandler(), freeMarker);
     Spark.get("/join", new JoinHandler(), freeMarker);
