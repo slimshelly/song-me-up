@@ -6,6 +6,7 @@ public interface Track {
   String getAlbumId() throws Exception;
 
   List<String> getArtistIds() throws Exception;
+  List<String> getArtistNames() throws Exception;
 
   boolean isExplicit() throws Exception;
 

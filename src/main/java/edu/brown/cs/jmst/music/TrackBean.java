@@ -25,6 +25,7 @@ public class TrackBean extends EntityBean implements Track {
   private String album_id;
   private String uri;
   private String album_cover;
+  
 
   public TrackBean(String id, String name, Boolean explicit, int popularity,
       int duration_ms, List<String> artistIds, List<String> artistNames, String album_id, String uri, String album_cover) {
@@ -34,7 +35,9 @@ public class TrackBean extends EntityBean implements Track {
     this.popularity = popularity;
     this.duration_ms = duration_ms;
     this.artistIds = artistIds;
-    this.setArtistNames(artistNames);
+
+    this.artistNames = artistNames;
+
     // this.playable = playable;
     this.album_id = album_id;
     this.name = name;
@@ -47,21 +50,21 @@ public class TrackBean extends EntityBean implements Track {
     this.explicit = track.get("explicit").getAsBoolean();
     this.popularity = track.get("popularity").getAsInt();
     this.duration_ms = track.get("duration_ms").getAsInt();
+    
     	// 
     JsonArray artists = track.get("artists").getAsJsonArray();
     List<String> artist_ids = new ArrayList<>();
     List<String> artist_names = new ArrayList<>();
     Iterator<JsonElement> iterator2 = artists.iterator();
     while (iterator2.hasNext()) {
-    		JsonObject ajo = iterator2.next().getAsJsonObject();
-    		artist_ids.add(ajo.get("id").getAsString());
-    		artist_names.add(ajo.get("name").getAsString());
+
+      JsonObject ajo = iterator2.next().getAsJsonObject();
+      artist_ids.add(ajo.get("id").getAsString());
+      artist_names.add(ajo.get("name").getAsString());
     }
-    
-    this.setArtistNames(artist_names);
+    this.artistNames = artist_names;
     this.artistIds = artist_ids;
     this.album_id = track.get("album").getAsJsonObject().get("id").getAsString();
-    // ALBUM ART!!!
     this.album_cover = SpotifyQuery.getAlbumArt(album_id, access_token);
     this.name = track.get("name").getAsString();
   }
@@ -120,12 +123,10 @@ public class TrackBean extends EntityBean implements Track {
     return album_cover;
   }
 
-  public List<String> getArtistNames() {
-    return artistNames;
-  }
+  @Override
+  public List<String> getArtistNames() throws Exception {
+    return this.artistNames;
 
-  public void setArtistNames(List<String> artistNames) {
-    this.artistNames = artistNames;
   }
 
 }

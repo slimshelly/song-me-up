@@ -102,7 +102,9 @@ const setup_live_playlist = () => {
           + "<div class='votingItem'>"
           + "<div class='track'>" 
           + "<div class='song'>" + suggestion.song_name + "</div>"
+
           + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
+
           + "</div>"
           + "<div class='buttons'>"
           + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
@@ -121,7 +123,9 @@ const setup_live_playlist = () => {
           + "<div class='playlistItem'>"
           + "<div class='track'>" 
           + "<div class='song'>" + data.payload.song_name + "</div>"
+
           + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
+
           + "</div>"
           + "<div class='buttons'>"
           + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"

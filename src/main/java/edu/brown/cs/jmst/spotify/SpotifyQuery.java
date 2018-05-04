@@ -433,6 +433,5 @@ public class SpotifyQuery {
     return returnPlaylists;
   }
 
-  
  
 }

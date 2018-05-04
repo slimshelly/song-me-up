@@ -3,8 +3,7 @@
 
 <body>
     <script src="js/jquery-3.1.1.js"></script>
-    <!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
-    <script src="js/untitled.js"></script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="js/player.js"></script>
 
     <div class="title">Song Me Up</div>
