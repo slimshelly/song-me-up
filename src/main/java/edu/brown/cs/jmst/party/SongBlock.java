@@ -28,7 +28,7 @@ class SongBlock {
   private SongBlock prevBlock;
 
   //Unsure which method is better. Numbers subject to change
-  private static final int BLOCK_LENGTH_SONGS = 5;
+  private static final int BLOCK_LENGTH_SONGS = 3;
   private static final int BLOCK_LENGTH_MS = 900000; //15 minutes
 
   private static final int VOTES_ONLY = 0;

@@ -52,10 +52,10 @@ $(document).ready(() => {
     	console.log(song);
 
 	    if (song.length === 0) {
-	    	$("#dropdown").hide();
+	    	$results.hide();
 	    }
 	    else {
-        $("#dropdown").show();
+        $results.show();
 		   	const postParameters = {word: song};
 		    console.log(postParameters);
 			  $results.empty();
@@ -73,8 +73,8 @@ $(document).ready(() => {
 		}
   });
 
-  $("#dropdown").click(function () {
-    $("#dropdown").hide(); // MAKE SMOOTH
+  $results.click(function () {
+    $results.hide(); // MAKE SMOOTH
   });
 
 
@@ -118,7 +118,7 @@ const setup_live_playlist = () => {
           $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
             + "<div class='votingItem'>"
             + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-            + "<div class='track'>" 
+            + "<div class='track'>"
             + "<div class='song'>" + suggestion.song_name + "</div>"
             + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
@@ -214,10 +214,10 @@ Refresh suggestions in the playlist (bottom block)
 function refresh_suggestions_block(toSuggest) {
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
-    $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+    $playlist.append("<li id='" + $("#user_id").val() + "'>"
     + "<div class='playlistItem'>"
     + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
-    + "<div class='track'>" 
+    + "<div class='track'>"
     + "<div class='song'>" + suggestion.song.name + "</div>"
     + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
 
@@ -237,10 +237,10 @@ Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
   toVote.forEach(function(voteSong) {
-    $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+    $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
       + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
-      + "<div class='track'>" 
+      + "<div class='track'>"
       + "<div class='song'>" + voteSong.song.name + "</div>"
       + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
 
@@ -260,10 +260,10 @@ Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
   toPlay.forEach(function(playSong) {
-    $playingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+    $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
       + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
-      + "<div class='track'>" 
+      + "<div class='track'>"
       + "<div class='song'>" + playSong.song.name + "</div>"
       + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
 
