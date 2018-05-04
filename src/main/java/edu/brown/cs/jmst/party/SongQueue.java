@@ -28,10 +28,8 @@ public class SongQueue {
     blockC.setNextBlock(blockA);
     blockC.setPrevBlock(blockB);
     this.suggestingBlock = blockA;
-    this.votingBlock = blockA;
-    this.playingBlock = blockA;
-    //this.votingBlock = blockC;
-    //this.playingBlock = blockB;
+    this.votingBlock = blockC;
+    this.playingBlock = blockB;
   }
 
   /**
