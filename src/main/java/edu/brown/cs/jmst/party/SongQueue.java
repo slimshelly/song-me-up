@@ -2,6 +2,7 @@ package edu.brown.cs.jmst.party;
 
 import edu.brown.cs.jmst.music.Track;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,24 +22,22 @@ public class SongQueue {
     this.blockA = new SongBlock();
     this.blockB = new SongBlock();
     this.blockC = new SongBlock();
-    blockA.setNextBlock(blockA);
-    blockA.setPrevBlock(blockA);
-//    blockA.setNextBlock(blockB);
-//    blockA.setPrevBlock(blockC);
-    //blockB.setNextBlock(blockC);
-    //blockB.setPrevBlock(blockA);
-    //blockC.setNextBlock(blockA);
-    //blockC.setPrevBlock(blockB);
+    blockA.setNextBlock(blockB);
+    blockA.setPrevBlock(blockC);
+    blockB.setNextBlock(blockC);
+    blockB.setPrevBlock(blockA);
+    blockC.setNextBlock(blockA);
+    blockC.setPrevBlock(blockB);
     this.suggestingBlock = blockA;
-    this.votingBlock = blockA;
-    this.playingBlock = blockA;
-    //this.votingBlock = blockC;
-    //this.playingBlock = blockB;
+    this.votingBlock = blockC;
+    this.playingBlock = blockB;
   }
 
   /**
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
+   * @return the Suggestion object added to the suggestions, or null if it was
+   *         a duplicate suggestion
    */
   public Suggestion suggest(Track song, String userId) throws PartyException {
     return suggestingBlock.suggest(song, userId);
@@ -48,10 +47,10 @@ public class SongQueue {
    * @param song A Suggestion to vote on
    * @param userId the ID string of the user voting on the suggestion
    * @param isUpVote true indicates an up-vote, false indicates a down-vote
+   * @return the ordered Collection of Suggestions that are being voted on
    */
   public Collection<Suggestion> vote(Suggestion song, String userId, boolean isUpVote) {
     votingBlock.vote(song, userId, isUpVote);
-    System.out.println("Is votingBlock empty? : [" + votingBlock.getSuggestions().isEmpty() + "]");
     return votingBlock.getSuggestions();
   }
 
@@ -73,6 +72,14 @@ public class SongQueue {
     return suggestingBlock.getSongs();
   }
 
+
+  /**
+   * @return A Collection of Suggestions in the order they should be played
+   */
+  public Collection<Suggestion> getSuggestedSongs() {
+    return suggestingBlock.getSuggestions();
+  }
+
   /**
    * @return a PriorityBlockingQueue of Suggestions that should be displayed for
    *         voting on. They are ordered based on number of votes
@@ -83,8 +90,6 @@ public class SongQueue {
 
   /**
    * @return A List of Suggestions in the order they should be played
-   * @throws Exception if an error occurs while getting the audioFeatures info
-   *                   about the track
    */
   public List<Suggestion> getSongsToPlay() {
     return playingBlock.getSongs();
@@ -94,19 +99,39 @@ public class SongQueue {
    * This method should be called EVERY time the current block of songs is
    * ending and the next block is needed, including the case when the host skips
    * the last song in the block.
+   * @return a length-3 List: the first element is the list of songs to play,
+   *         the second element is the list of songs to vote on, and the third
+   *         element is the collection of suggestions (probably empty)
    */
-  public void requestNewBlock() {
-    this.playingBlock.passSuggestions(); //decay scores, add to suggestion queue
-    Cycle(); //
+  public List<Collection<Suggestion>> requestNewBlock() {
+    this.playingBlock.passSuggestions(); //decays scores, adds to suggestion queue
+    Cycle(); //Switch the blocks
+    return this.requestAllBlocks();
   }
 
-  public void Play() {
-    this.playingBlock.passSuggestions();
-    //TODO: play songs from playingBlock
-    //TODO: while a song is playing, if there are enough vetoes then stop the
-    //todo~  current song and move on to the next.
-    Cycle();
+  /**
+   * This method should be called whenever the front end needs to get all the
+   * information at once. If a block is about to end, DO NOT USE THIS METHOD:
+   * instead use requestNewBlock(), which contains a call to this.
+   * @return a length-3 List: the first element is the list of songs to play,
+   *         the second element is the list of songs to vote on, and the third
+   *         element is the collection of suggestions
+   */
+  public List<Collection<Suggestion>> requestAllBlocks() {
+    List<Collection<Suggestion>> toReturn = new ArrayList<>();
+    toReturn.add(playingBlock.getSongs());
+    toReturn.add(votingBlock.getSuggestions());
+    toReturn.add(suggestingBlock.getSuggestions());
+    return toReturn;
   }
+
+//  public void Play() {
+//    this.playingBlock.passSuggestions();
+//    //TODO: play songs from playingBlock
+//    //TODO: while a song is playing, if there are enough vetoes then stop the
+//    //todo~  current song and move on to the next.
+//    Cycle();
+//  }
 
   private void Cycle() {
     //TODO: while cycling, some blocks will temporarily have two roles. Need to make sure that this does not cause problems
