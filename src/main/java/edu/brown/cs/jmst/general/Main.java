@@ -67,13 +67,12 @@ public final class Main {
         .defaultsTo(DEFAULT_PORT);
     parser.accepts("ip").withRequiredArg().ofType(String.class)
         .defaultsTo(DEFAULT_IP);
-    parser.accepts("web").withRequiredArg().ofType(Boolean.class)
-        .defaultsTo(false);
+    parser.accepts("web");
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
       try {
-        if ((boolean) options.valueOf("web")) {
+        if (options.has("web")) {
           runSparkServer(WEB_PORT, WEB_IP, WEB_ROOT_URI);
         } else {
           runSparkServer((int) options.valueOf("port"),
