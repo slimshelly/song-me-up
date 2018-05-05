@@ -171,10 +171,19 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
+	  case MESSAGE_TYPE.CONNECT:
+	    new_connect();
+	    break;
     }
   };
 }
 
+function new_connect(){
+	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
+        "id":$("#user_id").val()}
+      };
+  conn.send(JSON.stringify(vote));
+}
 
 /*
 Send VOTESONG message to backend when a user votes on a song - params are boolean vote and song id

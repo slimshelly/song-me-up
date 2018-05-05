@@ -1,6 +1,11 @@
 package edu.brown.cs.jmst.party;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
@@ -12,7 +17,9 @@ public class Party extends Entity {
   private User ph;
   private Set<User> partygoers;
   private Set<String> userIds; // just user ID strings
-  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this point, SongQueue does much more than hold songQueue
+  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this
+                               // point, SongQueue does much more than hold
+                               // songQueue
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
@@ -57,10 +64,12 @@ public class Party extends Entity {
   public String getHostName() {
     return ph.getName();
   }
-  
+
   /**
-   * @param song A Track to add to the current pool of suggestions
-   * @param userId the ID string of the user submitting the suggestion
+   * @param song
+   *          A Track to add to the current pool of suggestions
+   * @param userId
+   *          the ID string of the user submitting the suggestion
    * @throws PartyException
    */
   public Suggestion suggest(Track song, String userId) throws PartyException {
@@ -70,7 +79,7 @@ public class Party extends Entity {
   public Collection<Suggestion> getSuggestedSongs() {
     return songQueue.getSuggestedSongs();
   }
-  
+
   public Collection<Suggestion> getSongsToVoteOn() {
     return songQueue.getSongsToVoteOn();
   }
@@ -79,8 +88,8 @@ public class Party extends Entity {
     return songQueue.getSongsToPlay();
   }
 
-  public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
-          throws PartyException {
+  public Collection<Suggestion> voteOnSong(String userId, String songId,
+      boolean isUpVote) throws PartyException {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
     }
@@ -88,38 +97,38 @@ public class Party extends Entity {
     return songQueue.vote(voteOn, userId, isUpVote);
   }
 
-//  public int voteOnSong(String userid, String songid, boolean vote)
-//      throws PartyException {
-//    if (!votes.containsKey(userid)) {
-//      throw new PartyException("User not found in party.");
-//    } else {
-//      Map<String, Integer> user_votes = votes.get(userid);
-//      if (!user_votes.containsKey(songid)) {
-//        user_votes.put(songid, 0);
-//      }
-//      if (!total_votes.containsKey(songid)) {
-//        total_votes.put(songid, 0);
-//      }
-//      int val = user_votes.get(songid);
-//      int newval;
-//      if (vote) {
-//        if (val != 1) {
-//          newval = 1;
-//        } else {
-//          newval = 0;
-//        }
-//      } else {
-//        if (val != -1) {
-//          newval = -1;
-//        } else {
-//          newval = 0;
-//        }
-//      }
-//      user_votes.put(songid, newval);
-//      total_votes.put(songid, total_votes.get(songid) + (newval - val));
-//      return total_votes.get(songid);
-//    }
-//  }
+  // public int voteOnSong(String userid, String songid, boolean vote)
+  // throws PartyException {
+  // if (!votes.containsKey(userid)) {
+  // throw new PartyException("User not found in party.");
+  // } else {
+  // Map<String, Integer> user_votes = votes.get(userid);
+  // if (!user_votes.containsKey(songid)) {
+  // user_votes.put(songid, 0);
+  // }
+  // if (!total_votes.containsKey(songid)) {
+  // total_votes.put(songid, 0);
+  // }
+  // int val = user_votes.get(songid);
+  // int newval;
+  // if (vote) {
+  // if (val != 1) {
+  // newval = 1;
+  // } else {
+  // newval = 0;
+  // }
+  // } else {
+  // if (val != -1) {
+  // newval = -1;
+  // } else {
+  // newval = 0;
+  // }
+  // }
+  // user_votes.put(songid, newval);
+  // total_votes.put(songid, total_votes.get(songid) + (newval - val));
+  // return total_votes.get(songid);
+  // }
+  // }
 
   public void end() throws PartyException {
     for (User u : partygoers) {
@@ -134,6 +143,10 @@ public class Party extends Entity {
 
   public String getHostId() {
     return ph.getId();
+  }
+
+  public Set<String> getPartyGoerIds() {
+    return Collections.unmodifiableSet(userIds);
   }
 
 }

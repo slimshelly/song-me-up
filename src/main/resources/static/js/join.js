@@ -92,7 +92,8 @@ const MESSAGE_TYPE = {
   VOTESONG: 0,
   ADDSONG: 1,
   REMOVESONG: 2,
-  PLAYLIST: 3
+  PLAYLIST: 3,
+  CONNECT: 4
 };
 let conn;
 
@@ -190,17 +191,26 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
+	  case MESSAGE_TYPE.CONNECT:
+	    new_connect();
+	    break;
     }
   };
 }
 
+
+function new_connect(){
+	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
+        "id":$("#user_id").val()}
+      };
+  conn.send(JSON.stringify(vote));
+}
 
 /*
 Send VOTESONG message to backend when a user votes on a song - params are boolean vote and song id
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
