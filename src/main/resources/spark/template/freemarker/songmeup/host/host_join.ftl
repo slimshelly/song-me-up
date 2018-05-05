@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
-		<!-- <script src="js/player.js"></script> -->
+		<script src="js/player.js"></script>
 		<script src="js/host_join.js"></script>
-		<!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
+		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -22,8 +22,8 @@
 					<a href="main"><li>Home</li></a>
 					<a href="#"><li>Listeners</li></a>
 					<a href="#"><li>Info</li></a>
-					<a href="/main?leave=true"><li>End Party</li></a>
-					<a href="/logout"><li>Log Out</li></a>
+					<a href="main?leave=true"><li>End Party</li></a>
+					<a href="logout"><li>Log Out</li></a>
 				</ul>
 			</div>
 		</nav>
@@ -37,7 +37,7 @@
 					<span class="artistName">Flume — Skin</span>
 					<div class="musicControls">
 						<i class="fas fa-backward fa-4x" onclick="switchToPrevious()"></i>
-						<i id="playPause" class="fas fa-play fa-3x" onclick="togglePlay()"" style="font-size: 70px;"></i>
+						<i id="playPause" class="fas fa-play fa-3x" onclick="playSong()"" style="font-size: 70px;"></i>
 						<i class="fas fa-forward fa-4x" onclick="switchToNext()"></i>
 					</div>
 				</div>

@@ -9,14 +9,14 @@
 	<body>
 		<div class="nav-bar">
 			<p id="premium" hidden>${premium?c}</p>
-			<a class="logout" id="userStatus" href="/logout">LOG OUT</a>
-			<a id="faqs" href="/faq">FAQS</a>
-			<a id="home" href="/main">HOME</a>
+			<a class="logout" id="userStatus" href="logout">LOG OUT</a>
+			<a id="faqs" href="faq">FAQS</a>
+			<a id="home" href="main">HOME</a>
 		</div>
 		<div class="topSection">
 			<div class="title">Song Me Up</div>
 			<div class="buttons">
-				<a class="btn gray" id="host" href="/form">HOST A PARTY</a>
+				<a class="btn gray" id="host" href="form">HOST A PARTY</a>
 				<a class="btn gray" id="join" onclick="join_id()">JOIN A PARTY</a>
 			</div>
 			<div class="more" id="down">

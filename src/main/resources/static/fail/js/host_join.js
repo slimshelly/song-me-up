@@ -16,7 +16,7 @@ $(document).ready(() => {
   On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
   POST REQUEST IS EMPTY AFTER 2 REFRESHES - this is BAD
   */
-  $.post("./playlist", responseJSON => {
+  $.post("/~jmst/playlist", responseJSON => {
     const responseObject = JSON.parse(responseJSON);
     console.log(responseObject);
     let output = responseObject;
@@ -60,7 +60,7 @@ $(document).ready(() => {
         console.log(postParameters);
         $results.empty();
         // send input to backend to generate song suggestions
-        $.post("./suggestions", postParameters, responseJSON => {
+        $.post("/~jmst/suggestions", postParameters, responseJSON => {
 
         const responseObject = JSON.parse(responseJSON);
         console.log(responseObject);
@@ -98,13 +98,9 @@ let conn;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  //let host = window.location.host;
-  //conn = new WebSocket("ws://"+ host + "/songupdates");
+  let host = window.location.host;
+  conn = new WebSocket("ws://"+ host + "/~jmst/songupdates");
 
-    let completepath = window.location.host + window.location.pathname;
-  let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-  
-  conn = new WebSocket("ws://"+ partpath + "/songupdates");
   conn.onerror = err => {
     console.log('Connection error:', err);
   };

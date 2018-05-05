@@ -8,6 +8,7 @@ import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
+import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -22,7 +23,7 @@ public class MainPage implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect("/songmeup");
+      res.redirect(SpotifyAuthentication.getRootUri() + "/songmeup");
       return null;
     }
     QueryParamsMap qm = req.queryMap();

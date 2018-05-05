@@ -1,0 +1,347 @@
+
+body {
+	background: white;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+/* NAV BAR */
+#navvy {
+	display: flex;
+	justify-content: flex-end;
+}
+
+#menuToggle {
+	position: relative;
+	top: 30px;
+	right: 30px;
+
+	z-index: 1;
+
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#menuToggle input {
+	display: block;
+	width: 40px;
+	height: 32px;
+	position: absolute;
+	top: -7px;
+	left: -5px;
+
+	cursor: pointer;
+
+	opacity: 0; /* hide this */
+	z-index: 2; /* and place it over the hamburger */
+
+	-webkit-touch-callout: none;
+}
+
+#menuToggle span {
+	display: block;
+	width: 33px;
+	height: 4px;
+	margin-bottom: 5px;
+	position: relative;
+
+	background: #cdcdcd;
+	border-radius: 3px;
+
+	z-index: 1;
+
+	transform-origin: 4px 0px;
+	transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+	          background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+	          opacity 0.55s ease;
+}
+
+#menuToggle span:first-child {
+	transform-origin: 0% 0%;
+}
+
+#menuToggle span:nth-last-child(2) {
+	transform-origin: 0% 100%;
+}
+
+#menuToggle input:checked ~ span {
+	opacity: 1;
+	transform: rotate(45deg) translate(-2px, -1px);
+	background: rgb(160, 160, 205);
+}
+
+#menuToggle input:checked ~ span:nth-last-child(3) {
+	opacity: 0;
+	transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+#menuToggle input:checked ~ span:nth-last-child(2) {
+	transform: rotate(-45deg) translate(0, -1px);
+}
+
+#menu {
+	position: absolute;
+	width: 300px;
+	height: 100vh;
+
+	margin: -100px 0 0 0;
+	padding: 50px;
+	padding-top: 125px;
+	right: -100px;
+
+	background: #ededed;
+	list-style-type: none;
+	-webkit-font-smoothing: antialiased;
+	/* to stop flickering of text in safari */
+
+	transform-origin: 0% 0%;
+	transform: translate(100%, 0);
+	transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+
+#menu li {
+	font-family: 'Raleway', sans-serif;
+	text-transform: capitalize;
+	padding: 10px 0;
+	font-size: 22px;
+}
+
+#menu li:hover {
+	color: rgb(160, 160, 205);
+}
+
+#menuToggle input:checked ~ ul {
+	transform: none;
+}
+
+
+/* PARTY TITLE - in progress! */
+.title {
+	clear: both;
+}
+
+.party {
+	margin-bottom: 2%;
+	margin-left: 1%;
+	top: 5px;
+	font-size: 30px;
+	font-family: 'Lato', sans-serif;
+}
+
+
+/* PLAYLIST CONTENTS */
+.content {
+	margin-top: 1%;
+	display: flex;
+	justify-content: center;
+}
+
+.playlist {
+	box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.4);
+	width: 75%;
+	margin: 10px 10px 10px 10px;
+}
+
+.playlist ul {
+	color: black;
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.playlist ul li {
+	min-height: 50px;
+	background-color: white;
+	transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+.playlist ul li:hover {
+	background: rgb(255, 229, 229);
+}
+
+.playlist ul li {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.playlist ul li div {
+/*	margin-left: 10%;*/
+}
+
+
+/* SEARCH BAR */
+.search {
+	background: #ddd;
+}
+
+button {
+	padding: 6px 10px;
+	background: #ddd;
+	font-size: 17px;
+	border: none;
+	cursor: pointer;
+}
+
+input[type=text] {
+	width: 50%;
+	background: #ddd;
+	padding: 6px;
+	font-size: 17px;
+	border: none;
+	outline: none;
+}
+
+#dropdown {
+	position: absolute;
+	width: inherit;
+	background: rgb(160, 160, 205, 0.95);
+}
+
+.option {
+	padding: 5px 5px;
+}
+
+.option:hover {
+	background: rgb(25, 25, 25, 0.3);
+}
+
+/* APPEARANCE OF SONG AND ARTIST NAME */
+.song, .artist {
+	font-family: 'Raleway', sans-serif;
+}
+
+.song {
+	font-size: 15px;
+	color: black;
+	font-weight: bold;
+}
+
+.artist {
+	font-size: 10px;
+	color: gray;
+	text-transform: uppercase;
+}
+
+/* PLAYLIST APPEARANCE */
+.track {
+	margin-right: 65%;
+}
+
+
+.playingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: lightblue; /*temporary, just to visually distinguish*/
+}
+
+.votingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: lightgreen; /*temporary, just to visually distinguish*/
+}
+
+.suggestingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.buttons {
+	margin-right: 10px;
+}
+
+#down, #up {
+	margin-right: 5px;
+	font-size: 30px;
+	transition-property: color;
+	transition-duration: 0.3s;
+}
+
+#down_disabled, #up_disabled {
+	margin-right: 5px;
+	font-size: 30px;
+	transition-property: color;
+	transition-duration: 0.3s;
+	color: lightgray;
+}
+
+.albumCover {
+	width: 8%;
+}
+
+/*#down:hover {
+	color: red;
+}
+
+#up:hover {
+	color: green;
+}*/
+
+.downColor {
+	color: red;
+}
+
+.upColor {
+	color: green;
+}
+
+/* CURRENTLY PLAYING */
+.nowPlaying {
+	clear: both;
+	display: flex;
+	justify-content: center;
+}
+
+.imgContainer {
+	width: 75%;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.albumArt {
+	width: 30%;
+	height: 100%;
+	box-shadow: 5px 5px 5px rgba(50, 50, 50, 0.8);
+}
+
+.artistInfo {
+	margin-top: 5%;
+	display: block;
+	width: 100%;
+}
+
+.now {
+	font-family: 'Lato', sans-serif;
+	font-weight: bolder;
+}
+
+.now, .trackName, .artistName {
+	font-family: 'Lato', sans-serif;
+	display: block;
+	margin-left: 10%;
+}
+
+.trackName {
+	font-size: 30px;
+}
+
+.musicControls {
+	margin-top: 5%;
+	margin-left: 10%;
+}
+
+.musicControls i {
+	margin-right: 4%;
+}
+
+

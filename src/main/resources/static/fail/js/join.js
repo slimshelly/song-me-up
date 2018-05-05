@@ -16,8 +16,9 @@ $(document).ready(() => {
   On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
   POST REQUEST IS EMPTY AFTER 2 REFRESHES - this is BAD
   */
-  $.post("./playlist", responseJSON => {
+  $.post("/~jmst/playlist", responseJSON => {
     const responseObject = JSON.parse(responseJSON);
+    console.log("/~jmst/playlist post request");
     console.log(responseObject);
     let output = responseObject;
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
@@ -25,63 +26,59 @@ $(document).ready(() => {
     refresh_playing_block(output.play);
   });
 
-  /*
-  Toggle color for up and down buttons
-  */
-  $("#down").click(function () {
-    new_vote(false,"SongId");
-    if (document.getElementById("up").classList.contains("upColor")) {
-      $("#up").toggleClass("upColor");
-    }
-    $("#down").toggleClass("downColor");
-  });
+	/*
+	Toggle color for up and down buttons
+	*/
+	$("#down").click(function () {
+		new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
+		if (document.getElementById("up").classList.contains("upColor")) {
+			$("#up").toggleClass("upColor");
+		}
+		$("#down").toggleClass("downColor");
+	});
 
-  $("#up").click(function () {
-    new_vote(true,"SongId");
-    if (document.getElementById("down").classList.contains("downColor")) {
-      $("#down").toggleClass("downColor");
-    }
-    $("#up").toggleClass("upColor");
-  });
+	$("#up").click(function () {
+		new_vote(true,"SongId");
+		if (document.getElementById("down").classList.contains("downColor")) {
+			$("#down").toggleClass("downColor");
+		}
+		$("#up").toggleClass("upColor");
+	});
 
-  /*
-  Generate song suggestions based on user input. Send POST request on each key press inside search bar.
-  */
+	/*
+	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
+	*/
   $("#playlist").keyup(event => {
-      let song = document.getElementById('songName').value;
-      console.log(song);
+    	let song = document.getElementById('songName').value;
+    	console.log(song);
 
-      if (song.length === 0) {
-        $("#dropdown").hide();
-      }
-      else {
-        $("#dropdown").show();
-        const postParameters = {word: song};
-        console.log(postParameters);
-        $results.empty();
-        // send input to backend to generate song suggestions
-        $.post("./suggestions", postParameters, responseJSON => {
+	    if (song.length === 0) {
+	    	$results.hide();
+	    }
+	    else {
+        $results.show();
+		   	const postParameters = {word: song};
+		    console.log(postParameters);
+			  $results.empty();
+		    // send input to backend to generate song suggestions
+		    $.post("/~jmst/suggestions", postParameters, responseJSON => {
 
-        const responseObject = JSON.parse(responseJSON);
-        console.log(responseObject);
-        let output = responseObject;
+				const responseObject = JSON.parse(responseJSON);
+				console.log(responseObject);
+				let output = responseObject;
 
-        for(const sug of output){
+				for(const sug of output){
           $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
         };
-      });
-    }
+		  });
+		}
   });
 
-  // hide dropdown if user clicks a suggestion on it
-  $("#dropdown").click(function () {
-    $("#dropdown").hide(); // MAKE SMOOTH
+  $results.click(function () {
+    $results.hide(); // MAKE SMOOTH
   });
 
-  // toggle play and pause buttons on click
-  // $("#playPause").click(function () {
-  //   if($("#playPause").classList.contains(class);
-  // });
+
 });
 
 /*
@@ -98,13 +95,9 @@ let conn;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  //let host = window.location.host;
-  //conn = new WebSocket("ws://"+ host + "/songupdates");
+  let host = window.location.host;
+  conn = new WebSocket("ws://"+ host + "/~jmst/songupdates");
 
-    let completepath = window.location.host + window.location.pathname;
-  let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-  
-  conn = new WebSocket("ws://"+ partpath + "/songupdates");
   conn.onerror = err => {
     console.log('Connection error:', err);
   };
@@ -118,7 +111,7 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.VOTESONG:
-        // update number of votes for a specific song on the playlist
+      	// update number of votes for a specific song on the playlist
         console.log("A VOTE HAPPENED");
         let votingList = data.payload;
         // loop through json objects in payload
@@ -127,7 +120,7 @@ const setup_live_playlist = () => {
           $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
             + "<div class='votingItem'>"
             + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-            + "<div class='track'>" 
+            + "<div class='track'>"
             + "<div class='song'>" + suggestion.song_name + "</div>"
             + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
@@ -141,14 +134,14 @@ const setup_live_playlist = () => {
             + "</li>");
         });
 
-        break;
+      	break;
 
       case MESSAGE_TYPE.ADDSONG:
         console.log("Addsonging");
         console.log("inside"); // NOT WORKING
         console.log(data.payload);
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-          + "<div class='playlistItem'>"
+          + "<div class='suggestingItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
           + "<div class='track'>"
           + "<div class='song'>" + data.payload.song_name + "</div>"
@@ -157,8 +150,8 @@ const setup_live_playlist = () => {
 
           + "</div>"
           + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
           + "</div>"
           + "</div>"
 
@@ -166,8 +159,8 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
-        $playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
-        break;
+      	$playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
+      	break;
 
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
@@ -223,21 +216,21 @@ Refresh suggestions in the playlist (bottom block)
 function refresh_suggestions_block(toSuggest) {
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
-    $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-    + "<div class='playlistItem'>"
-    + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
-    + "<div class='track'>" 
-    + "<div class='song'>" + suggestion.song.name + "</div>"
-    + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
+      $playlist.append("<li id='" + $("#user_id").val() + "'>"
+          + "<div class='suggestingItem'>"
+          + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
+          + "<div class='track'>"
+          + "<div class='song'>" + suggestion.song.name + "</div>"
+          + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
 
-    + "</div>"
-    + "<div class='buttons'>"
-    + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-    + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-    + "</div>"
-    + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+          + "</div>"
+          + "</div>"
 
-    + "</li>");
+          + "</li>");
   });
 }
 
@@ -246,10 +239,10 @@ Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
   toVote.forEach(function(voteSong) {
-    $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
+    $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
       + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
-      + "<div class='track'>" 
+      + "<div class='track'>"
       + "<div class='song'>" + voteSong.song.name + "</div>"
       + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
 
@@ -269,17 +262,17 @@ Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
   toPlay.forEach(function(playSong) {
-    $playingBlock.append("<li id='" + $("#user_id").val() + "'>" 
-      + "<div class='votingItem'>"
+    $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
+      + "<div class='playingItem'>"
       + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
-      + "<div class='track'>" 
+      + "<div class='track'>"
       + "<div class='song'>" + playSong.song.name + "</div>"
       + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
       + "</div>"
       + "</div>"
 
@@ -287,12 +280,4 @@ function refresh_playing_block(toPlay) {
   });
 }
 
-function togglePlay() {
-  console.log("in");
-  let element = document.getElementById("playPause");
-  element.classList.toggle("fa-play");
-  element.classList.toggle("fa-pause");
-  // element.setAttribute("style", "font-size:55px;");
-  // element.classList.toggle("fa-pause");
-}
 
