@@ -188,12 +188,14 @@ const setup_live_playlist = () => {
       	$playlist.remove($("#" + $("#user_id").val()));
       	break;
 
-      case MESSAGE_TYPE.PLAYLIST:
-        // apend an entire list of li's to the displaySongs ul
+      case MESSAGE_TYPE.REFRESH_PLAYLIST:
+        let toPlay = data.payload.play;
+        let toVote = data.payload.vote;
+        let toSugg = data.payload.sugg;
+
+      case MESSAGE_TYPE.CONNECT:
+        new_connect();
         break;
-	  case MESSAGE_TYPE.CONNECT:
-	    new_connect();
-	    break;
     }
   };
 }
@@ -296,7 +298,8 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
-  // put top song in toPlay in now playing block
+
+  // put top song in toPlay in now playing block - NOT DONE YET
   console.log(toPlay);
   console.log(toPlay[0]);
   // if ($(".imgContainer").find(".artistInfo").length === 0){ 
@@ -330,8 +333,23 @@ function refresh_playing_block(toPlay) {
   });
 }
 
-function isEmpty( el ){
+function isEmpty( el ) {
     return !$.trim(el.html())
+}
+
+/*
+Update currently playing song at top of page.
+*/
+function refresh_now_playing(toSuggest) {
+  console.log(toSuggest);
+  $nowPlaying.append("<img class='albumArt' src='" + toSuggest.song.album_cover + "'>");
+  $nowPlaying.append("<div class='artistInfo'>"
+    + "<span class='now'>Now Playing</span>"
+    + "<span class='trackName'>" + toSuggest.song.name + "</span>"
+    + "<span class='artistName'>" + suggestion.song.artistNames[0] + "</span>"
+    + "</div>"
+    );
+  break;
 }
 
 
