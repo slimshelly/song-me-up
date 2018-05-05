@@ -5,7 +5,7 @@ import java.util.Base64;
 public class SpotifyAuthentication {
   public static final String CLIENT_ID = "4dbc736d594345a99c6e00bf776f5464";
   public static final String CLIENT_SECRET = "3a287186a58c4276804beb25a97f12de";
-  public static final String REDIRECT_HANDLE = "/~jmst/callback";
+  public static final String REDIRECT_HANDLE = "/callback";
   public static String ROOT_URI;
   public static String REDIRECT_URI;
   public static final String ENCODED_CLIENT_KEY = Base64.getEncoder()

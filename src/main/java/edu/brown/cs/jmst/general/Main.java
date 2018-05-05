@@ -37,7 +37,7 @@ public final class Main {
   private static final String DEFAULT_IP = "0.0.0.0";
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
   public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
-  public static final String WEB_ROOT_URI = "https://cs.hiram.edu";
+  public static final String WEB_ROOT_URI = "https://cs.hiram.edu/~jmst";
   public static final int WEB_PORT = 4582;
   public static final String WEB_IP = "127.0.0.1";
   private final SmuInputHandler smuHandler =
