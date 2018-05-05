@@ -22,6 +22,8 @@ public class SparkInitializer {
     prefix = "";
     if (web) {
       Spark.webSocket("/~jmst/songupdates", PartyWebSocket.class);
+      Spark.webSocket("/songupdates", PartyWebSocket.class);
+      Spark.webSocket("*/songupdates", PartyWebSocket.class);
     } else {
       Spark.webSocket("/songupdates", PartyWebSocket.class);
     }
