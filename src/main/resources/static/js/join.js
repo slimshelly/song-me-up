@@ -29,16 +29,16 @@ $(document).ready(() => {
 	/*
 	Toggle color for up and down buttons
 	*/
-	$("#down").click(function () {
-		new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
+	$(".down").click(function () {
+		//new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
 		}
 		$("#down").toggleClass("downColor");
 	});
 
-	$("#up").click(function () {
-		new_vote(true,"SongId");
+	$(".up").click(function () {
+		//new_vote(true,"SongId");
 		if (document.getElementById("down").classList.contains("downColor")) {
 			$("#down").toggleClass("downColor");
 		}
@@ -140,7 +140,7 @@ const setup_live_playlist = () => {
         console.log("inside"); // NOT WORKING
         console.log(data.payload);
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-          + "<div class='suggestingItem'>"
+          + "<div class='playlistItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
           + "<div class='track'>"
           + "<div class='song'>" + data.payload.song_name + "</div>"
@@ -149,8 +149,8 @@ const setup_live_playlist = () => {
 
           + "</div>"
           + "<div class='buttons'>"
-          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
-          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
           + "</div>"
           + "</div>"
 
