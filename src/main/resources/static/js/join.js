@@ -3,6 +3,7 @@ let $playlist;
 let $votingBlock;
 let $playingBlock;
 let $results;
+let $nowPlaying;
 
 $(document).ready(() => {
 
@@ -11,6 +12,7 @@ $(document).ready(() => {
   $votingBlock = $("#voting");
   $playingBlock = $("#playing");
   $results = $("#dropdown");
+  $nowPlaying = $(".imgContainer");
 
   /*
   On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
@@ -29,16 +31,18 @@ $(document).ready(() => {
 	/*
 	Toggle color for up and down buttons
 	*/
-	$(".down").click(function () {
-		//new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
+	$("#down").click(function () {
+    console.log("down clicked");
+		new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
 		}
 		$("#down").toggleClass("downColor");
 	});
 
-	$(".up").click(function () {
-		//new_vote(true,"SongId");
+	$("#up").click(function () {
+    console.log("up clicked");
+		new_vote(true,"SongId");
 		if (document.getElementById("down").classList.contains("downColor")) {
 			$("#down").toggleClass("downColor");
 		}
@@ -89,6 +93,7 @@ const MESSAGE_TYPE = {
   ADDSONG: 1,
   REMOVESONG: 2,
   PLAYLIST: 3,
+  CONNECT: 4,
   NEXT_SONG: 8,
   REQUEST_NEXT_SONG: 9
 };
@@ -99,8 +104,12 @@ const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
   let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-  
-  conn = new WebSocket("ws://"+ partpath + "/songupdates");
+  let type = "ws"
+  if(window.location.host==="cs.hiram.edu"){
+	type = type + "s";
+  }
+
+  conn = new WebSocket(type + "://"+ partpath + "/songupdates");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -141,9 +150,22 @@ const setup_live_playlist = () => {
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
-        console.log("Addsonging");
-        console.log("inside"); // NOT WORKING
-        console.log(data.payload);
+        // Check if there is a song currently playing, if not, start playing the added song
+        // This should ONLY happen when there is nothing in the playlist and a song is added
+        // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song
+        console.log("Adding a song");
+        if ($(".imgContainer").find(".artistInfo").length === 0){
+          $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
+          $nowPlaying.append("<div class='artistInfo'>"
+            + "<span class='now'>Now Playing</span>"
+            + "<span class='trackName'>" + data.payload.song_name + "</span>"
+            + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
+            + "</div>"
+            );
+          break; // don't put song in playlist - are we sure about this?
+        }
+
+        // otherwise, if a song is playing, add song to suggestions list
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
           + "<div class='suggestingItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
@@ -163,23 +185,34 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
-      	$playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
+        // CALL AS SOON AS nextsong is called
+        // removes li of ul, referenced by userId
+      	$playlist.remove($("#" + $("#user_id").val()));
       	break;
 
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
-          break;
+        break;
+	  case MESSAGE_TYPE.CONNECT:
+	    new_connect();
+	    break;
     }
   };
 }
 
+
+function new_connect(){
+	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
+        "id":$("#user_id").val()}
+      };
+  conn.send(JSON.stringify(vote));
+}
 
 /*
 Send VOTESONG message to backend when a user votes on a song - params are boolean vote and song id
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
@@ -277,6 +310,21 @@ Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
     $playingBlock.empty();
+  // put top song in toPlay in now playing block
+  console.log(toPlay);
+  console.log(toPlay[0]);
+  // if ($(".imgContainer").find(".artistInfo").length === 0){
+  //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
+  //   $nowPlaying.append("<div class='artistInfo'>"
+  //     + "<span class='now'>Now Playing</span>"
+  //     + "<span class='trackName'>" + data.payload.song_name + "</span>"
+  //     + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
+  //     + "</div>"
+  //     );
+  //   break; // don't put song in playlist - are we sure about this?
+  // }
+
+  // put rest of songs at top of playlist
   toPlay.forEach(function(playSong) {
     $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='playingItem'>"
@@ -294,6 +342,10 @@ function refresh_playing_block(toPlay) {
 
       + "</li>");
   });
+}
+
+function isEmpty( el ){
+    return !$.trim(el.html())
 }
 
 

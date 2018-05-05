@@ -1,6 +1,12 @@
 package edu.brown.cs.jmst.party;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -14,7 +20,9 @@ public class Party extends Entity {
   private User ph;
   private Set<User> partygoers;
   private Set<String> userIds; // just user ID strings
-  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this point, SongQueue_OLD does much more than hold songQueue
+  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this
+                               // point, SongQueue does much more than hold
+                               // suggestions
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
@@ -59,7 +67,7 @@ public class Party extends Entity {
   public String getHostName() {
     return ph.getName();
   }
-  
+
   /**
    * @param song A Track to add to the current pool of suggestions
    * @param userId the ID string of the user submitting the suggestion
@@ -72,7 +80,7 @@ public class Party extends Entity {
   public Collection<Suggestion> getSuggestedSongs() {
     return songQueue.getSuggestedSongs();
   }
-  
+
   public Collection<Suggestion> getSongsToVoteOn() {
     return songQueue.getSongsToVoteOn();
   }
@@ -85,8 +93,8 @@ public class Party extends Entity {
     return songQueue.getNextSongToPlay();
   }
 
-  public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
-          throws PartyException {
+  public Collection<Suggestion> voteOnSong(String userId, String songId,
+      boolean isUpVote) throws PartyException {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
     }
@@ -142,6 +150,10 @@ public class Party extends Entity {
     return ph.getId();
   }
 
+  public Set<String> getPartyGoerIds() {
+    return Collections.unmodifiableSet(userIds);
+  }
+
   public JsonObject sendSuggestionToSuggBlock(Suggestion sugg) throws Exception {
     return sugg.toJson();
   }
@@ -176,13 +188,6 @@ public class Party extends Entity {
     allBlocks.add("vote", refreshVoteBlock());
     allBlocks.add("play", refreshPlayBlock());
     return allBlocks;
-  }
-
-  public JsonObject test() {
-    JsonObject testObj = new JsonObject();
-    testObj.addProperty("messasge", "The test is working! PartyId:"
-            + " [" + getId() + "]");
-    return testObj;
   }
 
 }
