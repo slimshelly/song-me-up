@@ -10,6 +10,7 @@ import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.party.UserException;
 import edu.brown.cs.jmst.songmeup.SmuState;
+import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -49,11 +50,11 @@ public class CallbackHandler implements TemplateViewRoute {
       List<BasicNameValuePair> pair = new ArrayList<>();
       pair.add(new BasicNameValuePair("error", err.toString()));
       // res.redirect("../error?" + URLEncodedUtils.format(pair, "UTF-8"));
-      res.redirect(General.getNewUrl(req.url(),
-          "/error?" + URLEncodedUtils.format(pair, "UTF-8")));
+      res.redirect(SpotifyAuthentication.ROOT_URI + "/error?"
+          + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
       // res.redirect("../main");
-      res.redirect(General.getNewUrl(req.url(), "/main"));
+      res.redirect(SpotifyAuthentication.ROOT_URI + "/main");
     }
     return null;
   }
