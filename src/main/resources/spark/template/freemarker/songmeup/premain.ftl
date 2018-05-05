@@ -13,7 +13,7 @@
 			<h1>Song me up</h1>
 		  			<p>To use SongMeUp, log in to Spotify :) If you don't have an account, it is easy and free to make one!</p>
 			<div class="buttons">
-				<a class="login" id="userStatus" href="/login">Login</a>
+				<a class="login" id="userStatus" href="login">Login</a>
 			</div>
   		</div>
 	</body>

@@ -34,6 +34,11 @@ public final class General {
   private General() {
   }
 
+  public static String getNewUrl(String old, String newEnding) {
+    String base = old.substring(0, old.lastIndexOf("/"));
+    return base + newEnding;
+  }
+
   /**
    * Turns a string into a list of characters.
    *

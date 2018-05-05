@@ -56,7 +56,7 @@ public class User extends Entity {
       List<BasicNameValuePair> pairs2 = new ArrayList<>();
       pairs2.add(new BasicNameValuePair("code", code));
       pairs2.add(new BasicNameValuePair("redirect_uri",
-          SpotifyAuthentication.REDIRECT_URI));
+          SpotifyAuthentication.getRedirectUri()));
       pairs2.add(new BasicNameValuePair("grant_type", "authorization_code"));
       UrlEncodedFormEntity urlentity =
           new UrlEncodedFormEntity(pairs2, "UTF-8");

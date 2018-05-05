@@ -6,8 +6,8 @@ public class SpotifyAuthentication {
   public static final String CLIENT_ID = "4dbc736d594345a99c6e00bf776f5464";
   public static final String CLIENT_SECRET = "3a287186a58c4276804beb25a97f12de";
   public static final String REDIRECT_HANDLE = "/callback";
-  public static final String ROOT_URI = "http://localhost:4567";
-  public static final String REDIRECT_URI = ROOT_URI + REDIRECT_HANDLE;
+  private static String ROOT_URI;
+  private static String REDIRECT_URI;
   public static final String ENCODED_CLIENT_KEY = Base64.getEncoder()
       .encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes());
 
@@ -38,4 +38,22 @@ public class SpotifyAuthentication {
     }
     return sb.toString();
   }
+
+  public static void setRootUri(String uri) throws Exception {
+    if (ROOT_URI == null) {
+      ROOT_URI = uri;
+      REDIRECT_URI = ROOT_URI + REDIRECT_HANDLE;
+    } else {
+      throw new Exception("Cannot set root uri twice.");
+    }
+  }
+
+  public static String getRootUri() {
+    return ROOT_URI;
+  }
+
+  public static String getRedirectUri() {
+    return REDIRECT_URI;
+  }
+
 }
