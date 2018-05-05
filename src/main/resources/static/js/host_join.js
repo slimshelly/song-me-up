@@ -78,10 +78,6 @@ $(document).ready(() => {
     $("#dropdown").hide(); // MAKE SMOOTH
   });
 
-  // toggle play and pause buttons on click
-  // $("#playPause").click(function () {
-  //   if($("#playPause").classList.contains(class);
-  // });
 });
 
 /*

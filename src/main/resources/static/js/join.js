@@ -30,6 +30,7 @@ $(document).ready(() => {
 	Toggle color for up and down buttons
 	*/
 	$("#down").click(function () {
+    console.log("down clicked");
 		new_vote(false,"SongId");
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
@@ -38,6 +39,7 @@ $(document).ready(() => {
 	});
 
 	$("#up").click(function () {
+    console.log("up clicked");
 		new_vote(true,"SongId");
 		if (document.getElementById("down").classList.contains("downColor")) {
 			$("#down").toggleClass("downColor");
