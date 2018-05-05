@@ -73,10 +73,10 @@ public final class Main {
     if (options.has("gui")) {
       try {
         if (options.has("web")) {
-          runSparkServer(WEB_PORT, WEB_IP, WEB_ROOT_URI);
+          runSparkServer(WEB_PORT, WEB_IP, WEB_ROOT_URI, true);
         } else {
           runSparkServer((int) options.valueOf("port"),
-              (String) options.valueOf("ip"), DEFAULT_ROOT_URI);
+              (String) options.valueOf("ip"), DEFAULT_ROOT_URI, false);
         }
 
         runRepl();
@@ -110,7 +110,7 @@ public final class Main {
     return new FreeMarkerEngine(config);
   }
 
-  private void runSparkServer(int port, String ip, String rootUri)
+  private void runSparkServer(int port, String ip, String rootUri, boolean web)
       throws Exception {
     Spark.port(port);
     Spark.ipAddress(ip);
@@ -119,7 +119,7 @@ public final class Main {
 
     FreeMarkerEngine freeMarker = createEngine();
     SpotifyAuthentication.setRootUri(rootUri);
-    SparkInitializer.setHandlers(freeMarker, "");
+    SparkInitializer.setHandlers(freeMarker, web);
   }
 
   /**

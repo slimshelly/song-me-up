@@ -17,10 +17,15 @@ public class SparkInitializer {
 
   public static final Gson GSON = new Gson();
 
-  public static void setHandlers(FreeMarkerEngine freeMarker, String root) {
+  public static void setHandlers(FreeMarkerEngine freeMarker, boolean web) {
     String prefix = "/~jmst";
     prefix = "";
-    Spark.webSocket("/songupdates", PartyWebSocket.class);
+    if (web) {
+      Spark.webSocket("/~jmst/songupdates", PartyWebSocket.class);
+    } else {
+      Spark.webSocket("/songupdates", PartyWebSocket.class);
+    }
+
     Spark.get(prefix + "/main", new MainPage(), freeMarker);
     Spark.get(prefix + "/songmeup", new PreMainPage(), freeMarker);
 

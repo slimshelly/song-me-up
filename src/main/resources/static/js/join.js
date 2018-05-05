@@ -97,8 +97,12 @@ const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
   let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
+  let type = "ws"
+  if(window.location.host==="cs.hiram.edu"){
+	type = type + "s";  
+  }
   
-  conn = new WebSocket("ws://"+ partpath + "/songupdates");
+  conn = new WebSocket(type + "://"+ partpath + "/songupdates");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
