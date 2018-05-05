@@ -38,12 +38,11 @@ $(document).ready(() => {
 function join_id(){
 	let party_id = prompt("Enter the party code:", "######");
 	const postParameters = {"party_id": party_id};
-	let completepath = window.location.host + window.location.pathname;
+	/* let completepath = window.location.host + window.location.pathname;
 	let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-	
-	window.location.href = partpath + "/join?" + jQuery.param(postParameters);
-	console.log(window.location);
-	console.log(jQuery.param(postParameters));
+	let newPath = partpath + "/join?" + jQuery.param(postParameters);
+	console.log(newPath); */
+	window.location = "./join?" + jQuery.param(postParameters);
 }
 
 
