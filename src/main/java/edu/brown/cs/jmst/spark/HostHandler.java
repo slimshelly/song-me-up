@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
@@ -28,7 +29,7 @@ public class HostHandler implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect("./songmeup");
+      res.redirect(General.getNewUrl(req.url(), "/songmeup"));
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();
@@ -44,7 +45,8 @@ public class HostHandler implements TemplateViewRoute {
           Party p = state.startParty(u);
           List<BasicNameValuePair> pair = new ArrayList<>();
           pair.add(new BasicNameValuePair("party_id", p.getId()));
-          res.redirect("./host?" + URLEncodedUtils.format(pair, "UTF-8"));
+          res.redirect(General.getNewUrl(req.url(),
+              "/host?" + URLEncodedUtils.format(pair, "UTF-8")));
         }
       } catch (PartyException pe) {
         err = SparkErrorEnum.ALREADY_IN_PARTY;
@@ -55,7 +57,8 @@ public class HostHandler implements TemplateViewRoute {
       if (err != null) {
         List<BasicNameValuePair> pair = new ArrayList<>();
         pair.add(new BasicNameValuePair("error", err.toString()));
-        res.redirect("./error?" + URLEncodedUtils.format(pair, "UTF-8"));
+        res.redirect(General.getNewUrl(req.url(),
+            "/error?" + URLEncodedUtils.format(pair, "UTF-8")));
       }
     }
     return null;

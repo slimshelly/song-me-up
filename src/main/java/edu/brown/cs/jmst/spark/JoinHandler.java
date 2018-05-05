@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
@@ -27,7 +28,7 @@ public class JoinHandler implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect("./songmeup");
+      res.redirect(General.getNewUrl(req.url(), "/songmeup"));
     } else {
       QueryParamsMap qm = req.queryMap();
       String party_id = qm.value("party_id");
@@ -47,7 +48,8 @@ public class JoinHandler implements TemplateViewRoute {
       if (err != null) {
         List<BasicNameValuePair> pair = new ArrayList<>();
         pair.add(new BasicNameValuePair("error", err.toString()));
-        res.redirect("./error?" + URLEncodedUtils.format(pair, "UTF-8"));
+        res.redirect(General.getNewUrl(req.url(),
+            "/error?" + URLEncodedUtils.format(pair, "UTF-8")));
       }
     }
     return null;

@@ -22,7 +22,7 @@ public class MainPage implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect("./songmeup");
+      res.redirect(General.getNewUrl(req.url(), "/songmeup"));
       return null;
     }
     QueryParamsMap qm = req.queryMap();
