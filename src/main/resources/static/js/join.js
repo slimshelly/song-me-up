@@ -93,7 +93,13 @@ const MESSAGE_TYPE = {
   ADDSONG: 1,
   REMOVESONG: 2,
   PLAYLIST: 3,
+<<<<<<< HEAD
   NEXT_SONG: 9
+=======
+  CONNECT: 4,
+  NEXT_SONG: 8,
+  REQUEST_NEXT_SONG: 9
+>>>>>>> 28d4d2f979b01488ed8ff4e78c81f0b3690bc3d0
 };
 let conn;
 
@@ -102,8 +108,12 @@ const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
   let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-  
-  conn = new WebSocket("ws://"+ partpath + "/songupdates");
+  let type = "ws"
+  if(window.location.host==="cs.hiram.edu"){
+	type = type + "s";
+  }
+
+  conn = new WebSocket(type + "://"+ partpath + "/songupdates");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -146,9 +156,9 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.ADDSONG:
         // Check if there is a song currently playing, if not, start playing the added song
         // This should ONLY happen when there is nothing in the playlist and a song is added
-        // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song 
+        // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song
         console.log("Adding a song");
-        if ($(".imgContainer").find(".artistInfo").length === 0){ 
+        if ($(".imgContainer").find(".artistInfo").length === 0){
           $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
           $nowPlaying.append("<div class='artistInfo'>"
             + "<span class='now'>Now Playing</span>"
@@ -187,6 +197,7 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
+
       case MESSAGE_TYPE.NEXT_SONG:
 
         // data - json object
@@ -205,6 +216,11 @@ const setup_live_playlist = () => {
         updateMainCover(song_cover, song_name, song_artists);
         
         break;
+
+	  case MESSAGE_TYPE.CONNECT:
+	    new_connect();
+	    break;
+
     }
   };
 }
@@ -214,12 +230,18 @@ function updateMainCover() {
 }
 
 
+function new_connect(){
+	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
+        "id":$("#user_id").val()}
+      };
+  conn.send(JSON.stringify(vote));
+}
+
 /*
 Send VOTESONG message to backend when a user votes on a song - params are boolean vote and song id
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
@@ -243,6 +265,15 @@ function new_song(songId) {
   conn.send(JSON.stringify(userSuggestion));
 }
 
+function request_next_song() {
+    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+    console.log("requesting next song");
+    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+                   "payload": { "id": "", "song_id": ""}
+    };
+    conn.send(JSON.stringify(request));
+}
+
 /*
 Send PLAYLIST message to backend when the last song in the playing block is 10 seconds from finishing
 */
@@ -258,6 +289,7 @@ function get_playlist(songId) {
 Refresh suggestions in the playlist (bottom block)
 */
 function refresh_suggestions_block(toSuggest) {
+    $playlist.empty();
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
       $playlist.append("<li id='" + $("#user_id").val() + "'>"
@@ -282,6 +314,7 @@ function refresh_suggestions_block(toSuggest) {
 Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
+    $votingBlock.empty();
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
@@ -305,10 +338,11 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
+    $playingBlock.empty();
   // put top song in toPlay in now playing block
   console.log(toPlay);
   console.log(toPlay[0]);
-  // if ($(".imgContainer").find(".artistInfo").length === 0){ 
+  // if ($(".imgContainer").find(".artistInfo").length === 0){
   //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
   //   $nowPlaying.append("<div class='artistInfo'>"
   //     + "<span class='now'>Now Playing</span>"

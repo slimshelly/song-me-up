@@ -30,7 +30,7 @@ public class Suggestion implements Comparable<Suggestion> {
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  Suggestion(String userId, Track song) {
+  Suggestion(Track song, String userId) {
 	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
@@ -52,7 +52,6 @@ public class Suggestion implements Comparable<Suggestion> {
       artistIds.add(artist_id);
     }
     
-    
     jo.add("artist_ids", artistIds);
     
     JsonArray artistNames = new JsonArray();
@@ -61,7 +60,6 @@ public class Suggestion implements Comparable<Suggestion> {
     }
     
     jo.addProperty("album_cover", song.getAlbumArt());
-    
     
     jo.add("artist_names", artistNames);
     jo.addProperty("duration_ms", song.getDuration_ms());
