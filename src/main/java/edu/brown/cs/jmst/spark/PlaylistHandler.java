@@ -1,14 +1,12 @@
 package edu.brown.cs.jmst.spark;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.party.Party;
-import edu.brown.cs.jmst.party.SongQueue;
 import edu.brown.cs.jmst.party.Suggestion;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
