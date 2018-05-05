@@ -3,6 +3,7 @@ let $playlist;
 let $votingBlock;
 let $playingBlock;
 let $results;
+let $nowPlaying;
 
 $(document).ready(() => {
 
@@ -11,6 +12,7 @@ $(document).ready(() => {
   $votingBlock = $("#voting");
   $playingBlock = $("#playing");
   $results = $("#dropdown");
+  $nowPlaying = $(".imgContainer");
 
   /*
   On page load, send post request to the backend to get CURRENT VERSION OF PLAYLIST
@@ -141,9 +143,24 @@ const setup_live_playlist = () => {
       	break;
 
       case MESSAGE_TYPE.ADDSONG:
-        console.log("Addsonging");
-        console.log("inside"); // NOT WORKING
-        console.log(data.payload);
+        // Check if there is a song currently playing, if not, start playing the added song
+        // This should ONLY happen when there is nothing in the playlist and a song is added
+        // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song 
+        console.log("add songing");
+        console.log($(".imgContainer"));
+        console.log($(".imgContainer").val());
+        if ($(".imgContainer").find(".artistInfo").length === 0){ 
+          $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
+          $nowPlaying.append("<div class='artistInfo'>"
+            + "<span class='now'>Now Playing</span>"
+            + "<span class='trackName'>" + data.payload.song_name + "</span>"
+            + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
+            + "</div>"
+            );
+          break; // don't put song in playlist - are we sure about this?
+        }
+
+        // otherwise, if a song is playing, add song to suggestions list
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
           + "<div class='suggestingItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
@@ -265,6 +282,12 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
+  // put top song in toPlay in now playing block
+  console.log(toPlay);
+  console.log(toPlay[0]);
+  //$(".albumArt").src = toPlay[0];
+
+  // put rest of songs at top of playlist
   toPlay.forEach(function(playSong) {
     $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='playingItem'>"
@@ -282,6 +305,10 @@ function refresh_playing_block(toPlay) {
 
       + "</li>");
   });
+}
+
+function isEmpty( el ){
+    return !$.trim(el.html())
 }
 
 
