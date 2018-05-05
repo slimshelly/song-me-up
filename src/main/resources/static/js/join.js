@@ -146,9 +146,7 @@ const setup_live_playlist = () => {
         // Check if there is a song currently playing, if not, start playing the added song
         // This should ONLY happen when there is nothing in the playlist and a song is added
         // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song 
-        console.log("add songing");
-        console.log($(".imgContainer"));
-        console.log($(".imgContainer").val());
+        console.log("Adding a song");
         if ($(".imgContainer").find(".artistInfo").length === 0){ 
           $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
           $nowPlaying.append("<div class='artistInfo'>"
@@ -180,7 +178,9 @@ const setup_live_playlist = () => {
         break;
 
       case MESSAGE_TYPE.REMOVESONG:
-      	$playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
+        // CALL AS SOON AS nextsong is called
+        // removes li of ul, referenced by userId
+      	$playlist.remove($("#" + $("#user_id").val()));
       	break;
 
       case MESSAGE_TYPE.PLAYLIST:
@@ -285,7 +285,16 @@ function refresh_playing_block(toPlay) {
   // put top song in toPlay in now playing block
   console.log(toPlay);
   console.log(toPlay[0]);
-  //$(".albumArt").src = toPlay[0];
+  // if ($(".imgContainer").find(".artistInfo").length === 0){ 
+  //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
+  //   $nowPlaying.append("<div class='artistInfo'>"
+  //     + "<span class='now'>Now Playing</span>"
+  //     + "<span class='trackName'>" + data.payload.song_name + "</span>"
+  //     + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
+  //     + "</div>"
+  //     );
+  //   break; // don't put song in playlist - are we sure about this?
+  // }
 
   // put rest of songs at top of playlist
   toPlay.forEach(function(playSong) {
