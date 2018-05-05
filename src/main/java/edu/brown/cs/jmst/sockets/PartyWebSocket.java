@@ -32,7 +32,8 @@ public class PartyWebSocket {
   private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
 
   private static enum MESSAGE_TYPE {
-    VOTESONG, ADDSONG, REMOVESONG, PLAYLIST
+    VOTESONG, ADDSONG, REMOVESONG, PLAYLIST, REFRESH_ALL, REFRESH_PLAY,
+    REFRESH_VOTE, REFRESH_SUGG, NEXT_SONG, REQUEST_NEXT_SONG
   }
 
   @OnWebSocketConnect
@@ -63,11 +64,101 @@ public class PartyWebSocket {
 //    }
 //  }
 
+  public void signalRefreshAll(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_ALL.ordinal());
+      jo.add("payload", party.refreshAllBlocks());
+      for (Session s : sessions) {
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshPlay(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_PLAY.ordinal());
+      jo.add("payload", party.refreshPlayBlock());
+      for (Session s : sessions) {
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshVote(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_VOTE.ordinal());
+      jo.add("payload", party.refreshVoteBlock());
+      for (Session s : sessions) {
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshSugg(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_SUGG.ordinal());
+      jo.add("payload", party.refreshSuggBlock());
+      for (Session s : sessions) {
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalNextSong(JsonObject songToPlay, Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
+      jo.add("payload", songToPlay);
+      for (Session s : sessions) {
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    assert received.get("type").getAsInt() < 4
+    assert received.get("type").getAsInt() < 4 //TODO: change the limits
         && received.get("type").getAsInt() >= 0;
     SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
@@ -140,7 +231,7 @@ public class PartyWebSocket {
         case REMOVESONG:
           break;
         case PLAYLIST:
-          Collection<Suggestion> playingBlock = party.getSongsToPlay();
+          Collection<Suggestion> playingBlock = party.getSongsToPlaySoon();
           JsonArray orderedSuggestions = new JsonArray();
           for (Suggestion s: playingBlock) {
             try {
@@ -153,6 +244,16 @@ public class PartyWebSocket {
           JsonObject jo = new JsonObject();
           jo.addProperty("type", MESSAGE_TYPE.PLAYLIST.ordinal());
           jo.add("payload", orderedSuggestions);
+          break;
+        case REQUEST_NEXT_SONG:
+          //tell backend to get the next song
+          try {
+            Suggestion nextSong = party.getNextSongToPlay();
+            signalRefreshPlay(party);
+            signalNextSong(nextSong.toJson(), party);
+          } catch (Exception e) {
+            General.printErr("Error getting next song. " + e.getMessage());
+          }
           break;
       }
     }

@@ -2,6 +2,8 @@ package edu.brown.cs.jmst.party;
 
 import java.util.*;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
@@ -12,7 +14,7 @@ public class Party extends Entity {
   private User ph;
   private Set<User> partygoers;
   private Set<String> userIds; // just user ID strings
-  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this point, SongQueue does much more than hold songQueue
+  private SongQueue songQueue; // object to hold all songQueue. NOTE: at this point, SongQueue_OLD does much more than hold songQueue
   private SongMeUpPlaylist partyPlaylist; // object to hold current playlist
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
@@ -75,8 +77,12 @@ public class Party extends Entity {
     return songQueue.getSongsToVoteOn();
   }
 
-  public Collection<Suggestion> getSongsToPlay() {
-    return songQueue.getSongsToPlay();
+  public List<Suggestion> getSongsToPlaySoon() {
+    return songQueue.getSongsToPlaySoon();
+  }
+
+  public Suggestion getNextSongToPlay() throws PartyException {
+    return songQueue.getNextSongToPlay();
   }
 
   public Collection<Suggestion> voteOnSong(String userId, String songId, boolean isUpVote)
@@ -84,7 +90,7 @@ public class Party extends Entity {
     if (!userIds.contains(userId)) {
       throw new PartyException("User not found in party.");
     }
-    Suggestion voteOn = songQueue.getSuggestionById(songId);
+    Suggestion voteOn = songQueue.getSuggestionInVoteBlockById(songId);
     return songQueue.vote(voteOn, userId, isUpVote);
   }
 
@@ -134,6 +140,49 @@ public class Party extends Entity {
 
   public String getHostId() {
     return ph.getId();
+  }
+
+  public JsonObject sendSuggestionToSuggBlock(Suggestion sugg) throws Exception {
+    return sugg.toJson();
+  }
+
+  public JsonArray refreshSuggBlock() throws Exception {
+    JsonArray suggBlock = new JsonArray();
+    for (Suggestion s : songQueue.getSuggestedSongs()) {
+      suggBlock.add(s.toJson());
+    }
+    return suggBlock;
+  }
+
+  public JsonArray refreshVoteBlock() throws Exception {
+    JsonArray voteBlock = new JsonArray();
+    for (Suggestion s : songQueue.getSongsToVoteOn()) {
+      voteBlock.add(s.toJson());
+    }
+    return voteBlock;
+  }
+
+  public JsonArray refreshPlayBlock() throws Exception {
+    JsonArray playBlock = new JsonArray();
+    for (Suggestion s : songQueue.getSongsToPlaySoon()) {
+      playBlock.add(s.toJson());
+    }
+    return playBlock;
+  }
+
+  public JsonObject refreshAllBlocks() throws Exception {
+    JsonObject allBlocks = new JsonObject();
+    allBlocks.add("sugg", refreshSuggBlock());
+    allBlocks.add("vote", refreshVoteBlock());
+    allBlocks.add("play", refreshPlayBlock());
+    return allBlocks;
+  }
+
+  public JsonObject test() {
+    JsonObject testObj = new JsonObject();
+    testObj.addProperty("messasge", "The test is working! PartyId:"
+            + " [" + getId() + "]");
+    return testObj;
   }
 
 }

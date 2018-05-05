@@ -18,10 +18,16 @@ public class SongQueue {
   private SongBlock votingBlock;
   private SongBlock playingBlock;
 
+  private static final int SUGGESTING = 1;
+  private static final int VOTING = 2;
+  private static final int PLAYING = 3;
+
+  private static final int MIN_VOTE_BLOCK_SIZE = 15;
+
   SongQueue() {
-    this.blockA = new SongBlock();
-    this.blockB = new SongBlock();
-    this.blockC = new SongBlock();
+    this.blockA = new SongBlock(SUGGESTING);
+    this.blockB = new SongBlock(VOTING);
+    this.blockC = new SongBlock(PLAYING);
     blockA.setNextBlock(blockB);
     blockA.setPrevBlock(blockC);
     blockB.setNextBlock(blockC);
@@ -40,8 +46,27 @@ public class SongQueue {
    *         a duplicate suggestion
    */
   public Suggestion suggest(Track song, String userId) throws PartyException {
-    return suggestingBlock.suggest(song, userId);
+    Suggestion existingSuggestion;
+    if ((existingSuggestion = votingBlock.getSuggestionByTrack(song)) != null) {
+      votingBlock.suggestDuplicate(existingSuggestion, userId);
+      return null;
+    } else if (votingBlock.size() < MIN_VOTE_BLOCK_SIZE) {
+      return votingBlock.suggestUnique(song, userId);
+      //TODO: distinguish that this suggestion was added to votingBlock, not suggestingBlock
+    } else if ((existingSuggestion = suggestingBlock.getSuggestionByTrack(song)) != null) {
+      suggestingBlock.suggestDuplicate(existingSuggestion, userId);
+      return null;
+    } else {
+      return suggestingBlock.suggestUnique(song, userId);
+    }
   }
+
+  //TODO: possible actions that front end might need to take:
+  //1. append song to suggestion block's suggestion queue (no refresh)
+  //2. refresh suggestion blocks' suggestion queue
+  //3. refresh voting block's suggestion queue
+  //4. refresh playing block's playing list
+  //5. refresh everything simultaneously
 
   /**
    * @param song A Suggestion to vote on
@@ -54,22 +79,22 @@ public class SongQueue {
     return votingBlock.getSuggestions();
   }
 
-  public Suggestion getSuggestionById(String songId) throws PartyException {
+  public Suggestion getSuggestionInVoteBlockById(String songId) throws PartyException {
     Suggestion toReturn = votingBlock.getSuggestionById(songId);
     if (toReturn == null) {
       throw new PartyException("No song found in current voting block with ID '"
-      + songId + "'.");
+              + songId + "'.");
     }
     return toReturn;
   }
-  
+
 //  /**
 //   * @return A List of Suggestions an arbitrary order? help tom
 //   * @throws Exception if an error occurs while getting the audioFeatures info
 //   *                   about the track
 //   */
 //  public List<Suggestion> getSongsToSuggest() {
-//    return suggestingBlock.getSongs();
+//    return suggestingBlock.getSongsToPlaySoon();
 //  }
 
 
@@ -91,8 +116,21 @@ public class SongQueue {
   /**
    * @return A List of Suggestions in the order they should be played
    */
-  public List<Suggestion> getSongsToPlay() {
-    return playingBlock.getSongs();
+  public List<Suggestion> getSongsToPlaySoon() {
+    return playingBlock.getSongsToPlay();
+  }
+
+  public Suggestion getNextSongToPlay() throws PartyException {
+    if (playingBlock.getSongsToPlay().size() != 0) {
+      return playingBlock.getNextSongToPlay();
+    }
+    cycle(); //TODO: need to tell front end to update everything!
+    if (playingBlock.getSongsToPlay().size() != 0) {
+      return playingBlock.getNextSongToPlay();
+    } else {
+      throw new PartyException("Voting queue was empty; could not select song t"
+              + "o play next.");
+    }
   }
 
   /**
@@ -105,7 +143,7 @@ public class SongQueue {
    */
   public List<Collection<Suggestion>> requestNewBlock() {
     this.playingBlock.passSuggestions(); //decays scores, adds to suggestion queue
-    Cycle(); //Switch the blocks
+    cycle(); //Switch the blocks
     return this.requestAllBlocks();
   }
 
@@ -119,7 +157,7 @@ public class SongQueue {
    */
   public List<Collection<Suggestion>> requestAllBlocks() {
     List<Collection<Suggestion>> toReturn = new ArrayList<>();
-    toReturn.add(playingBlock.getSongs());
+    toReturn.add(playingBlock.getSongsToPlay());
     toReturn.add(votingBlock.getSuggestions());
     toReturn.add(suggestingBlock.getSuggestions());
     return toReturn;
@@ -130,11 +168,15 @@ public class SongQueue {
 //    //TODO: play songs from playingBlock
 //    //TODO: while a song is playing, if there are enough vetoes then stop the
 //    //todo~  current song and move on to the next.
-//    Cycle();
+//    cycle();
 //  }
 
-  private void Cycle() {
+  private void cycle() {
     //TODO: while cycling, some blocks will temporarily have two roles. Need to make sure that this does not cause problems
+    this.playingBlock.becomeSuggBlock();
+    this.suggestingBlock.becomeVoteBlock();
+    this.votingBlock.becomePlayBlock();
+
     this.suggestingBlock = suggestingBlock.getNextBlock();
     this.votingBlock = votingBlock.getNextBlock();
     this.playingBlock = playingBlock.getNextBlock();
@@ -143,7 +185,7 @@ public class SongQueue {
   //  //TODO: ordered collection of Suggestions (most basic version, ordered only on number of votes)
 //  private PriorityQueue<Suggestion> queue;
 //
-//  public SongQueue() {
+//  public SongQueue_OLD() {
 //    this.queue = new PriorityQueue<>();
 //  }
 //

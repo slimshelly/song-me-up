@@ -88,7 +88,9 @@ const MESSAGE_TYPE = {
   VOTESONG: 0,
   ADDSONG: 1,
   REMOVESONG: 2,
-  PLAYLIST: 3
+  PLAYLIST: 3,
+  NEXT_SONG: 8,
+  REQUEST_NEXT_SONG: 9
 };
 let conn;
 
@@ -143,7 +145,7 @@ const setup_live_playlist = () => {
         console.log("inside"); // NOT WORKING
         console.log(data.payload);
         $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-          + "<div class='playlistItem'>"
+          + "<div class='suggestingItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
           + "<div class='track'>"
           + "<div class='song'>" + data.payload.song_name + "</div>"
@@ -152,8 +154,8 @@ const setup_live_playlist = () => {
 
           + "</div>"
           + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
           + "</div>"
           + "</div>"
 
@@ -166,7 +168,7 @@ const setup_live_playlist = () => {
 
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
-        break;
+          break;
     }
   };
 }
@@ -201,6 +203,15 @@ function new_song(songId) {
   conn.send(JSON.stringify(userSuggestion));
 }
 
+function request_next_song() {
+    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+    console.log("requesting next song");
+    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+                   "payload": { "id": "", "song_id": ""}
+    };
+    conn.send(JSON.stringify(request));
+}
+
 /*
 Send PLAYLIST message to backend when the last song in the playing block is 10 seconds from finishing
 */
@@ -216,6 +227,7 @@ function get_playlist(songId) {
 Refresh suggestions in the playlist (bottom block)
 */
 function refresh_suggestions_block(toSuggest) {
+    $playlist.empty();
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
       $playlist.append("<li id='" + $("#user_id").val() + "'>"
@@ -240,6 +252,7 @@ function refresh_suggestions_block(toSuggest) {
 Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
+    $votingBlock.empty();
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
@@ -263,6 +276,7 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
+    $playingBlock.empty();
   toPlay.forEach(function(playSong) {
     $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='playingItem'>"

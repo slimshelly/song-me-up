@@ -1,14 +1,12 @@
 package edu.brown.cs.jmst.spark;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.party.Party;
-import edu.brown.cs.jmst.party.SongQueue;
 import edu.brown.cs.jmst.party.Suggestion;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -33,7 +31,7 @@ public class PlaylistHandler implements Route {
     System.out.println("about to get playlist");
     Collection<Suggestion> suggestingBlock = currParty.getSuggestedSongs();
     Collection<Suggestion> votingBlock = currParty.getSongsToVoteOn();
-    Collection<Suggestion> playingBlock = currParty.getSongsToPlay();
+    Collection<Suggestion> playingBlock = currParty.getSongsToPlaySoon();
     
     System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);
