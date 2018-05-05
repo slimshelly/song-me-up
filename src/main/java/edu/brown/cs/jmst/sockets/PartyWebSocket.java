@@ -74,7 +74,8 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_ALL.ordinal());
       jo.add("payload", party.refreshAllBlocks());
-      for (Session s : sessions) {
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
     } catch (IOException ioe) {
@@ -92,7 +93,8 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_PLAY.ordinal());
       jo.add("payload", party.refreshPlayBlock());
-      for (Session s : sessions) {
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
     } catch (IOException ioe) {
@@ -110,7 +112,8 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_VOTE.ordinal());
       jo.add("payload", party.refreshVoteBlock());
-      for (Session s : sessions) {
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
     } catch (IOException ioe) {
@@ -128,7 +131,8 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_SUGG.ordinal());
       jo.add("payload", party.refreshSuggBlock());
-      for (Session s : sessions) {
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
     } catch (IOException ioe) {
@@ -146,7 +150,8 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
       jo.add("payload", songToPlay);
-      for (Session s : sessions) {
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
     } catch (IOException ioe) {
