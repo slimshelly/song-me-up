@@ -14,6 +14,7 @@ import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
+import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -29,7 +30,7 @@ public class HostHandler implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect(General.getNewUrl(req.url(), "/songmeup"));
+      res.redirect(SpotifyAuthentication.getRootUri() + "/songmeup");
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();
@@ -57,8 +58,8 @@ public class HostHandler implements TemplateViewRoute {
       if (err != null) {
         List<BasicNameValuePair> pair = new ArrayList<>();
         pair.add(new BasicNameValuePair("error", err.toString()));
-        res.redirect(General.getNewUrl(req.url(),
-            "/error?" + URLEncodedUtils.format(pair, "UTF-8")));
+        res.redirect(SpotifyAuthentication.getRootUri() + "/error?"
+            + URLEncodedUtils.format(pair, "UTF-8"));
       }
     }
     return null;

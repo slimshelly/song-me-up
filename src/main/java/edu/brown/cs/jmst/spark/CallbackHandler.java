@@ -50,11 +50,11 @@ public class CallbackHandler implements TemplateViewRoute {
       List<BasicNameValuePair> pair = new ArrayList<>();
       pair.add(new BasicNameValuePair("error", err.toString()));
       // res.redirect("../error?" + URLEncodedUtils.format(pair, "UTF-8"));
-      res.redirect(SpotifyAuthentication.ROOT_URI + "/error?"
+      res.redirect(SpotifyAuthentication.getRootUri() + "/error?"
           + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
       // res.redirect("../main");
-      res.redirect(SpotifyAuthentication.ROOT_URI + "/main");
+      res.redirect(SpotifyAuthentication.getRootUri() + "/main");
     }
     return null;
   }

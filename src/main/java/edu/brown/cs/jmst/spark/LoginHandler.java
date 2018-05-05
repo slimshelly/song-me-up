@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
 import spark.ModelAndView;
 import spark.Request;
@@ -26,9 +25,8 @@ public class LoginHandler implements TemplateViewRoute {
     pairs.add(
         new BasicNameValuePair("client_id", SpotifyAuthentication.CLIENT_ID));
     pairs.add(new BasicNameValuePair("scope", scope));
-    General.printInfo(SpotifyAuthentication.REDIRECT_URI);
     pairs.add(new BasicNameValuePair("redirect_uri",
-        SpotifyAuthentication.REDIRECT_URI));
+        SpotifyAuthentication.getRedirectUri()));
     pairs.add(new BasicNameValuePair("state", state));
     pairs.add(new BasicNameValuePair("show_dialog", "true"));
     res.redirect("https://accounts.spotify.com/authorize?"
