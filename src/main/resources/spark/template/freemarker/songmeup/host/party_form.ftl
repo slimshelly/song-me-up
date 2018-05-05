@@ -13,7 +13,7 @@
 		</div>
 		<div class="title">Fill out this form to get your party started!</div>
 		<div class="buttons">
-			<a class="btn" href="host">SUBMIT</a>
+			<a class="btn" href="./host">SUBMIT</a>
 		</div>
 		
 	</body>
