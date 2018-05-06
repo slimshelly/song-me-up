@@ -2,14 +2,13 @@
 
 let player;
 let freshToken;
+let temp_uri = 'spotify:track:2Th9BGKvfZG8bKQSACitwG';
 
 function playSong(song_uri) {
 
-    console.log(song_uri);
-
     play({
         // takes uri passed in and plays with the default player.
-        spotify_uri: song_uri,
+        spotify_uri: [temp_uri],
         playerInstance: player
     });
 
@@ -52,6 +51,7 @@ $(document).ready(() => {
     window.onSpotifyWebPlaybackSDKReady = () => {
 
         // get first token
+        console.log("hello")
         firstTokenAndInitialize();
 
     };
@@ -61,11 +61,13 @@ $(document).ready(() => {
 
 function firstTokenAndInitialize() {
 
+    console.log("in first token and initialize")
+
     $.post("./refresh", responseJSON => {
 
         // parse response
         const responseObject = JSON.parse(responseJSON);
-        freshToken = '\'' + responseObject.access_token + '\'';
+        freshToken = responseObject.access_token;
         console.log("the fresh token is " + freshToken);
 
         // initialize player after new token
@@ -98,10 +100,6 @@ function initializePlayer(token) {
                 });
 
 
-            }
-        });
-
-
         // Error handling
         player.addListener('initialization_error', ({
             message
@@ -129,5 +127,11 @@ function initializePlayer(token) {
             console.log(state.position);
             console.log(state.duration);
         });
+
+
+            }
+        });
+
+
 
 }
