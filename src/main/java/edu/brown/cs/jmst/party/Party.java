@@ -4,12 +4,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
@@ -27,7 +28,7 @@ public class Party extends Entity {
                                           // state
   private Map<String, Map<String, Integer>> votes; // maps user ids to maps from
                                                    // songs to votes.
-  private Map<String, Integer> total_votes; // maps song ids to total votes.
+  // private Map<String, Integer> total_votes; // maps song ids to total votes.
   public static final int ID_LENGTH = 6;
 
   public Party(User host, String id, SongMeUpPlaylist partyPlaylist)
@@ -42,7 +43,7 @@ public class Party extends Entity {
     partygoers = Collections.synchronizedSet(new HashSet<>());
     userIds = Collections.synchronizedSet(new HashSet<>());
     votes = Collections.synchronizedMap(new HashMap<>());
-    total_votes = Collections.synchronizedMap(new HashMap<>());
+    // total_votes = Collections.synchronizedMap(new HashMap<>());
     songQueue = new SongQueue();
     this.partyPlaylist = partyPlaylist;
   }
@@ -69,11 +70,14 @@ public class Party extends Entity {
   }
 
   /**
-   * @param song A Track to add to the current pool of suggestions
-   * @param userId the ID string of the user submitting the suggestion
+   * @param song
+   *          A Track to add to the current pool of suggestions
+   * @param userId
+   *          the ID string of the user submitting the suggestion
    * @throws PartyException
    */
-  public SuggestResult suggest(Track song, String userId) throws PartyException {
+  public SuggestResult suggest(Track song, String userId)
+      throws PartyException {
     return songQueue.suggest(song, userId);
   }
 
@@ -102,38 +106,38 @@ public class Party extends Entity {
     return songQueue.vote(voteOn, userId, isUpVote);
   }
 
-//  public int voteOnSong(String userid, String songid, boolean vote)
-//      throws PartyException {
-//    if (!votes.containsKey(userid)) {
-//      throw new PartyException("User not found in party.");
-//    } else {
-//      Map<String, Integer> user_votes = votes.get(userid);
-//      if (!user_votes.containsKey(songid)) {
-//        user_votes.put(songid, 0);
-//      }
-//      if (!total_votes.containsKey(songid)) {
-//        total_votes.put(songid, 0);
-//      }
-//      int val = user_votes.get(songid);
-//      int newval;
-//      if (vote) {
-//        if (val != 1) {
-//          newval = 1;
-//        } else {
-//          newval = 0;
-//        }
-//      } else {
-//        if (val != -1) {
-//          newval = -1;
-//        } else {
-//          newval = 0;
-//        }
-//      }
-//      user_votes.put(songid, newval);
-//      total_votes.put(songid, total_votes.get(songid) + (newval - val));
-//      return total_votes.get(songid);
-//    }
-//  }
+  // public int voteOnSong(String userid, String songid, boolean vote)
+  // throws PartyException {
+  // if (!votes.containsKey(userid)) {
+  // throw new PartyException("User not found in party.");
+  // } else {
+  // Map<String, Integer> user_votes = votes.get(userid);
+  // if (!user_votes.containsKey(songid)) {
+  // user_votes.put(songid, 0);
+  // }
+  // if (!total_votes.containsKey(songid)) {
+  // total_votes.put(songid, 0);
+  // }
+  // int val = user_votes.get(songid);
+  // int newval;
+  // if (vote) {
+  // if (val != 1) {
+  // newval = 1;
+  // } else {
+  // newval = 0;
+  // }
+  // } else {
+  // if (val != -1) {
+  // newval = -1;
+  // } else {
+  // newval = 0;
+  // }
+  // }
+  // user_votes.put(songid, newval);
+  // total_votes.put(songid, total_votes.get(songid) + (newval - val));
+  // return total_votes.get(songid);
+  // }
+  // }
 
   public void end() throws PartyException {
     for (User u : partygoers) {
@@ -154,7 +158,8 @@ public class Party extends Entity {
     return Collections.unmodifiableSet(userIds);
   }
 
-  public JsonObject sendSuggestionToSuggBlock(Suggestion sugg) throws Exception {
+  public JsonObject sendSuggestionToSuggBlock(Suggestion sugg)
+      throws Exception {
     return sugg.toJson();
   }
 

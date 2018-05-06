@@ -33,7 +33,13 @@ public class HostHandler implements TemplateViewRoute {
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();
+      if (u.inParty() && !u.getCurrentParty().equals(qm.value("party_id"))) {
+        Party p = state.getParty(u.getCurrentParty());
+        res.redirect(u.getCurrentPartyUrl(p));
+        return null;
+      }
       try {
+
         if (qm.hasKey("party_id")) {
           Party p = state.getParty(qm.value("party_id"));
           Map<String,
