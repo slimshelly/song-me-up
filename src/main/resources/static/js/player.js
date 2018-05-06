@@ -14,6 +14,12 @@ function playSong(song_uri) {
 
 }
 
+function requestNext() {
+    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+    request_next_song();
+}
+
+
 const play = ({
     spotify_uri,
     playerInstance: {

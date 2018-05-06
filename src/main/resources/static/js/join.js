@@ -89,13 +89,16 @@ $(document).ready(() => {
 Open socket for web communication and deal with different messages
 */
 const MESSAGE_TYPE = {
-  VOTESONG: 0,
-  ADDSONG: 1,
-  REMOVESONG: 2,
-  PLAYLIST: 3,
-  CONNECT: 4,
-  NEXT_SONG: 8,
-  REQUEST_NEXT_SONG: 9
+
+    CONNECT: 0,
+    SUGGEST: 1,
+    REFRESH_SUGG: 2,
+    VOTESONG: 3,
+    REFRESH_VOTE: 4,
+    NEXT_SONG: 5,
+    REFRESH_PLAY: 6,
+    REFRESH_ALL: 7
+
 };
 let conn;
 
@@ -190,10 +193,9 @@ const setup_live_playlist = () => {
       	$playlist.remove($("#" + $("#user_id").val()));
       	break;
 
-      case MESSAGE_TYPE.REFRESH_PLAYLIST:
-        let toPlay = data.payload.play;
-        let toVote = data.payload.vote;
-        let toSugg = data.payload.sugg;
+      case MESSAGE_TYPE.PLAYLIST:
+        // apend an entire list of li's to the displaySongs ul
+        break;
 
       case MESSAGE_TYPE.NEXT_SONG:
 
@@ -210,15 +212,20 @@ const setup_live_playlist = () => {
         playSong(song_uri);
         
         // NOTE: song_artists is a LIST of artist names
-        refresh_now_playing(song_cover, song_name, song_artists);
+        updateMainCover(song_cover, song_name, song_artists);
         
         break;
 
 	  case MESSAGE_TYPE.CONNECT:
 	    new_connect();
 	    break;
+
     }
   };
+}
+
+function updateMainCover() {
+
 }
 
 
@@ -330,10 +337,8 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
-  // empty playing block
-  $playingBlock.empty();
-
-  // put top song in toPlay in now playing block - ?
+    $playingBlock.empty();
+  // put top song in toPlay in now playing block
   console.log(toPlay);
   console.log(toPlay[0]);
   // if ($(".imgContainer").find(".artistInfo").length === 0){
@@ -367,24 +372,8 @@ function refresh_playing_block(toPlay) {
   });
 }
 
-function isEmpty( el ) {
+function isEmpty( el ){
     return !$.trim(el.html())
-}
-
-/*
-Update currently playing song at top of page.
-*/
-function refresh_now_playing(song_cover, song_name, song_artists) {
-  // show mulptiples artists!!
-  console.log(toSuggest);
-  $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
-  $nowPlaying.append("<div class='artistInfo'>"
-    + "<span class='now'>Now Playing</span>"
-    + "<span class='trackName'>" + song_name + "</span>"
-    + "<span class='artistName'>" + song_artists[0] + "</span>"
-    + "</div>"
-    );
-  break;
 }
 
 

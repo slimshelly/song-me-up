@@ -72,6 +72,7 @@ public class SparkInitializer {
 
     Spark.get(prefix + "/player", new PlayerPage(), freeMarker);
     Spark.get(prefix + "/error", new ErrorHandler(), freeMarker);
+    Spark.get(prefix + "/faq", new FAQPage(), freeMarker);
 
     // NOT RELEVANT, will delete later
     Spark.get(prefix + "/playlists", new MockPlaylist(), freeMarker);
