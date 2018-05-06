@@ -374,30 +374,25 @@ public class SpotifyQuery {
     List<SpotifyPlaylist> returnPlaylists = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
 
-      System.out.println("here1");
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("limit", "10"));
+      pairs.add(new BasicNameValuePair("offset", "0"));
       
-      System.out.println("here2");
-      HttpGet get = new HttpGet("//api.spotify.com/v1/me/playlists?"
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/me/playlists?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
 
-      System.out.println("here3");
       HttpResponse response = client.execute(get);
-      System.out.println(response);
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 
-        System.out.println("here4");
         JsonArray playlists =
-            jo.get("playlists").getAsJsonObject().get("items").getAsJsonArray();
+            jo.get("items").getAsJsonArray();
         Iterator<JsonElement> iterator = playlists.iterator();
 
         while (iterator.hasNext()) {
 
-          System.out.println("here5");
           JsonObject playlistjo = iterator.next().getAsJsonObject();
 
           // uri
@@ -412,7 +407,6 @@ public class SpotifyQuery {
           
           // track ids
           
-          System.out.println("here6");
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
          
           String track_link = tracks.get("href").getAsString();
@@ -421,7 +415,7 @@ public class SpotifyQuery {
           
           // type
           String type = playlistjo.get("type").getAsString();
-          System.out.println("here7");
+
           returnPlaylists
               .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
           
@@ -439,7 +433,6 @@ public class SpotifyQuery {
     } catch (IOException e) {
       throw e;
     }
-    System.out.println("here8");
     return returnPlaylists;
   }
 
