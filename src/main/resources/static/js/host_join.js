@@ -84,11 +84,18 @@ $(document).ready(() => {
 Open socket for web communication and deal with different messages
 */
 const MESSAGE_TYPE = {
-  VOTESONG: 0,
-  ADDSONG: 1,
-  REMOVESONG: 2,
-  PLAYLIST: 3
+
+    CONNECT: 0,
+    SUGGEST: 1,
+    REFRESH_SUGG: 2,
+    VOTESONG: 3,
+    REFRESH_VOTE: 4,
+    NEXT_SONG: 5,
+    REFRESH_PLAY: 6,
+    REFRESH_ALL: 7
+
 };
+
 let conn;
 
 // Setup the WebSocket connection for live updating of scores.
@@ -171,7 +178,7 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
-        
+
       case MESSAGE_TYPE.NEXT_SONG:
 
         // data - json object
@@ -193,6 +200,10 @@ const setup_live_playlist = () => {
 	  case MESSAGE_TYPE.CONNECT:
 	    new_connect();
 	    break;
+
+    case MESSAGE_TYPE.REFRESH:
+      new_connect();
+      break;
     }
   };
 }
