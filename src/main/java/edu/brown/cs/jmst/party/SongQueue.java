@@ -23,7 +23,7 @@ public class SongQueue {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  private static final int MIN_VOTE_BLOCK_SIZE = 15;
+  private static final int MIN_VOTE_BLOCK_SIZE = 3;
 
   SongQueue() {
     this.blockA = new SongBlock(SUGGESTING);
@@ -126,6 +126,7 @@ public class SongQueue {
     if (playingBlock.getSongsToPlay().size() != 0) {
       return playingBlock.getNextSongToPlay();
     }
+    System.out.println("Cycling");
     cycle(); //TODO: need to tell front end to update everything!
     if (playingBlock.getSongsToPlay().size() != 0) {
       return playingBlock.getNextSongToPlay();

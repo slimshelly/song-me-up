@@ -194,7 +194,7 @@ public class PartyWebSocket {
           try {
             // get track object from spotify (access to all spotify track
             // fields)
-            // build trackbean, which includes all spotify track fields and
+            //  build trackbean, which includes all spotify track fields and
             // album art
             // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
@@ -203,14 +203,17 @@ public class PartyWebSocket {
             STATUS_TYPE status = suggested.getStatus();
             switch (status) {
               case VOTE: {
+                System.out.println("Result of suggesting: VOTE");
                 signalRefreshVote(party);
                 break;
               }
               case DUPLICATE_SUGG: {
+                System.out.println("Result of suggesting: DUPLICATE_SUGG");
                 signalRefreshSugg(party);
                 break;
               }
               case UNIQUE_SUGG: {
+                System.out.println("Result of suggesting: UNIQUE_SUGG");
                 try {
                   JsonObject suggestion = suggested.getSuggested().toJson();
                   JsonObject jo = new JsonObject();
