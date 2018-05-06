@@ -30,8 +30,14 @@ public class JoinHandler implements TemplateViewRoute {
     if (u == null || !u.loggedIn()) {
       res.redirect(SpotifyAuthentication.getRootUri() + "/songmeup");
     } else {
+
       QueryParamsMap qm = req.queryMap();
       String party_id = qm.value("party_id");
+      if (u.inParty() && !u.getCurrentParty().equals(party_id)) {
+        Party p = state.getParty(u.getCurrentParty());
+        res.redirect(u.getCurrentPartyUrl(p));
+        return null;
+      }
       SparkErrorEnum err = null;
       try {
         Party p = state.addPartyPerson(u, party_id);
