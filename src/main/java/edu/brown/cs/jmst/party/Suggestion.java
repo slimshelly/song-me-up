@@ -24,6 +24,10 @@ public class Suggestion implements Comparable<Suggestion> {
 
   private Integer order;
 
+  private Double valence;
+  private Double danceability;
+  private Double energy;
+
   // private Boolean votedOn;
 
   private Map<String, Integer> userVoteMap;

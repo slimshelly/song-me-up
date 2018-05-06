@@ -96,18 +96,9 @@ public class SongQueue {
     return toReturn;
   }
 
-//  /**
-//   * @return A List of Suggestions an arbitrary order? help tom
-//   * @throws Exception if an error occurs while getting the audioFeatures info
-//   *                   about the track
-//   */
-//  public List<Suggestion> getSongsToSuggest() {
-//    return suggestingBlock.getSongsToPlaySoon();
-//  }
-
-
   /**
-   * @return A Collection of Suggestions in the order they should be played
+   * @return A Collection of Suggestions ordered based on score, with order of
+   *         submission settling any ties.
    */
   public Collection<Suggestion> getSuggestedSongs() {
     return suggestingBlock.getSuggestions();
@@ -115,7 +106,8 @@ public class SongQueue {
 
   /**
    * @return a PriorityBlockingQueue of Suggestions that should be displayed for
-   *         voting on. They are ordered based on number of votes
+   *         voting on. They are ordered based on score, with order of
+   *         submission settling any ties.
    */
   public PriorityBlockingQueue<Suggestion> getSongsToVoteOn() {
     return votingBlock.getSuggestions();
@@ -128,20 +120,24 @@ public class SongQueue {
     return playingBlock.getSongsToPlay();
   }
 
-  public Suggestion getNextSongToPlay() throws Exception {
+  /**
+   * @return the Suggestion to play next
+   * @throws PartyException when the voting block is empty and there are no
+   *                        songs left to play
+   */
+  public Suggestion getNextSongToPlay() throws PartyException {
     if (playingBlock.getSongsToPlay().size() != 0) {
       System.out.println("get next song to play line 128");
       return playingBlock.getNextSongToPlay();
-      
     }
     System.out.println("Cycling");
     cycle(); //TODO: need to tell front end to update everything!
     if (playingBlock.getSongsToPlay().size() != 0) {
-      System.out.println("get next song to play line 133");
+      System.out.println("get next song to play line 132");
       return playingBlock.getNextSongToPlay();
     } else {
-      throw new PartyException("Voting queue was empty; could not select song t"
-              + "o play next.");
+      throw new PartyException(
+              "Voting queue was empty; could not select song to play next.");
     }
   }
 

@@ -161,10 +161,6 @@ class SongBlock {
     return this.songsToPlay;
   }
 
-  void updateSongsToPlay() {
-    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
-  }
-
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
     PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
     int totalLengthMs = 0;
@@ -205,9 +201,8 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
-  Suggestion getNextSongToPlay() throws Exception {
+  Suggestion getNextSongToPlay() {
     assert this.state == PLAYING;
-//    System.out.println(this.songsToPlay.get(0).getSong().getName());
     return this.songsToPlay.remove(0);
   }
 
@@ -259,6 +254,10 @@ class SongBlock {
   // Method that decays the votes on the not-selected suggestions, then adds the
   // suggestions to the next block's collection of suggestions.
 
+  void updateSongsToPlay() {
+    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
+  }
+
   protected void becomePlayBlock() {
 //    assert this.state == VOTING;
 //    assert this.songsToPlay.isEmpty();
@@ -269,13 +268,14 @@ class SongBlock {
     }
     this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
+    System.out.println("BECOMING PLAY [2->3] {block state: " + this.state + "}");
     this.state = PLAYING;
 //    assert this.suggestions.isEmpty(); // TODO: temporary!
   }
 
   protected void becomeSuggBlock() {
     if (state != PLAYING) {
-      System.out.println("block state: " + this.state);
+      System.out.println("BECOMING SUGG [3->1] {block state: " + this.state + "}");
     }
 //    assert this.state == PLAYING;
 //    assert this.suggestions.isEmpty();
@@ -284,6 +284,7 @@ class SongBlock {
 
   protected void becomeVoteBlock() {
 //    assert this.state == SUGGESTING;
+    System.out.println("BECOMING VOTE [1->2] {block state: " + this.state + "}");
     this.state = VOTING;
   }
 
