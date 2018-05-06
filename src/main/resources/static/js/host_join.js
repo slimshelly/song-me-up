@@ -143,30 +143,6 @@ const setup_live_playlist = () => {
           + "</div>"
           + "</li>");
         break;
-      // case MESSAGE_TYPE.VOTESONG:
-      //   // update number of votes for a specific song on the playlist
-      //   console.log("A VOTE HAPPENED");
-      //   let votingList = data.payload;
-      //   // loop through json objects in payload
-      //   // display number of votes for given song_id
-      //   votingList.forEach(function(suggestion) {
-      //     $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
-      //       + "<div class='votingItem'>"
-      //       + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-      //       + "<div class='track'>"
-      //       + "<div class='song'>" + suggestion.song_name + "</div>"
-      //       + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
-      //
-      //       + "</div>"
-      //       + "<div class='buttons'>"
-      //       + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      //       + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-      //       + "</div>"
-      //       + "</div>"
-      //
-      //       + "</li>");
-      //   });
-      //   break;
       case MESSAGE_TYPE.REFRESH_SUGG:
         console.log("[HOST] Recieved REFRESH_SUGG message (Legal but not used!)");
         break;
@@ -174,15 +150,9 @@ const setup_live_playlist = () => {
         console.log("[HOST] Recieved VOTESONG message (ILLEGAL!)");
         break;
       case MESSAGE_TYPE.REFRESH_VOTE:
-<<<<<<< HEAD
-        let votingList1 = data.payload;
-        console.log(votingList1);
-        refresh_voting_block(votingList1);
-=======
         let votingList = data.payload;
         console.log("[HOST] Recieved REFRESH_VOTE message");
         refresh_voting_block(votingList);
->>>>>>> 626589ecb37bef585291b899a4dad9d6a46c90a8
         break;
       case MESSAGE_TYPE.NEXT_SONG:
         console.log("[HOST] Recieved NEXT_SONG message");
@@ -193,6 +163,8 @@ const setup_live_playlist = () => {
         let song_name = song.song_name;
         let song_artists = song.artist_names;
         playSong(song_uri);
+        console.log("the song's name is" + song_name);
+        console.log("the song's uri is" + song_uri);
         refresh_now_playing(song_cover, song_name, song_artists);
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
