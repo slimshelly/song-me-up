@@ -374,7 +374,7 @@ function isEmpty( el ) {
 Update currently playing song at top of page.
 */
 function refresh_now_playing(song_cover, song_name, song_artists) {
-  // show mulptiples artists!!
+  // show multiple artists!!
   console.log(toSuggest);
   $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
   $nowPlaying.append("<div class='artistInfo'>"
