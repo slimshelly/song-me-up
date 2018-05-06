@@ -22,6 +22,8 @@ public class Suggestion implements Comparable<Suggestion> {
   private Integer downVotes;
   private Integer score;
 
+  private Integer order;
+
   // private Boolean votedOn;
 
   private Map<String, Integer> userVoteMap;
@@ -30,7 +32,7 @@ public class Suggestion implements Comparable<Suggestion> {
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  Suggestion(Track song, String userId) {
+  Suggestion(Track song, String userId, Integer order) {
 	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
@@ -42,6 +44,8 @@ public class Suggestion implements Comparable<Suggestion> {
     this.userVoteMap.put(userId, 1);
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
+
+    this.order = order;
   }
 
   public JsonObject toJson() throws Exception {
@@ -237,6 +241,10 @@ public class Suggestion implements Comparable<Suggestion> {
    */
   @Override
   public int compareTo(Suggestion o) {
-    return o.score - this.score;
+    int scoreComp = o.score - this.score;
+    if (scoreComp == 0) {
+      return this.order - o.order;
+    }
+    return scoreComp;
   }
 }

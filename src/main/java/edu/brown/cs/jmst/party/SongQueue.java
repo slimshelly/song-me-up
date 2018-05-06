@@ -3,9 +3,11 @@ package edu.brown.cs.jmst.party;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
+import javafx.scene.layout.Priority;
 
 /**
  * @author tvanderm
@@ -23,7 +25,9 @@ public class SongQueue {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  private static final int MIN_VOTE_BLOCK_SIZE = 3;
+  private static final int MIN_VOTE_BLOCK_SIZE = 4;
+
+  private static int order = 0;
 
   SongQueue() {
     this.blockA = new SongBlock(SUGGESTING);
@@ -52,14 +56,16 @@ public class SongQueue {
       votingBlock.suggestDuplicate(existingSuggestion, userId);
       return new SuggestResult(STATUS_TYPE.VOTE);
     } else if (votingBlock.size() < MIN_VOTE_BLOCK_SIZE) {
-      votingBlock.suggestUnique(song, userId); //TODO: return value unneeded?
+      order++;
+      votingBlock.suggestUnique(song, userId, order); //TODO: return value unneeded?
       return new SuggestResult(STATUS_TYPE.VOTE);
     } else if ((existingSuggestion = suggestingBlock.getSuggestionByTrack(song)) != null) {
       suggestingBlock.suggestDuplicate(existingSuggestion, userId);
       return new SuggestResult(STATUS_TYPE.DUPLICATE_SUGG);
     } else {
+      order++;
       return new SuggestResult(STATUS_TYPE.UNIQUE_SUGG,
-              suggestingBlock.suggestUnique(song, userId));
+              suggestingBlock.suggestUnique(song, userId, order));
     }
   }
 
@@ -111,7 +117,7 @@ public class SongQueue {
    * @return a PriorityBlockingQueue of Suggestions that should be displayed for
    *         voting on. They are ordered based on number of votes
    */
-  public Collection<Suggestion> getSongsToVoteOn() {
+  public PriorityBlockingQueue<Suggestion> getSongsToVoteOn() {
     return votingBlock.getSuggestions();
   }
 
