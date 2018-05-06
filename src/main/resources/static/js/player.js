@@ -50,9 +50,9 @@ function playSomething() {
         // no song is played, request next song
         console.log("no current song, request next song");
         requestNext();
-    } 
+    }
 
-    if (started === true ) {
+    if (started === true) {
         if (paused === true) {
             resumeSong();
         } else {

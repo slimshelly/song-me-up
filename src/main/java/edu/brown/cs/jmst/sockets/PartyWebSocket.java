@@ -57,12 +57,6 @@ public class PartyWebSocket {
     userSession.removeValue(session);
   }
 
-//  public void updateView(JsonObject suggestBlock, JsonObject voteBlock,
-//                         JsonObject playBlock) {
-//    for (Session s : sessions) {
-//      s.getRemote().sendString(GSON.toJson(jo));
-//    }
-//  }
 
   public void signalRefreshAll(Party party) throws IOException {
     if (party == null) {
@@ -143,6 +137,8 @@ public class PartyWebSocket {
       General.printErr(e.getMessage());
     }
   }
+  
+  
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
