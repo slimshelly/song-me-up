@@ -280,7 +280,7 @@ function refresh_suggestions_block(toSuggest) {
           + "<img class='albumCover' src='" + suggestion.album_cover + "'>"
           + "<div class='track'>"
           + "<div class='song'>" + suggestion.song_name + "</div>"
-          + "<div class='artist'>" + suggestion.song.artist_names[0] + "</div>"
+          + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
           + "</div>"
           + "<div class='buttons'>"
