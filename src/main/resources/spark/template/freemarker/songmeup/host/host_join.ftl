@@ -30,14 +30,14 @@
 		<div class="title">${hostname}'s Party: ${party_id}</div>
 		<div class="nowPlaying">
 			<div class="imgContainer">
-				<img class="albumArt" src="photos/flume.jpg">
-				<div class="artistInfo">
+				<!-- <img class="albumArt" src="photos/flume.jpg"> -->
+				<div class="artistInfo"><!-- 
 					<span class="now">Now Playing</span>
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
-					<span class="artistName">Flume — Skin</span>
+					<span class="artistName">Flume — Skin</span> -->
 					<div class="musicControls">
 						<i class="fas fa-backward fa-4x" onclick="seek()"></i>
-						<i id="playPause" class="fas fa-play fa-3x" onclick="playSong();togglePlay();" style="font-size: 70px;"></i>
+						<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
 						<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
 					</div>
 				</div>
