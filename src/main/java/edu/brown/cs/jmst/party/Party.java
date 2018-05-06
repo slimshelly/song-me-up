@@ -13,6 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.jmst.beans.Entity;
+import edu.brown.cs.jmst.music.AudioFeatures;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
@@ -67,9 +69,10 @@ public class Party extends Entity {
    * @param userId the ID string of the user submitting the suggestion
    * @throws PartyException
    */
-  public SuggestResult suggest(Track song, String userId)
+  public SuggestResult suggest(Track song, String userId,
+                               AudioFeaturesSimple features)
       throws PartyException {
-    return songQueue.suggest(song, userId);
+    return songQueue.suggest(song, userId, features);
   }
 
   public Suggestion getNextSongToPlay() throws Exception {

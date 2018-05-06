@@ -2,6 +2,8 @@ package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
 
+import edu.brown.cs.jmst.music.AudioFeatures;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.eclipse.jetty.websocket.api.Session;
@@ -174,7 +176,9 @@ public class PartyWebSocket {
             // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
             Track song = new TrackBean(track, u.getAuth());
-            SuggestResult suggested = party.suggest(song, user_id);
+            AudioFeaturesSimple features = SpotifyQuery.getSimpleFeatures(song_id,
+                    u.getAuth());
+            SuggestResult suggested = party.suggest(song, user_id, features);
             STATUS_TYPE status = suggested.getStatus();
             switch (status) {
               case VOTE: {

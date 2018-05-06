@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import edu.brown.cs.jmst.music.AudioFeatures;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
 
@@ -49,7 +51,8 @@ public class SongQueue {
    * @return the Suggestion object added to the suggestions, or null if it was
    *         a duplicate suggestion
    */
-  public SuggestResult suggest(Track song, String userId)
+  public SuggestResult suggest(Track song, String userId,
+                               AudioFeaturesSimple features)
       throws PartyException {
     Suggestion existingSuggestion;
     if ((existingSuggestion = votingBlock.getSuggestionByTrack(song)) != null) {
@@ -57,7 +60,7 @@ public class SongQueue {
       return new SuggestResult(STATUS_TYPE.VOTE);
     } else if (votingBlock.size() < MIN_VOTE_BLOCK_SIZE) {
       order++;
-      votingBlock.suggestUnique(song, userId, order); //TODO: return value unneeded?
+      votingBlock.suggestUnique(song, userId, features, order); //TODO: return value unneeded?
       return new SuggestResult(STATUS_TYPE.VOTE);
     } else if ((existingSuggestion =
         suggestingBlock.getSuggestionByTrack(song)) != null) {
@@ -66,7 +69,7 @@ public class SongQueue {
     } else {
       order++;
       return new SuggestResult(STATUS_TYPE.UNIQUE_SUGG,
-          suggestingBlock.suggestUnique(song, userId, order));
+          suggestingBlock.suggestUnique(song, userId, features, order));
     }
   }
 

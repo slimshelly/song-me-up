@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 
 /**
@@ -24,19 +25,22 @@ public class Suggestion implements Comparable<Suggestion> {
 
   private Integer order;
 
-  private Double valence;
-  private Double danceability;
-  private Double energy;
+
+  private Float valence;
+  private Float danceability;
+  private Float energy;
 
   // private Boolean votedOn;
 
   private Map<String, Integer> userVoteMap;
   private Set<String> userSubmittedSet;
 
+
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
 
-  Suggestion(Track song, String userId, Integer order) {
+  Suggestion(Track song, String userId, AudioFeaturesSimple features,
+             Integer order) {
 	// I NEED name, artist, album, duration, score, album art
     this.song = song;
     this.age = 0;
@@ -48,6 +52,10 @@ public class Suggestion implements Comparable<Suggestion> {
     this.userVoteMap.put(userId, 1);
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
+
+    this.valence = features.getValence();
+    this.danceability = features.getDanceability();
+    this.energy = features.getEnergy();
 
     this.order = order;
   }

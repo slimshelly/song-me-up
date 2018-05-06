@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.brown.cs.jmst.music.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -23,12 +24,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
-import edu.brown.cs.jmst.music.Album;
-import edu.brown.cs.jmst.music.Artist;
-import edu.brown.cs.jmst.music.AudioFeatures;
-import edu.brown.cs.jmst.music.SpotifyPlaylist;
-import edu.brown.cs.jmst.music.Track;
-import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
@@ -159,6 +154,15 @@ public class SpotifyQuery {
       throw e;
     }
     return albumURL;
+  }
+
+  public static AudioFeaturesSimple getSimpleFeatures(String id,
+                                                      String access_token) {
+    Float danceability;
+    Float energy;
+    Float valence;
+    // TODO: query spotify and get ONLY THESE THREE FIELDS
+    return new AudioFeaturesSimple(id, danceability, energy, valence);
   }
 
   /**
@@ -370,7 +374,7 @@ public class SpotifyQuery {
 
   public static List<SpotifyPlaylist> getUserPlaylist(String access_token)
       throws Exception {
-
+	System.out.println("Getting playlists");
     List<SpotifyPlaylist> returnPlaylists = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
 
@@ -384,31 +388,40 @@ public class SpotifyQuery {
 
       HttpResponse response = client.execute(get);
       if (response.getStatusLine().getStatusCode() == 200) {
+    	    System.out.println("got response");
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-
+        
+        System.out.println("got as json object");
         JsonArray playlists =
             jo.get("items").getAsJsonArray();
         Iterator<JsonElement> iterator = playlists.iterator();
-
+        
+        
         while (iterator.hasNext()) {
-
+        	  System.out.println("in loop");
           JsonObject playlistjo = iterator.next().getAsJsonObject();
-
+          System.out.println("got playlistjo");
+          
           // uri
           String uri = playlistjo.get("uri").getAsString();
-
+          System.out.println("got uri");
+          
           // id
           String id = playlistjo.get("id").getAsString();
-
+          System.out.println("got id");
+          
           // images
           JsonArray playlist_images = playlistjo.get("images").getAsJsonArray();
+          System.out.println("got images 1");
           List<String> images = new ArrayList<>();
           Iterator<JsonElement> iterator2 = playlist_images.iterator();
           while (iterator2.hasNext()) {
-            JsonObject ajo = iterator.next().getAsJsonObject();
+            JsonObject ajo = iterator2.next().getAsJsonObject();
             images.add(ajo.get("url").getAsString());
+            System.out.println("got url");
           }
+          System.out.println("got images");
           
           // name
           String name = playlistjo.get("name").getAsString();
@@ -416,21 +429,26 @@ public class SpotifyQuery {
           // tracks
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
          
+          // number of tracks
           int num_of_tracks = tracks.get("total").getAsInt();
           
-          // track ids
-          JsonArray playlist_tracks = playlistjo.get("tracks").getAsJsonArray();
+          // track ids - HALP
+          
+//          JsonArray playlist_tracks = tracks.get("items").getAsJsonArray();
+//          System.out.println("got tracks");
           List<String> track_ids = new ArrayList<>();
-          Iterator<JsonElement> iterator3 = playlist_tracks.iterator();
-          while (iterator3.hasNext()) {
-            JsonObject ajo = iterator.next().getAsJsonObject();
-            JsonObject ajo2 = ajo.get("track").getAsJsonObject();
-            track_ids.add(ajo2.get("id").getAsString());
-          }
+//          Iterator<JsonElement> iterator3 = playlist_tracks.iterator();
+//          System.out.println("made iterator");
+//          while (iterator3.hasNext()) {
+//            JsonObject ajo = iterator3.next().getAsJsonObject();
+//            JsonObject ajo2 = ajo.get("track").getAsJsonObject();
+//            track_ids.add(ajo2.get("id").getAsString());
+//          }
+//          System.out.println("got track ids");
           
           // type
           String type = playlistjo.get("type").getAsString();
-
+          System.out.println("about to add playlist");
           returnPlaylists
               .add(new SpotifyPlaylist(id, uri, num_of_tracks, track_ids, name, type, images) );
           
@@ -448,6 +466,7 @@ public class SpotifyQuery {
     } catch (IOException e) {
       throw e;
     }
+    System.out.println("About to send playlist");
     return returnPlaylists;
   }
 
