@@ -113,8 +113,4 @@ server {
 
 	server_name smuapp.com www.smuapp.com;
     return 404; # managed by Certbot
-
-
-
-
 }

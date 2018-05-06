@@ -1,4 +1,3 @@
-
 let $playlist;
 let $votingBlock;
 let $playingBlock;
@@ -338,4 +337,3 @@ function togglePlay() {
   // element.setAttribute("style", "font-size:55px;");
   // element.classList.toggle("fa-pause");
 }
-

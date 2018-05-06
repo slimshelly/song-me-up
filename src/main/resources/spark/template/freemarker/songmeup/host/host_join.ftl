@@ -31,12 +31,6 @@
 		<div class="title">${hostname}'s Party: ${party_id}</div>
 		<div class="nowPlaying">
 			<div class="imgContainer">
-				<!-- <img class="albumArt" src="photos/flume.jpg"> -->
-				<div class="artistInfo"><!--
-					<span class="now">Now Playing</span>
-					<span class="trackName">Lose It (feat. Vic Mensa)</span>
-					<span class="artistName">Flume — Skin</span> -->
-				</div>
 			</div>
 		</div>
 		<div class="musicControls">
