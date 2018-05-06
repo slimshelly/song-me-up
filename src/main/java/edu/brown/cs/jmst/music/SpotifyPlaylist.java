@@ -9,15 +9,15 @@ public class SpotifyPlaylist extends Entity {
 	private String id;
 	private String uri;
 	private String type;
-	private String track_link;
+	private int num_of_tracks;
 	private List<String> track_ids;
 	private String name;
 	private List<String> playlist_images;
 	
-	public SpotifyPlaylist(String id, String uri, String track_link, List<String> track_ids, String name, String type, List<String> playlist_images) {
+	public SpotifyPlaylist(String id, String uri, int num_of_tracks, List<String> track_ids, String name, String type, List<String> playlist_images) {
 		this.id = id;
 		this.uri = uri;
-		this.track_link = track_link;
+		this.num_of_tracks = num_of_tracks;
 		this.track_ids = track_ids;
 		this.name = name;
 		this.type = type;
@@ -43,8 +43,8 @@ public class SpotifyPlaylist extends Entity {
 		this.uri = uri;
 	}
 	
-	public String getLink() {
-	  return this.track_link;
+	public int getNumOfTracks() {
+	  return this.num_of_tracks;
 	}
 	
 	public List<String> getSongs() {

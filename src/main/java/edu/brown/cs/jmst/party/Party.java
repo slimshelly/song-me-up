@@ -72,18 +72,6 @@ public class Party extends Entity {
     return songQueue.suggest(song, userId);
   }
 
-  public Collection<Suggestion> getSuggestedSongs() {
-    return songQueue.getSuggestedSongs();
-  }
-
-  public Collection<Suggestion> getSongsToVoteOn() {
-    return songQueue.getSongsToVoteOn();
-  }
-
-  public List<Suggestion> getSongsToPlaySoon() {
-    return songQueue.getSongsToPlaySoon();
-  }
-
   public Suggestion getNextSongToPlay() throws Exception {
     return songQueue.getNextSongToPlay();
   }
@@ -139,13 +127,13 @@ public class Party extends Entity {
 
   public JsonArray refreshVoteBlock() throws Exception {
     JsonArray voteBlock = new JsonArray();
-    PriorityBlockingQueue<Suggestion> songsToVote = songQueue.getSongsToVoteOn();
+    PriorityBlockingQueue<Suggestion> voteSongs = songQueue.getSongsToVoteOn();
     Suggestion s;
-    while ((s = songsToVote.poll()) != null) {
+    while ((s = voteSongs.poll()) != null) {
       voteBlock.add(s.toJson());
     }
     return voteBlock;
-    //fixed bug with 3 songs, one with score 1, one with 0, one with -1 being put in wrong order
+    //fixed bug with 3 songs with different scores being put in wrong order
   }
 
   public JsonArray refreshPlayBlock() throws Exception {
