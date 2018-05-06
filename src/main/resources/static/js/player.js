@@ -1,48 +1,88 @@
-let freshToken;
-
-function refresher() {
-
-    $.post("/refresh", responseJSON => {
-        const responseObject = JSON.parse(responseJSON);
-
-        freshToken = '\'' + responseObject.access_token + '\'';
-        console.log(freshToken);
-    });
-
-}
-
 
 
 let player;
-let song_list = ['spotify:track:2Th9BGKvfZG8bKQSACitwG', 'spotify:track:4pYd8dIohiqc3KsxSRqf0w'];
+let freshToken;
 
+function playSong(song_uri) {
 
-function updateSongList() {
-    song_list = ['spotify:track:087OBLtoeS3Q6j0k6tMNAI', 'spotify:track:7E390nZTMqEbrNC1TmHd42'];
+    console.log(song_uri);
+
     play({
-        spotify_uri: song_list,
+        // takes uri passed in and plays with the default player.
+        spotify_uri: song_uri,
         playerInstance: player
     });
+
 }
+
+const play = ({
+    spotify_uri,
+    playerInstance: {
+        _options: {
+            getOAuthToken,
+            id
+        }
+    }
+}) => {
+    getOAuthToken(access_token => {
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                uris: spotify_uri
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            },
+        });
+    });
+};
+
+/*
+
+1. get fresh token
+2. initialize the player with token
+3. wait until player connects.
+4. after it connects, notify the front end, and tell them you can now play songs. 
+
+*/
 
 $(document).ready(() => {
 
-
-    console.log(player + "before player is initialized");
-
-
     window.onSpotifyWebPlaybackSDKReady = () => {
-        refresher();
-        const token = freshToken;
+
+        // get first token
+        firstTokenAndInitialize();
+
+    };
+
+});
+
+
+function firstTokenAndInitialize() {
+
+    $.post("./refresh", responseJSON => {
+
+        // parse response
+        const responseObject = JSON.parse(responseJSON);
+        freshToken = '\'' + responseObject.access_token + '\'';
+        console.log("the fresh token is " + freshToken);
+
+        // initialize player after new token
+        initializePlayer(freshToken);
+    });
+
+}
+
+function initializePlayer(token) {
+
         player = new Spotify.Player({
-            name: 'Test Player',
+            name: 'Host Player',
             getOAuthToken: cb => {
                 cb(token);
             }
         });
 
-
-        console.log(player + "after player is initialized");
 
         // Connect to the player!
         player.connect();
@@ -71,10 +111,7 @@ $(document).ready(() => {
         player.addListener('authentication_error', ({
             message
         }) => {
-
             console.error(message);
-            refresher();
-            console.log("called refresher");
         });
         player.addListener('account_error', ({
             message
@@ -92,110 +129,5 @@ $(document).ready(() => {
             console.log(state.position);
             console.log(state.duration);
         });
-
-
-    };
-
-});
-
-
-
-const play = ({
-    spotify_uri,
-    playerInstance: {
-        _options: {
-            getOAuthToken,
-            id
-        }
-    }
-}) => {
-    getOAuthToken(access_token => {
-        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                uris: spotify_uri
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}`
-            },
-        });
-    });
-};
-
-
-function playSong() {
-
-    startTime = (new Date).getTime();
-    // plays song from the very beginning
-    play({
-        spotify_uri: song_list,
-        playerInstance: player
-    });
-
-    console.log("done play")
-    // if success, then play
-}
-
-
-function pauseSong() {
-
-    player.pause().then(() => {
-        console.log('Paused!');
-    });
-
-}
-
-
-function resumeSong() {
-    player.resume().then(() => {
-        console.log('Resumed!');
-    });
-}
-
-function togglePlaySong() {
-
-    // if song is playing - toggle play song. else, start playing song
-
-    player.togglePlay().then(() => {
-        console.log('Toggled playback!');
-    });
-}
-
-
-function switchToNext() {
-    player.nextTrack().then(() => {
-        console.log('Skipped to next track!');
-    });
-}
-
-function switchToPrevious() {
-    player.previousTrack().then(() => {
-        console.log('Set to previous track!');
-    });
-}
-
-function showCurrentState() {
-
-    player.getCurrentState().then(state => {
-        if (!state) {
-            console.error('User is not playing music through the Web Playback SDK');
-            return;
-        }
-
-        let {
-            current_track,
-            next_tracks: [next_track]
-        } = state.track_window;
-
-        console.log(state.position);
-        console.log(state.track_window.next_tracks.length);
-        console.log('Currently Playing', current_track);
-        console.log('Playing Next', next_track);
-
-        // if (next_track == null && ) {
-        //   updateSongList();
-        // } 
-    });
 
 }

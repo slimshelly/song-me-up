@@ -2,6 +2,8 @@ package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -35,7 +37,8 @@ public class PartyWebSocket {
       new DualHashBidiMap<>();
 
   private static enum MESSAGE_TYPE {
-    VOTESONG, ADDSONG, REMOVESONG, PLAYLIST, CONNECT
+    VOTESONG, ADDSONG, REMOVESONG, PLAYLIST, CONNECT, REFRESH_ALL, REFRESH_PLAY,
+    REFRESH_VOTE, REFRESH_SUGG, NEXT_SONG, REQUEST_NEXT_SONG
   }
 
   @OnWebSocketConnect
@@ -56,18 +59,113 @@ public class PartyWebSocket {
     userSession.removeValue(session);
   }
 
-  // public void updateView(JsonObject suggestBlock, JsonObject voteBlock,
-  // JsonObject playBlock) {
-  // for (Session s : sessions) {
-  // s.getRemote().sendString(GSON.toJson(jo));
-  // }
-  // }
+//  public void updateView(JsonObject suggestBlock, JsonObject voteBlock,
+//                         JsonObject playBlock) {
+//    for (Session s : sessions) {
+//      s.getRemote().sendString(GSON.toJson(jo));
+//    }
+//  }
+
+  public void signalRefreshAll(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_ALL.ordinal());
+      jo.add("payload", party.refreshAllBlocks());
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshPlay(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_PLAY.ordinal());
+      jo.add("payload", party.refreshPlayBlock());
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshVote(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_VOTE.ordinal());
+      jo.add("payload", party.refreshVoteBlock());
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalRefreshSugg(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.REFRESH_SUGG.ordinal());
+      jo.add("payload", party.refreshSuggBlock());
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
+  public void signalNextSong(JsonObject songToPlay, Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
+      jo.add("payload", songToPlay);
+      for (String partyer_id : party.getPartyGoerIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    assert received.get("type").getAsInt() < 4
+    assert received.get("type").getAsInt() < 4 //TODO: change the limits
         && received.get("type").getAsInt() >= 0;
     SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
@@ -96,8 +194,8 @@ public class PartyWebSocket {
               try {
                 orderedSuggestions.add(s.toJson());
               } catch (Exception e) {
-                General.printErr(
-                    "Error accessing Track information. " + e.getMessage());
+                General.printErr("Error accessing Track information. "
+                        + e.getMessage());
               }
             }
             JsonObject jo = new JsonObject();
@@ -125,19 +223,16 @@ public class PartyWebSocket {
             Track song = new TrackBean(track, u.getAuth());
             Suggestion suggested = party.suggest(song, user_id);
             // System.out.println(suggested.getSong().getAlbumArt());
-            JsonObject suggestion = suggested.toJson(); // TODO: if it's null,
-                                                        // we want to update
-                                                        // votes, not add a
-                                                        // suggestion
-            // build track object to send to frontend with message type ADDSONG
+            JsonObject suggestion = suggested.toJson(); //TODO: if it's null, we want to update votes, not add a suggestion
+          	// build track object to send to frontend with message type ADDSONG
             Collection<Suggestion> votingBlock = party.getSongsToVoteOn();
             JsonArray orderedSuggestions = new JsonArray();
             for (Suggestion s : votingBlock) {
               try {
                 orderedSuggestions.add(s.toJson());
               } catch (Exception e) {
-                General.printErr(
-                    "Error accessing Track information. " + e.getMessage());
+                General.printErr("Error accessing Track information. "
+                        + e.getMessage());
               }
             }
             JsonObject jo = new JsonObject();
@@ -158,14 +253,14 @@ public class PartyWebSocket {
         case REMOVESONG:
           break;
         case PLAYLIST:
-          Collection<Suggestion> playingBlock = party.getSongsToPlay();
+          Collection<Suggestion> playingBlock = party.getSongsToPlaySoon();
           JsonArray orderedSuggestions = new JsonArray();
           for (Suggestion s : playingBlock) {
             try {
               orderedSuggestions.add(s.toJson());
             } catch (Exception e) {
-              General.printErr(
-                  "Error accessing Track information. " + e.getMessage());
+              General.printErr("Error accessing Track information. "
+                      + e.getMessage());
             }
           }
           JsonObject jo = new JsonObject();
@@ -173,6 +268,16 @@ public class PartyWebSocket {
           jo.add("payload", orderedSuggestions);
           break;
         case CONNECT:
+          break;
+        case REQUEST_NEXT_SONG:
+          //tell backend to get the next song
+          try {
+            Suggestion nextSong = party.getNextSongToPlay();
+            signalRefreshPlay(party);
+            signalNextSong(nextSong.toJson(), party);
+          } catch (Exception e) {
+            General.printErr("Error getting next song. " + e.getMessage());
+          }
           break;
       }
     }

@@ -14,7 +14,7 @@
 			<a id="home" href="main">HOME</a>
 		</div>
 		<div class="topSection">
-			<div class="title">Song Me Up</div>
+			<div class="title">SongMeUp</div>
 			<div class="buttons">
 				<a class="btn gray" id="host" href="form">HOST A PARTY</a>
 				<a class="btn gray" id="join" onclick="join_id()">JOIN A PARTY</a>
@@ -27,7 +27,7 @@
     		</div>
   		<div class="info1" id="info">
   			<div class="section">
-	  			<h1>Song me up</h1>
+	  			<h1>SongMeUp</h1>
 		  			<p>is a playlist generating tool that allows partygoers to determine their own music</p>
 	  			<h2>How it works</h2>
 	  				<p>Join a party by entering a party code</p>

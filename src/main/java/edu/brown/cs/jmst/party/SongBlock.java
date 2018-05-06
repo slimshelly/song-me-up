@@ -23,9 +23,16 @@ import java.util.concurrent.PriorityBlockingQueue;
  */
 class SongBlock {
 
-  private PriorityBlockingQueue<Suggestion> suggestions = new PriorityBlockingQueue<>();
+  private PriorityBlockingQueue<Suggestion> suggestions;
+  private List<Suggestion> songsToPlay;
   private SongBlock nextBlock;
   private SongBlock prevBlock;
+
+  private int state;
+
+  private static final int SUGGESTING = 1;
+  private static final int VOTING = 2;
+  private static final int PLAYING = 3;
 
   //Unsure which method is better. Numbers subject to change
   private static final int BLOCK_LENGTH_SONGS = 3;
@@ -37,18 +44,24 @@ class SongBlock {
   private static final int NO_VOTES = 3;
   private static final int ORDER = 4;
 
+
+  SongBlock(int state) {
+    this.suggestions = new PriorityBlockingQueue<>();
+    this.songsToPlay = new ArrayList<>();
+    this.state = state;
+  }
+
   protected SongBlock getNextBlock() {
     return this.nextBlock;
   }
-
-  protected SongBlock getPrevBlock() {
-    return this.prevBlock;
-  }
-
   protected void setNextBlock(SongBlock nextBlock) {
     this.nextBlock = nextBlock;
   }
 
+
+  protected SongBlock getPrevBlock() {
+    return this.prevBlock;
+  }
   protected void setPrevBlock(SongBlock prevBlock) {
     this.prevBlock = prevBlock;
   }
@@ -57,58 +70,91 @@ class SongBlock {
     return this.suggestions;
   }
 
-  Suggestion getSuggestionByTrack(Track song) {
+  int size() {
+    return this.suggestions.size();
+  }
+
+  Suggestion getSuggestionByTrack(Track song) throws PartyException {
     for (Suggestion s: suggestions) {
       if (s.getSong().equals(song)) {
         return s;
       }
     }
     return null;
+//    throw new PartyException("No matching song found in this block.");
   }
-
-  Suggestion getSuggestionById(String songId) {
+  Suggestion getSuggestionById(String songId) throws PartyException {
     for (Suggestion s: suggestions) {
       if (s.getSong().getId().equals(songId)) {
         return s;
       }
     }
     return null;
+//    throw new PartyException("No song found in this block with ID [" + songId
+//            + "].");
   }
 
-//  protected Suggestion suggest(Track song, String userId) {
-//    Suggestion toReturn = new Suggestion(userId, song);
-//    suggestions.add(toReturn);
-//    return toReturn;
-//  }
-
-  //TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"
-  protected Suggestion suggest(Track song, String userId) throws PartyException {
-    Suggestion existingSuggestion = nextBlock.getSuggestionByTrack(song);
-    if (existingSuggestion == null) {
-      existingSuggestion = getSuggestionByTrack(song);
+  /*TODO: after making a suggestion, maybe tell a user "Other users can vote on your suggestion in XX:XX minutes!"*/
+  /**
+   * Method for adding a duplicate song suggestion to this block.
+   * @param existingSuggestion the Suggestion that already existed
+   * @param userId the id String of the user making the suggestion
+   * @throws PartyException if the user has suggested this song already
+   */
+  protected void suggestDuplicate(Suggestion existingSuggestion, String userId)
+          throws PartyException {
+    //TODO: is it thread safe? Could the same user spamming the same suggestion break the functionality?
+    if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
+      throw new PartyException("User may not submit the same suggestion more th"
+              + "an once.");
     }
-    if (existingSuggestion != null) {
-      if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
-        throw new PartyException("User may not submit the same suggestion more "
-                + "than once.");
-      }
-      if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
-        vote(existingSuggestion, userId, true);
-      }
-      existingSuggestion.addSubmitter(userId);
-      return null;
+    if (! existingSuggestion.hasBeenUpVotedByUser(userId)) {
+      vote(existingSuggestion, userId, true);
     }
-    Suggestion toReturn = new Suggestion(userId, song);
-    suggestions.add(toReturn);
-    return toReturn;
+    existingSuggestion.addSubmitter(userId);
   }
 
-  protected int vote(Suggestion song, String userId, boolean isUpVote) {
-    assert suggestions.contains(song);
-    suggestions.remove(song); //update ordering
-    int toReturn = song.vote(userId, isUpVote);
-    suggestions.add(song); //update ordering
-    return toReturn;
+  /**
+   * Method for adding a unique, non-duplicate song suggestion to this block.
+   * @param song a Track object to suggest
+   * @param userId the id String of the user making the suggestion
+   * @return the new Suggestion that was added to the block's suggestion queue
+   */
+  protected Suggestion suggestUnique(Track song, String userId) {
+    Suggestion suggested = new Suggestion(song, userId);
+    //TODO: lock the queue to make this thread-safe
+    suggestions.add(suggested);
+    //TODO: unlock the queue
+    return suggested;
+  }
+
+  /**
+   * Method for updating the score of an existing Suggestion in this block.
+   * @param voteOn the Suggestion to vote on
+   * @param userId the id String of the user making the vote
+   * @param isUpVote a boolean; true indicates an up-vote, false indicates a
+   *                 down-vote
+   * @return the updated score of the Suggestion after the vote is made
+   */
+  protected int vote(Suggestion voteOn, String userId, boolean isUpVote) {
+    assert suggestions.contains(voteOn);
+    //TODO: lock the queue to make it thread-safe
+    suggestions.remove(voteOn); //updating ordering
+    int updatedScore = voteOn.vote(userId, isUpVote);
+    suggestions.add(voteOn); //updating ordering
+    //TODO: unlock the queue;
+    return updatedScore;
+  }
+
+  /**
+   * @return A list of songs in the order they should be played
+   */
+  List<Suggestion> getSongsToPlay() {
+    return this.songsToPlay;
+  }
+
+  void updateSongsToPlay() {
+    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
   }
 
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
@@ -150,14 +196,10 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
-  /**
-   * @return A list of songs in the order they should be played
-   * @throws Exception if an error occurs while getting the audioFeatures info
-   *                   about the track
-   */
-  protected List<Suggestion> getSongs() {
-    //The line below ONLY pays attention to votes (which is obviously temporary)
-    return new ArrayList<>(topSuggestionsQuantity());
+
+  Suggestion getNextSongToPlay() {
+    assert this.state == PLAYING;
+    return this.songsToPlay.remove(0);
   }
 
   protected Suggestion nextSong(Suggestion prev, Collection<Suggestion> top, int sortMode) {
@@ -201,12 +243,39 @@ class SongBlock {
   //  suggestions to the next block's collection of suggestions.
 
 
+  protected void becomePlayBlock() {
+    assert this.state == VOTING;
+    assert this.songsToPlay.isEmpty();
+    this.songsToPlay.addAll(topSuggestionsQuantity());
+    for (Suggestion s: this.suggestions) {
+      s.decayScore();
+    }
+    this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
+    this.suggestions.drainTo(nextBlock.suggestions);
+    this.state = PLAYING;
+    assert this.suggestions.isEmpty(); //TODO: temporary!
+  }
+
+  protected void becomeSuggBlock() {
+    assert this.state == PLAYING;
+    assert this.suggestions.isEmpty();
+    this.state = SUGGESTING;
+  }
+
+  protected void becomeVoteBlock() {
+    assert this.state == SUGGESTING;
+    this.state = VOTING;
+  }
+
   /**
    * Decays the score of the unplayed Suggestions from the current playing block
    * and removes Suggestions with a sufficiently low score. The remaining
    * Suggestions are then added to the next SongBlock's suggestions queue.
    */
   protected void passSuggestions() {
+    assert songsToPlay.isEmpty();
+
+    songsToPlay = new ArrayList<>(topSuggestionsQuantity());
     for (Suggestion s: this.suggestions) {
       s.decayScore();
     }

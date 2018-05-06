@@ -31,7 +31,7 @@ public class PlaylistHandler implements Route {
     System.out.println("about to get playlist");
     Collection<Suggestion> suggestingBlock = currParty.getSuggestedSongs();
     Collection<Suggestion> votingBlock = currParty.getSongsToVoteOn();
-    Collection<Suggestion> playingBlock = currParty.getSongsToPlay();
+    Collection<Suggestion> playingBlock = currParty.getSongsToPlaySoon();
     
     System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);
