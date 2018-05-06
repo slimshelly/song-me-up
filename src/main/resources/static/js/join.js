@@ -210,7 +210,7 @@ const setup_live_playlist = () => {
         playSong(song_uri);
         
         // NOTE: song_artists is a LIST of artist names
-        updateMainCover(song_cover, song_name, song_artists);
+        refresh_now_playing(song_cover, song_name, song_artists);
         
         break;
 
@@ -219,10 +219,6 @@ const setup_live_playlist = () => {
 	    break;
     }
   };
-}
-
-function updateMainCover() {
-
 }
 
 
@@ -378,13 +374,14 @@ function isEmpty( el ) {
 /*
 Update currently playing song at top of page.
 */
-function refresh_now_playing(toSuggest) {
+function refresh_now_playing(song_cover, song_name, song_artists) {
+  // show mulptiples artists!!
   console.log(toSuggest);
-  $nowPlaying.append("<img class='albumArt' src='" + toSuggest.song.album_cover + "'>");
+  $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
   $nowPlaying.append("<div class='artistInfo'>"
     + "<span class='now'>Now Playing</span>"
-    + "<span class='trackName'>" + toSuggest.song.name + "</span>"
-    + "<span class='artistName'>" + suggestion.song.artistNames[0] + "</span>"
+    + "<span class='trackName'>" + song_name + "</span>"
+    + "<span class='artistName'>" + song_artists[0] + "</span>"
     + "</div>"
     );
   break;
