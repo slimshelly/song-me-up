@@ -93,7 +93,7 @@ public class Party extends Entity {
     return songQueue.getSongsToPlaySoon();
   }
 
-  public Suggestion getNextSongToPlay() throws PartyException {
+  public Suggestion getNextSongToPlay() throws Exception {
     return songQueue.getNextSongToPlay();
   }
 
@@ -154,8 +154,16 @@ public class Party extends Entity {
     return ph.getId();
   }
 
+  // Excludes the host's ID
   public Set<String> getPartyGoerIds() {
     return Collections.unmodifiableSet(userIds);
+  }
+
+  // Includes the host's ID
+  public Set<String> getIds() {
+    Set<String> idSet = new HashSet<>(userIds);
+    idSet.add(ph.getId());
+    return Collections.unmodifiableSet(idSet);
   }
 
   public JsonObject sendSuggestionToSuggBlock(Suggestion sugg)
