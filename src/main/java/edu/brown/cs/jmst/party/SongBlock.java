@@ -207,8 +207,9 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
-  Suggestion getNextSongToPlay() {
+  Suggestion getNextSongToPlay() throws Exception {
     assert this.state == PLAYING;
+//    System.out.println(this.songsToPlay.get(0).getSong().getName());
     return this.songsToPlay.remove(0);
   }
 

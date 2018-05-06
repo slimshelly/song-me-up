@@ -112,7 +112,6 @@ public class SmuInputHandler implements Commander {
       
       for (SpotifyPlaylist t : playlists) {
         playlistinfo.add(t.toString());
-        System.out.println(t.toString());
       }
       state.setListMessage(playlistinfo);
     }

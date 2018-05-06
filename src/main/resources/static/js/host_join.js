@@ -172,9 +172,9 @@ const setup_live_playlist = () => {
         console.log("Recieved VOTESONG message (ILLEGAL!)");
         break;
       case MESSAGE_TYPE.REFRESH_VOTE:
-        let votingList = data.payload;
-        console.log(votingList);
-        refresh_voting_block(votingList);
+        let votingList1 = data.payload;
+        console.log(votingList1);
+        refresh_voting_block(votingList1);
         break;
       case MESSAGE_TYPE.NEXT_SONG:
 
@@ -297,15 +297,15 @@ function refresh_voting_block(toVote) {
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
       + "<div class='votingItem'>"
-      + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
+      + "<img class='albumCover' src='" + voteSong.album_cover + "'>"
       + "<div class='track'>" 
-      + "<div class='song'>" + voteSong.song.name + "</div>"
-      + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
+      + "<div class='song'>" + voteSong.song_name + "</div>"
+      + "<div class='artist'>" + voteSong.artist_names[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
       + "</div>"
       + "</div>"
 

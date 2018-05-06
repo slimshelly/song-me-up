@@ -59,6 +59,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "track"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
       // want to add limit of 10! HELP
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
@@ -237,6 +238,7 @@ public class SpotifyQuery {
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "artist"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
       UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
       urlentity.setContentEncoding("application/json");
       get.setEntity(urlentity);
@@ -300,7 +302,8 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "album"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
-
+      pairs.add(new BasicNameValuePair("limit", "10"));
+      
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
@@ -375,6 +378,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "playlist"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));

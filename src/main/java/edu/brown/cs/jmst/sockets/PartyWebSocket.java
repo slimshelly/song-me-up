@@ -266,6 +266,7 @@ public class PartyWebSocket {
           try {
             System.out.println("I am getting enxt song from back end.");
             Suggestion nextSong = party.getNextSongToPlay();
+            
             signalRefreshAll(party); //TODO: only refresh play if possible
             JsonObject jo = new JsonObject();
             jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
