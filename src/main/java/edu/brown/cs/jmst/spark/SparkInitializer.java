@@ -37,39 +37,22 @@ public class SparkInitializer {
         freeMarker);
 
     // PRE PLAYLIST PAGE
-    Spark.get(prefix + "/form", new PartyFormHandler(), freeMarker); // leads
-                                                                     // to
-    // joe's
-    // party form, fill
-    // out before
-    // creating party
-    Spark.get(prefix + "/host", new HostHandler(), freeMarker); // leads
-                                                                // to
-                                                                // joe's
-    // "you
-    // have made a party
-    // page" pre-playlist
+    // below leads to joe's party form, fill out before creating party
+    Spark.get(prefix + "/form", new PartyFormHandler(), freeMarker);
+    Spark.post(prefix + "/spotifyPlaylists", new PlaylistSuggestor());
+    // below leads to joe's "you have made a party page"
+    Spark.get(prefix + "/host", new HostHandler(), freeMarker);
 
     // PLAYLIST PAGES (2)
-    // Spark.get(prefix + "/admin", new AdminPageHandler(), freeMarker); //
-    // leads
-    // to
-    // joe's
-    // own playlist
-    // page
-    Spark.get(prefix + "/join", new JoinHandler(), freeMarker); // leads
-                                                                // to
-                                                                // user's
-    // playlist page
+    // Spark.get(prefix + "/admin", new AdminPageHandler(), freeMarker);
+    // below leads to user's playlist page
+    Spark.get(prefix + "/join", new JoinHandler(), freeMarker);
 
     // GENERATE INFO FOR PLAYLIST PAGE
     Spark.post(prefix + "/suggestions", new SongSuggestor());
     Spark.post(prefix + "/refresh", new RefreshToken());
-    Spark.post(prefix + "/playlist", new PlaylistHandler()); // reloads
-                                                             // party
-    // playlist
-    // on
-    // page reload
+    // below reloads party playlist on page reload
+    Spark.post(prefix + "/playlist", new PlaylistHandler());
 
     Spark.get(prefix + "/player", new PlayerPage(), freeMarker);
     Spark.get(prefix + "/error", new ErrorHandler(), freeMarker);
