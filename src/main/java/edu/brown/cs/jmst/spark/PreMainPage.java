@@ -28,13 +28,6 @@ public class PreMainPage implements TemplateViewRoute {
       if (u.inParty()) {
         Party p = SmuState.getInstance().getParty(u.getCurrentParty());
         res.redirect(u.getCurrentPartyUrl(p));
-        // if (p.getHostId().equals(u.getId())) {
-        // res.redirect(SpotifyAuthentication.getRootUri() + "/host?party_id="
-        // + p.getId());
-        // } else {
-        // res.redirect(SpotifyAuthentication.getRootUri() + "/join?party_id="
-        // + p.getId());
-        // }
       } else {
         res.redirect(SpotifyAuthentication.getRootUri() + "/main");
       }
