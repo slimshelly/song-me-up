@@ -1,11 +1,11 @@
 package edu.brown.cs.jmst.party;
 
-import edu.brown.cs.jmst.music.Track;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
+
+import edu.brown.cs.jmst.music.Track;
 
 /**
  * The basis for selecting songs to play. Exactly 3 should exist simultaneously.
@@ -257,8 +257,9 @@ class SongBlock {
   }
 
   protected void becomeSuggBlock() {
-    assert this.state == PLAYING;
-    assert this.suggestions.isEmpty();
+    if (state != PLAYING) {
+      System.out.println("block state: "+ this.state);
+    }
     this.state = SUGGESTING;
   }
 

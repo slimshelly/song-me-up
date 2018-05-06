@@ -1,11 +1,7 @@
 package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-import edu.brown.cs.jmst.party.*;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.eclipse.jetty.websocket.api.Session;
@@ -15,18 +11,20 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
+import edu.brown.cs.jmst.party.Party;
+import edu.brown.cs.jmst.party.PartyException;
+import edu.brown.cs.jmst.party.SuggestResult;
+import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
+import edu.brown.cs.jmst.party.Suggestion;
+import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
-import edu.brown.cs.jmst.party.SuggestResult;
-
-import static edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
 
 @WebSocket
 public class PartyWebSocket {
@@ -169,7 +167,10 @@ public class PartyWebSocket {
     System.out.println("Received [" + received.toString() + "]");
     assert received.get("type").getAsInt() < 8 //TODO: change the limits
         && received.get("type").getAsInt() >= 0;
-    SmuState state = SmuState.getInstance();
+   
+
+    System.out.println("hello I GOT HERE! line 174");
+        SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
@@ -263,6 +264,7 @@ public class PartyWebSocket {
         }
         case NEXT_SONG:
           try {
+            System.out.println("I am getting enxt song from back end.");
             Suggestion nextSong = party.getNextSongToPlay();
             signalRefreshAll(party); //TODO: only refresh play if possible
             JsonObject jo = new JsonObject();
