@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 
 /**
@@ -127,8 +128,10 @@ class SongBlock {
    *          the id String of the user making the suggestion
    * @return the new Suggestion that was added to the block's suggestion queue
    */
-  protected Suggestion suggestUnique(Track song, String userId, Integer order) {
-    Suggestion suggested = new Suggestion(song, userId, order);
+  protected Suggestion suggestUnique(Track song, String userId,
+                                     AudioFeaturesSimple features,
+                                     Integer order) {
+    Suggestion suggested = new Suggestion(song, userId, features, order);
     // TODO: lock the queue to make this thread-safe
     suggestions.add(suggested);
     // TODO: unlock the queue
