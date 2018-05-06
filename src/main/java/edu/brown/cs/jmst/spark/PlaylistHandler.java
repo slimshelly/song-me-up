@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import com.google.gson.JsonArray;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.Suggestion;
 import edu.brown.cs.jmst.party.User;
@@ -29,9 +30,9 @@ public class PlaylistHandler implements Route {
     Party currParty = state.getParty(partyId); // retrieve party from id
     
     System.out.println("about to get playlist");
-    Collection<Suggestion> suggestingBlock = currParty.getSuggestedSongs();
-    Collection<Suggestion> votingBlock = currParty.getSongsToVoteOn();
-    Collection<Suggestion> playingBlock = currParty.getSongsToPlaySoon();
+    JsonArray suggestingBlock = currParty.refreshSuggBlock();
+    JsonArray votingBlock = currParty.refreshVoteBlock();
+    JsonArray playingBlock = currParty.refreshPlayBlock();
     
     System.out.println("about to send songs");
     Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);

@@ -142,7 +142,7 @@ const setup_live_playlist = () => {
 
         break;
 
-      case MESSAGE_TYPE.ADDSONG:
+      case MESSAGE_TYPE.SUGGEST:
         console.log("Addsonging");
         console.log("inside"); // NOT WORKING
         console.log(data.payload);

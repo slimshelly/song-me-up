@@ -123,101 +123,86 @@ const setup_live_playlist = () => {
       default:
         console.log('Unknown message type!', data.type);
         break;
-
-      case MESSAGE_TYPE.VOTESONG:
-      	// update number of votes for a specific song on the playlist
-        console.log("A VOTE HAPPENED");
-        let votingList = data.payload;
-        // loop through json objects in payload
-        // display number of votes for given song_id
-        votingList.forEach(function(suggestion) {
-          $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
-            + "<div class='votingItem'>"
-            + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-            + "<div class='track'>"
-            + "<div class='song'>" + suggestion.song_name + "</div>"
-            + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
-
-            + "</div>"
-            + "<div class='buttons'>"
-            + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-            + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-            + "</div>"
-            + "</div>"
-
-            + "</li>");
-        });
-
-      	break;
-
-      case MESSAGE_TYPE.ADDSONG:
+      case MESSAGE_TYPE.CONNECT:
+        new_connect();
+        break;
+      case MESSAGE_TYPE.SUGGEST:
         // Check if there is a song currently playing, if not, start playing the added song
         // This should ONLY happen when there is nothing in the playlist and a song is added
         // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song
         console.log("Adding a song");
-        if ($(".imgContainer").find(".artistInfo").length === 0){
-          $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
-          $nowPlaying.append("<div class='artistInfo'>"
-            + "<span class='now'>Now Playing</span>"
-            + "<span class='trackName'>" + data.payload.song_name + "</span>"
-            + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
-            + "</div>"
-            );
-          break; // don't put song in playlist - are we sure about this?
-        }
+        // if ($(".imgContainer").find(".artistInfo").length === 0){
+        //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
+        //   $nowPlaying.append("<div class='artistInfo'>"
+        //     + "<span class='now'>Now Playing</span>"
+        //     + "<span class='trackName'>" + data.payload.song_name + "</span>"
+        //     + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
+        //     + "</div>"
+        //     );
+        //   break; // don't put song in playlist - are we sure about this?
+        // }
 
         // otherwise, if a song is playing, add song to suggestions list
-        $playlist.append("<li id='" + $("#user_id").val() + "'>" 
+        $playlist.append("<li id='" + $("#user_id").val() + "'>"
           + "<div class='suggestingItem'>"
           + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
           + "<div class='track'>"
           + "<div class='song'>" + data.payload.song_name + "</div>"
-
           + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
-
           + "</div>"
           + "<div class='buttons'>"
           + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
           + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
           + "</div>"
           + "</div>"
-
           + "</li>");
         break;
-
-      case MESSAGE_TYPE.REMOVESONG:
-        // CALL AS SOON AS nextsong is called
-        // removes li of ul, referenced by userId
-      	$playlist.remove($("#" + $("#user_id").val()));
-      	break;
-
-      case MESSAGE_TYPE.REFRESH_PLAYLIST:
+      case MESSAGE_TYPE.REFRESH_SUGG:
+        console.log("Recieved REFRESH_SUGG message (Legal but not used!)");
+        break;
+      case MESSAGE_TYPE.VOTESONG:
+        console.log("Recieved VOTESONG message (ILLEGAL!)");
+        break;
+      case MESSAGE_TYPE.REFRESH_VOTE:
+        let votingList = data.payload;
+        console.log(votingList);
+        refresh_voting_block(votingList);
+        break;
+      case MESSAGE_TYPE.NEXT_SONG:
+        let song = data.payload;
+        let song_uri = song.uri;
+        let song_cover = song.album_cover;
+        let song_name = song.song_name;
+        let song_artists = artist_names;
+        playSong(song_uri);
+        refresh_now_playing(song_cover, song_name, song_artists);
+        break;
+      case MESSAGE_TYPE.REFRESH_PLAY:
+        let playingList = data.payload;
+        // loop through json objects in payload
+        playingList.forEach(function(suggestion) {
+          $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
+            + "<div class='playingItem'>"
+            + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
+            + "<div class='track'>"
+            + "<div class='song'>" + suggestion.song_name + "</div>"
+            + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
+            + "</div>"
+            + "<div class='buttons'>"
+            + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+            + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+            + "</div>"
+            + "</div>"
+            + "</li>");
+        });
+        break;
+      case MESSAGE_TYPE.REFRESH_ALL:
         let toPlay = data.payload.play;
         let toVote = data.payload.vote;
         let toSugg = data.payload.sugg;
-
-      case MESSAGE_TYPE.NEXT_SONG:
-
-        // data - json object
-        let song = data.payload;
-        let song_uri = song.uri;
-
-        let song_cover = song.album_cover;
-        let song_name = song.song_name;
-        // a list of artist names
-        let song_artists = artist_names;
-
-        // get player to play song
-        playSong(song_uri);
-        
-        // NOTE: song_artists is a LIST of artist names
-        refresh_now_playing(song_cover, song_name, song_artists);
-        
-        break;
-
-	  case MESSAGE_TYPE.CONNECT:
-	    new_connect();
-	    break;
+        refresh_playing_block(toPlay);
+        refresh_voting_block(toVote);
+        refresh_suggestions_block(toSugg);
     }
   };
 }
@@ -235,7 +220,7 @@ Send VOTESONG message to backend when a user votes on a song - params are boolea
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
-  let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
+  let vote = {"type": MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId,
         "vote":vote_boolean}
@@ -248,20 +233,21 @@ Send ADDSONG message to backend when a user adds a song
 */
 function new_song(songId) {
   // Send a ADDSONG message to the server using `conn`
-  console.log("i want to add a song");
-  console.log(songId);
-  console.log($("#user_id").val());
-  let userSuggestion = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
+  // console.log("i want to add a song");
+  // console.log(songId);
+  // console.log($("#user_id").val());
+  let userSuggestion = {"type": MESSAGE_TYPE.SUGGEST, "payload": {
         "id":$("#user_id").val(), 
         "song_id":songId}
       };
+  console.log(JSON.stringify(userSuggestion));
   conn.send(JSON.stringify(userSuggestion));
 }
 
 function request_next_song() {
     //Sent a REQUEST_NEXT_SONG message to the server using 'con'
     console.log("requesting next song");
-    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+    let request = {"type": MESSAGE_TYPE.NEXT_SONG,
                    "payload": { "id": "", "song_id": ""}
     };
     conn.send(JSON.stringify(request));
@@ -272,7 +258,7 @@ Send PLAYLIST message to backend when the last song in the playing block is 10 s
 */
 function get_playlist(songId) {
   // Send a PLAYLIST message to the server using `conn`
-  let playlistRequest = {"type":MESSAGE_TYPE.PLAYLIST, "payload": {
+  let playlistRequest = {"type": MESSAGE_TYPE.REFRESH_PLAY, "payload": {
         "id":$("#user_id").val()}
       };
   conn.send(JSON.stringify(playlistRequest));
@@ -311,15 +297,15 @@ function refresh_voting_block(toVote) {
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
-      + "<img class='albumCover' src='" + voteSong.song.album_cover + "'>"
+      + "<img class='albumCover' src='" + voteSong.album_cover + "'>"
       + "<div class='track'>"
-      + "<div class='song'>" + voteSong.song.name + "</div>"
-      + "<div class='artist'>" + voteSong.song.artistNames[0] + "</div>"
+      + "<div class='song'>" + voteSong.song_name + "</div>"
+      + "<div class='artist'>" + voteSong.artist_names[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
       + "</div>"
       + "</div>"
 
@@ -385,7 +371,6 @@ function refresh_now_playing(song_cover, song_name, song_artists) {
     + "<span class='artistName'>" + song_artists[0] + "</span>"
     + "</div>"
     );
-  break;
 }
 
 

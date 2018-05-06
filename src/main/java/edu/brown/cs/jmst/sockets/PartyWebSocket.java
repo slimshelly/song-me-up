@@ -165,7 +165,9 @@ public class PartyWebSocket {
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    assert received.get("type").getAsInt() < 4 //TODO: change the limits
+    System.out.println("Is received null? [" + received.equals(null) + "]");
+    System.out.println("Received [" + received.toString() + "]");
+    assert received.get("type").getAsInt() < 8 //TODO: change the limits
         && received.get("type").getAsInt() >= 0;
     SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
