@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import edu.brown.cs.jmst.music.Track;
-import javafx.scene.layout.Priority;
 
 /**
  * The basis for selecting songs to play. Exactly 3 should exist simultaneously.
@@ -29,7 +28,7 @@ class SongBlock {
   private SongBlock nextBlock;
   private SongBlock prevBlock;
 
-  private int state;
+  protected int state;
 
   private static final int SUGGESTING = 1;
   private static final int VOTING = 2;
@@ -161,10 +160,6 @@ class SongBlock {
     return this.songsToPlay;
   }
 
-  void updateSongsToPlay() {
-    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
-  }
-
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
     PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
     int totalLengthMs = 0;
@@ -205,9 +200,8 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
-  Suggestion getNextSongToPlay() throws Exception {
+  Suggestion getNextSongToPlay() {
     assert this.state == PLAYING;
-//    System.out.println(this.songsToPlay.get(0).getSong().getName());
     return this.songsToPlay.remove(0);
   }
 
@@ -259,31 +253,32 @@ class SongBlock {
   // Method that decays the votes on the not-selected suggestions, then adds the
   // suggestions to the next block's collection of suggestions.
 
+  void updateSongsToPlay() {
+    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
+  }
+
   protected void becomePlayBlock() {
-//    assert this.state == VOTING;
-//    assert this.songsToPlay.isEmpty();
+    assert this.state == VOTING;
+    assert this.songsToPlay.isEmpty();
     updateSongsToPlay();
-    //this.songsToPlay.addAll(topSuggestionsQuantity());
+    // this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
     this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
     this.state = PLAYING;
-//    assert this.suggestions.isEmpty(); // TODO: temporary!
+    assert this.suggestions.isEmpty(); // TODO: temporary!
   }
 
   protected void becomeSuggBlock() {
-    if (state != PLAYING) {
-      System.out.println("block state: " + this.state);
-    }
-//    assert this.state == PLAYING;
-//    assert this.suggestions.isEmpty();
+    assert this.state == PLAYING;
+    assert this.suggestions.isEmpty();
     this.state = SUGGESTING;
   }
 
   protected void becomeVoteBlock() {
-//    assert this.state == SUGGESTING;
+    assert this.state == SUGGESTING;
     this.state = VOTING;
   }
 
@@ -301,7 +296,7 @@ class SongBlock {
     }
     suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     suggestions.drainTo(nextBlock.suggestions);
-//    assert (suggestions.isEmpty()); // TODO: temporary!
+    assert (suggestions.isEmpty()); // TODO: temporary!
   }
   // TODO: make the above thread-safe by ensuring new suggestions go to the
   // correct block
