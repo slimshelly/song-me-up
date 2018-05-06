@@ -39,6 +39,7 @@ public class Suggestion implements Comparable<Suggestion> {
     this.downVotes = 0;
 
     this.userVoteMap = new ConcurrentHashMap<>();
+    this.userVoteMap.put(userId, 1);
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
   }
@@ -236,6 +237,6 @@ public class Suggestion implements Comparable<Suggestion> {
    */
   @Override
   public int compareTo(Suggestion o) {
-    return this.score - o.score;
+    return o.score - this.score;
   }
 }
