@@ -20,13 +20,13 @@ public class SparkInitializer {
   public static void setHandlers(FreeMarkerEngine freeMarker, boolean web) {
     String prefix = "/~jmst";
     prefix = "";
-    if (web) {
-      Spark.webSocket("/~jmst/songupdates", PartyWebSocket.class);
-      Spark.webSocket("/songupdates", PartyWebSocket.class);
-      Spark.webSocket("*/songupdates", PartyWebSocket.class);
-    } else {
-      Spark.webSocket("/songupdates", PartyWebSocket.class);
-    }
+    Spark.webSocket("/songupdates", PartyWebSocket.class);
+    // if (web) {
+    // Spark.webSocket("/~jmst/songupdates", PartyWebSocket.class);
+    // Spark.webSocket("/songupdates", PartyWebSocket.class);
+    // } else {
+    // Spark.webSocket("/songupdates", PartyWebSocket.class);
+    // }
 
     Spark.get(prefix + "/main", new MainPage(), freeMarker);
     Spark.get(prefix + "/songmeup", new PreMainPage(), freeMarker);

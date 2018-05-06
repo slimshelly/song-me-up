@@ -37,9 +37,9 @@ public final class Main {
   private static final String DEFAULT_IP = "0.0.0.0";
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
   public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
-  public static final String WEB_ROOT_URI = "https://cs.hiram.edu/~jmst";
-  public static final int WEB_PORT = 4582;
-  public static final String WEB_IP = "127.0.0.1";
+  public static final String WEB_ROOT_URI =
+      "http://13.59.8.244:" + Integer.toString(DEFAULT_PORT);
+  public static final String WEB_IP = "172.26.4.178";
   private final SmuInputHandler smuHandler =
       new SmuInputHandler(SmuState.getInstance());
 
@@ -73,7 +73,7 @@ public final class Main {
     if (options.has("gui")) {
       try {
         if (options.has("web")) {
-          runSparkServer(WEB_PORT, WEB_IP, WEB_ROOT_URI, true);
+          runSparkServer(DEFAULT_PORT, WEB_IP, WEB_ROOT_URI, true);
         } else {
           runSparkServer((int) options.valueOf("port"),
               (String) options.valueOf("ip"), DEFAULT_ROOT_URI, false);
