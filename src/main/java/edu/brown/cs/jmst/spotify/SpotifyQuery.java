@@ -416,8 +416,7 @@ public class SpotifyQuery {
           // tracks
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
          
-          // track link
-          String track_link = tracks.get("href").getAsString();
+          int num_of_tracks = tracks.get("total").getAsInt();
           
           // track ids
           JsonArray playlist_tracks = playlistjo.get("tracks").getAsJsonArray();
@@ -433,7 +432,7 @@ public class SpotifyQuery {
           String type = playlistjo.get("type").getAsString();
 
           returnPlaylists
-              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type, images) );
+              .add(new SpotifyPlaylist(id, uri, num_of_tracks, track_ids, name, type, images) );
           
         }
 
@@ -452,7 +451,66 @@ public class SpotifyQuery {
     return returnPlaylists;
   }
 
+//
+//  public static List<Track> getPlaylistTracks(String user_id, String playlist_id, String access_token)
+//      throws Exception {
+//
+//    List<Track> returnTracks = new ArrayList<>();
+//    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+//
+//      List<BasicNameValuePair> pairs = new ArrayList<>();
+//      pairs.add(new BasicNameValuePair("limit", "10"));
+//      pairs.add(new BasicNameValuePair("offset", "0"));
+//      
+//      HttpGet get = new HttpGet("https://api.spotify.com/v1/me/playlists?"
+//          + URLEncodedUtils.format(pairs, "UTF-8"));
+//      get.setHeader("Authorization", "Bearer " + access_token);
+//
+//      HttpResponse response = client.execute(get);
+//      if (response.getStatusLine().getStatusCode() == 200) {
+//        String json_string = EntityUtils.toString(response.getEntity());
+//        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+//
+//        JsonArray playlists =
+//            jo.get("items").getAsJsonArray();
+//        Iterator<JsonElement> iterator = playlists.iterator();
+//
+//        while (iterator.hasNext()) {
+//          JsonObject trackjo = iterator.next().getAsJsonObject();
+//          String id = trackjo.get("id").getAsString();
+//          String name = trackjo.get("name").getAsString();
+//          String uri = trackjo.get("uri").getAsString();
+//          boolean explicit = trackjo.get("explicit").getAsBoolean();
+//          int popularity = trackjo.get("popularity").getAsInt();
+//          int duration_ms = trackjo.get("duration_ms").getAsInt();
+//          JsonArray artists = trackjo.get("artists").getAsJsonArray();
+//          // General.printInfo(artists.toString());
+//          List<String> artist_ids = new ArrayList<>();
+//          List<String> artist_names = new ArrayList<>();
+//          
+//          Iterator<JsonElement> iterator2 = artists.iterator();
+//          while (iterator2.hasNext()) {
+//            JsonObject ajo = iterator2.next().getAsJsonObject();
+//            artist_ids.add(ajo.get("id").getAsString());
+//            artist_names.add(ajo.get("id").getAsString());
+//          }
+//
+//          String album_id =
+//              trackjo.get("album").getAsJsonObject().get("id").getAsString();
+//          String album_art = getAlbumArt(album_id, access_token);
+//
+//          returnTracks.add(new TrackBean(id, name, explicit, popularity, duration_ms,
+//              artist_ids, artist_names, album_id, uri, album_art));
+//        }
+//      }
+//        
+//      }
+//    
+//    
+//    return returnTracks;
+//  }
 
+  
   public static List<SpotifyPlaylist> searchPlaylist(String keywords, String access_token)
       throws Exception {
 
@@ -501,11 +559,11 @@ public class SpotifyQuery {
           // name
           String name = playlistjo.get("name").getAsString();
           
-          // track ids - FIX THIS
+
+          // tracks
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
-          
          
-          String track_link = tracks.get("href").getAsString();
+          int num_of_tracks = tracks.get("total").getAsInt();
           
           List<String> track_ids = new ArrayList<>();
           
@@ -513,7 +571,7 @@ public class SpotifyQuery {
           String type = playlistjo.get("type").getAsString();
 
           returnPlaylists
-              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type, images) );
+              .add(new SpotifyPlaylist(id, uri, num_of_tracks, track_ids, name, type, images) );
           
         }
 
