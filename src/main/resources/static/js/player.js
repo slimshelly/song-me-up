@@ -4,6 +4,9 @@ let temp_uri = 'spotify:track:2Th9BGKvfZG8bKQSACitwG';
 let paused = false;
 let started = false;
 
+let nextSongInterval = null;
+
+
 function showCurrentState() {
 
     player.getCurrentState().then(state => {
@@ -40,12 +43,22 @@ function checkState() {
     showCurrentState();
 }
 
-let nextSongInterval = null;
-
-
 function playSomething() {
+
     console.log("play song called")
-    playSong(temp_uri);
+    if (started === false && paused === false) {
+        // no song is played, request next song
+        console.log("no current song, request next song");
+        requestNext();
+    } 
+
+    if (started === true ) {
+        if (paused === true) {
+            resumeSong();
+        } else {
+            pauseSong();
+        }
+    }
 }
 
 function playSong(song_uri) {

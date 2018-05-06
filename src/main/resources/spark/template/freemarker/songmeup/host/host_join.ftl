@@ -35,14 +35,14 @@
 					<span class="now">Now Playing</span>
 					<span class="trackName">Lose It (feat. Vic Mensa)</span>
 					<span class="artistName">Flume — Skin</span> -->
-					<div class="musicControls">
+				</div>
+			</div>
+		</div>
+		<div class="musicControls">
 						<i class="fas fa-backward fa-4x" onclick="seek()"></i>
 						<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
 						<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
 					</div>
-				</div>
-			</div>
-		</div>
 
 		<div class="content">
 			<div class="playlist" id="playlist">
