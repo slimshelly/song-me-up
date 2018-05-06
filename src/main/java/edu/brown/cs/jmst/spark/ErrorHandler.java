@@ -39,9 +39,7 @@ public class ErrorHandler implements TemplateViewRoute {
       String param = URLEncodedUtils.format(pair, "UTF-8");
       if (p.getHostId().equals(u.getId())) {
         redirect_url = "\"host?" + param + "\"";
-        // redirect_url = "\"/~jmst/host?" + param + "\"";
       } else {
-        // redirect_url = "\"/~jmst/join?" + param + "\"";
         redirect_url = "\"join?" + param + "\"";
       }
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()

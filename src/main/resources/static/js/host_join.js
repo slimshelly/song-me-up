@@ -177,6 +177,10 @@ const setup_live_playlist = () => {
         refresh_voting_block(votingList);
         break;
       case MESSAGE_TYPE.NEXT_SONG:
+
+        console.log("i got a response song!");
+
+        // data - json object
         let song = data.payload;
         let song_uri = song.uri;
         let song_cover = song.album_cover;
@@ -204,9 +208,10 @@ const setup_live_playlist = () => {
 
 function request_next_song() {
     //Sent a REQUEST_NEXT_SONG message to the server using 'con'
-    console.log("requesting next song");
+
+    console.log("i just requested in host join")
     let request = {"type":MESSAGE_TYPE.NEXT_SONG,
-                   "payload": { "id": "", "song_id": ""}
+                   "payload": { "id": $("#user_id").val() , "song_id": ""}
     };
     conn.send(JSON.stringify(request));
 }
