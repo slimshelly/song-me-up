@@ -37,7 +37,7 @@
 					<span class="artistName">Flume — Skin</span>
 					<div class="musicControls">
 						<i class="fas fa-backward fa-4x" onclick="switchToPrevious()"></i>
-						<i id="playPause" class="fas fa-play fa-3x" onclick="playSong()"" style="font-size: 70px;"></i>
+						<i id="playPause" class="fas fa-play fa-3x" onclick="playSong()" style="font-size: 70px;"></i>
 						<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
 					</div>
 				</div>
