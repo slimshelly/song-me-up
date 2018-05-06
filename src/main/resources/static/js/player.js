@@ -19,7 +19,7 @@ function showCurrentState() {
     } = state.track_window;
     let currPos = state.position;
     let currLength = state.track_window.current_track.duration_ms;
-    console.log(state.position);
+    // console.log(state.position);
     // console.log(state.track_window.current_track.duration_ms);
     if (currLength - currPos <= 1000) {
       console.log("end of song");

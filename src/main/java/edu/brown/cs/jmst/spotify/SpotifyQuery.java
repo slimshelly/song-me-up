@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.brown.cs.jmst.music.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -23,12 +24,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
-import edu.brown.cs.jmst.music.Album;
-import edu.brown.cs.jmst.music.Artist;
-import edu.brown.cs.jmst.music.AudioFeatures;
-import edu.brown.cs.jmst.music.SpotifyPlaylist;
-import edu.brown.cs.jmst.music.Track;
-import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
@@ -159,6 +154,15 @@ public class SpotifyQuery {
       throw e;
     }
     return albumURL;
+  }
+
+  public static AudioFeaturesSimple getSimpleFeatures(String id,
+                                                      String access_token) {
+    Float danceability;
+    Float energy;
+    Float valence;
+    // TODO: query spotify and get ONLY THESE THREE FIELDS
+    return new AudioFeaturesSimple(id, danceability, energy, valence);
   }
 
   /**
