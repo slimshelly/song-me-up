@@ -13,8 +13,7 @@ public class SpotifyAuthentication {
 
   private static final String VALID =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  private static final String READABLE =
-      "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz";
+  private static final String READABLE = "ABCDEFGHJKLMNPQRSTUWXYZ";
 
   public static String randomString(int length) {
     if (length < 0) {

@@ -8,30 +8,23 @@
 	</head>
 	<body>
 		<div class="nav-bar">
-			<p>Hello ${name}!</p>
-			<p id="premium" hidden>${premium?c}</p>
 			<a class="logout" id="userStatus" href="logout">LOG OUT</a>
 			<a id="faqs" href="faq">FAQS</a>
 			<a id="home" href="main">HOME</a>
 		</div>
 		<div class="topSection">
 			<div class="title">SongMeUp</div>
-			<div class="buttons">
-				<a class="btn gray" id="host" href="form">HOST A PARTY</a>
-				<a class="btn gray" id="joinbtn">JOIN A PARTY</a>
-			</div>
-			<!-- The Modal -->
-			<div id="modal_query" class="modal">
+			<div> </div>
 
-			  <!-- Modal content -->
-			  <div class="modal-content">
-				<span class="close" id="close_modal">&times;</span>
-				<p>Enter the party code:</p>
-				<p id="bad_id" hidden>Party code is 6 letters.</p>
-				<input class="textfield" type="text" id="party_id_box">
-			  </div>
+1. Who can host parties? - only spotify premium users <br>
+2. Who can join parties? Anyone, if you have a spotify account <br>
+3. How many parties can I be in at once? One <br>
+4. Who can add songs? Anyone <br>
+5. Who can hit PLAY and pause? Only the host <br>
+6. How many times can I vote on a song? Only once <br>
+7. How many songs can I request? As many as you’d like! <br>
+8. How are songs prioritised? It's a secret<br>
 
-			</div>
 			<div class="more" id="down">
 	    		<a class="arrow" href="#">
 	      			<span class="bottom"></span>

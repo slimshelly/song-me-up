@@ -143,7 +143,7 @@ public class User extends Entity {
   }
 
   public boolean inParty() {
-    return curr_party == null;
+    return curr_party != null;
   }
 
   public String leaveParty() throws PartyException {
@@ -174,5 +174,13 @@ public class User extends Entity {
 
   public String getRefresh() {
     return refresh_key;
+  }
+
+  public String getCurrentPartyUrl(Party p) {
+    if (p.getHostId().equals(getId())) {
+      return SpotifyAuthentication.getRootUri() + "/host?party_id=" + p.getId();
+    } else {
+      return SpotifyAuthentication.getRootUri() + "/join?party_id=" + p.getId();
+    }
   }
 }

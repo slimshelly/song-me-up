@@ -33,14 +33,20 @@ public class HostHandler implements TemplateViewRoute {
     } else {
       SparkErrorEnum err = null;
       QueryParamsMap qm = req.queryMap();
+      if (u.inParty() && !u.getCurrentParty().equals(qm.value("party_id"))) {
+        Party p = state.getParty(u.getCurrentParty());
+        res.redirect(u.getCurrentPartyUrl(p));
+        return null;
+      }
       try {
+
         if (qm.hasKey("party_id")) {
           Party p = state.getParty(qm.value("party_id"));
           Map<String,
               Object> variables = new ImmutableMap.Builder<String, Object>()
                   .put("party_id", p.getId()).put("hostname", p.getHostName())
                   .put("user_id", u.getId()).build();
-          return new ModelAndView(variables, "songmeup/host/host.ftl");
+          return new ModelAndView(variables, "songmeup/host/host_join.ftl");
         } else {
           Party p = state.startParty(u);
           List<BasicNameValuePair> pair = new ArrayList<>();
