@@ -259,10 +259,10 @@ function refresh_suggestions_block(toSuggest) {
     console.log(suggestion);
     $playlist.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='suggestingItem'>"
-      + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
+      + "<img class='albumCover' src='" + suggestion.album_cover + "'>"
       + "<div class='track'>"
-      + "<div class='song'>" + suggestion.song.name + "</div>"
-      + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
+      + "<div class='song'>" + suggestion.song_name + "</div>"
+      + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"
@@ -307,12 +307,13 @@ function refresh_playing_block(toPlay) {
   console.log("[HOST] In function refresh_playing_block");
   $playingBlock.empty();
   toPlay.forEach(function(playSong) {
+    console.log(playSong);
     $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='playingItem'>"
-      + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
+      + "<img class='albumCover' src='" + playSong.album_cover + "'>"
       + "<div class='track'>"
-      + "<div class='song'>" + playSong.song.name + "</div>"
-      + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
+      + "<div class='song'>" + playSong.song_name + "</div>"
+      + "<div class='artist'>" + playSong.artist_names[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"

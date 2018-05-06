@@ -102,18 +102,15 @@ class SongBlock {
   /**
    * Method for adding a duplicate song suggestion to this block.
    *
-   * @param existingSuggestion
-   *          the Suggestion that already existed
-   * @param userId
-   *          the id String of the user making the suggestion
-   * @throws PartyException
-   *           if the user has suggested this song already
+   * @param existingSuggestion the Suggestion that already existed
+   * @param userId the id String of the user making the suggestion
+   * @throws PartyException if the user has suggested this song already
    */
   protected synchronized void suggestDuplicate(Suggestion existingSuggestion,
       String userId) throws PartyException {
     if (existingSuggestion.hasBeenSubmittedByUser(userId)) {
       throw new PartyException(
-          "User may not submit the same suggestion more th" + "an once.");
+          "User may not submit the same suggestion more than once.");
     }
     if (!existingSuggestion.hasBeenUpVotedByUser(userId)) {
       vote(existingSuggestion, userId, true);
@@ -264,7 +261,8 @@ class SongBlock {
   protected void becomePlayBlock() {
 //    assert this.state == VOTING;
 //    assert this.songsToPlay.isEmpty();
-    this.songsToPlay.addAll(topSuggestionsQuantity());
+    updateSongsToPlay();
+    //this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
