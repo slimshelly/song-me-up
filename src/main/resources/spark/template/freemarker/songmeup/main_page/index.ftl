@@ -17,7 +17,19 @@
 			<div class="title">SongMeUp</div>
 			<div class="buttons">
 				<a class="btn gray" id="host" href="form">HOST A PARTY</a>
-				<a class="btn gray" id="join" onclick="join_id()">JOIN A PARTY</a>
+				<a class="btn gray" id="joinbtn">JOIN A PARTY</a>
+			</div>
+			<!-- The Modal -->
+			<div id="modal_query" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+				<span class="close" id="close_modal">&times;</span>
+				<p>Enter the party code:</p>
+				<p id="bad_id" hidden>Party code is 6 letters.</p>
+				<input class="textfield" type="text" id="party_id_box">
+			  </div>
+
 			</div>
 			<div class="more" id="down">
 	    		<a class="arrow" href="#">
