@@ -12,14 +12,16 @@ public class SpotifyPlaylist extends Entity {
 	private String track_link;
 	private List<String> track_ids;
 	private String name;
+	private List<String> playlist_images;
 	
-	public SpotifyPlaylist(String id, String uri, String track_link, List<String> track_ids, String name, String type) {
+	public SpotifyPlaylist(String id, String uri, String track_link, List<String> track_ids, String name, String type, List<String> playlist_images) {
 		this.id = id;
 		this.uri = uri;
 		this.track_link = track_link;
 		this.track_ids = track_ids;
 		this.name = name;
 		this.type = type;
+		this.playlist_images = playlist_images;
 	}
 	
 	public String getId() {
@@ -73,6 +75,14 @@ public class SpotifyPlaylist extends Entity {
 	@Override
 	public String toString() {
 		return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
+	}
+
+	public List<String> getPlaylist_images() {
+		return playlist_images;
+	}
+
+	public void setPlaylist_images(List<String> playlist_images) {
+		this.playlist_images = playlist_images;
 	}
 	
  

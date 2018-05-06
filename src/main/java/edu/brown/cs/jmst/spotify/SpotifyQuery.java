@@ -401,23 +401,39 @@ public class SpotifyQuery {
           // id
           String id = playlistjo.get("id").getAsString();
 
+          // images
+          JsonArray playlist_images = playlistjo.get("images").getAsJsonArray();
+          List<String> images = new ArrayList<>();
+          Iterator<JsonElement> iterator2 = playlist_images.iterator();
+          while (iterator2.hasNext()) {
+            JsonObject ajo = iterator.next().getAsJsonObject();
+            images.add(ajo.get("url").getAsString());
+          }
           
           // name
           String name = playlistjo.get("name").getAsString();
           
-          // track ids
-          
+          // tracks
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
          
+          // track link
           String track_link = tracks.get("href").getAsString();
           
+          // track ids
+          JsonArray playlist_tracks = playlistjo.get("tracks").getAsJsonArray();
           List<String> track_ids = new ArrayList<>();
+          Iterator<JsonElement> iterator3 = playlist_tracks.iterator();
+          while (iterator3.hasNext()) {
+            JsonObject ajo = iterator.next().getAsJsonObject();
+            JsonObject ajo2 = ajo.get("track").getAsJsonObject();
+            track_ids.add(ajo2.get("id").getAsString());
+          }
           
           // type
           String type = playlistjo.get("type").getAsString();
 
           returnPlaylists
-              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
+              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type, images) );
           
         }
 
@@ -472,14 +488,22 @@ public class SpotifyQuery {
 
           // id
           String id = playlistjo.get("id").getAsString();
-
+          
+          // playlist images
+          JsonArray playlist_images = playlistjo.get("images").getAsJsonArray();
+          List<String> images = new ArrayList<>();
+          Iterator<JsonElement> iterator2 = playlist_images.iterator();
+          while (iterator2.hasNext()) {
+            JsonObject ajo = iterator.next().getAsJsonObject();
+            images.add(ajo.get("url").getAsString());
+          }
           
           // name
           String name = playlistjo.get("name").getAsString();
           
-          // track ids
-          
+          // track ids - FIX THIS
           JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
+          
          
           String track_link = tracks.get("href").getAsString();
           
@@ -489,7 +513,7 @@ public class SpotifyQuery {
           String type = playlistjo.get("type").getAsString();
 
           returnPlaylists
-              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
+              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type, images) );
           
         }
 
