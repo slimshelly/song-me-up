@@ -79,6 +79,18 @@ function playSong(song_uri) {
 
 }
 
+function playNextSong(songUri) {
+
+    console.log("the paused state is: " + paused);
+    console.log("the started state is" + started);
+    // reset conditions
+    paused = false;
+    started = false;
+
+    console.log("playing next");
+    playSong(songUri);
+}
+
 function requestNext() {
     //Sent a REQUEST_NEXT_SONG message to the server using 'con'
     request_next_song();
