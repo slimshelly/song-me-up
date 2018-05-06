@@ -77,11 +77,11 @@ public class SpotifyPlaylist extends Entity {
 		return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
 	}
 
-	public List<String> getPlaylist_images() {
+	public List<String> getPlaylistImages() {
 		return playlist_images;
 	}
 
-	public void setPlaylist_images(List<String> playlist_images) {
+	public void setPlaylistImages(List<String> playlist_images) {
 		this.playlist_images = playlist_images;
 	}
 	
