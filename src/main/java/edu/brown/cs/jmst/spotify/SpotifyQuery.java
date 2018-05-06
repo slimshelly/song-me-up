@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.brown.cs.jmst.music.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,6 +23,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.Album;
+import edu.brown.cs.jmst.music.Artist;
+import edu.brown.cs.jmst.music.AudioFeatures;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
+import edu.brown.cs.jmst.music.SpotifyPlaylist;
+import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.music.TrackBean;
 
 public class SpotifyQuery {
 
@@ -148,27 +154,25 @@ public class SpotifyQuery {
 
   public static AudioFeaturesSimple getSimpleFeatures(String id,
                                                       String access_token) {
-    Float danceability;
-    Float energy;
-    Float valence;
+    Float danceability = (float )1.0;
+    Float energy = (float) 1.0;
+    Float valence = (float) 1.0;
     // TODO: query spotify and get ONLY THESE THREE FIELDS
-    return new AudioFeaturesSimple(id, danceability, energy, valence);
+    return new AudioFeaturesSimple("id", danceability, energy, valence);
   }
 
   /**
    * Requires an ID.
    *
    */
-  public static AudioFeatures searchAudioFeatures(String keywords,
+  public static AudioFeatures searchAudioFeatures(String song_id,
       String access_token) throws Exception {
-    General.printVal("Keywords", keywords);
+
     AudioFeatures audioFeature = new AudioFeatures();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      HttpPost get = new HttpPost("https://api.spotify.com/v1/search");
+      HttpPost get = new HttpPost("https://api.spotify.com/v1/audio-features/" + song_id);
       get.setHeader("Authorization", "Bearer " + access_token);
       List<BasicNameValuePair> pairs = new ArrayList<>();
-      pairs.add(new BasicNameValuePair("q", keywords));
-      pairs.add(new BasicNameValuePair("type", "track"));
       UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
       urlentity.setContentEncoding("application/json");
       get.setEntity(urlentity);
@@ -177,31 +181,25 @@ public class SpotifyQuery {
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-        JsonArray tracks = jo.get("tracks").getAsJsonArray();
-        for (JsonElement track : tracks) {
-          JsonObject afjo = track.getAsJsonObject();
-          // make track class
-          // String id, Boolean explicit, int popularity, int duration_ms,
-          // List<String> artistIds, Boolean playable
-          String id = afjo.get("id").getAsString();
-          Float acousticness = afjo.get("acousticness").getAsFloat();
-          Float danceability = afjo.get("danceability").getAsFloat();
-          Integer duration_ms = afjo.get("duration_ms").getAsInt();
-          Float energy = afjo.get("energy").getAsFloat();
-          Float instrumentalness = afjo.get("instrumentalness").getAsFloat();
-          Integer key = afjo.get("key").getAsInt();
-          Float liveness = afjo.get("liveness").getAsFloat();
-          Float loudness = afjo.get("loudness").getAsFloat();
-          Integer mode = afjo.get("mode").getAsInt();
-          Float speechiness = afjo.get("speechiness").getAsFloat();
-          Float tempo = afjo.get("tempo").getAsFloat();
-          Integer time_signature = afjo.get("time_signature").getAsInt();
-          Float valence = afjo.get("valence").getAsFloat();
+//
+        String id = jo.get("id").getAsString();
+//        Float acousticness = jo.get("acousticness").getAsFloat();
+//        Integer duration_ms = jo.get("duration_ms").getAsInt();
+//        Float instrumentalness = jo.get("instrumentalness").getAsFloat();
+//        Integer key = jo.get("key").getAsInt();
+//        Float liveness = jo.get("liveness").getAsFloat();
+//        Float loudness = jo.get("loudness").getAsFloat();
+//        Integer mode = jo.get("mode").getAsInt();
+//        Float speechiness =jo.get("speechiness").getAsFloat();
+//        Float tempo = jo.get("tempo").getAsFloat();
+//        Integer time_signature = jo.get("time_signature").getAsInt();
 
-          audioFeature = new AudioFeatures(id, acousticness, danceability,
-                  duration_ms, energy, instrumentalness, key, liveness, loudness,
-                  mode, speechiness, tempo, time_signature, valence);
-        }
+        Float valence = jo.get("valence").getAsFloat();
+        Float energy = jo.get("energy").getAsFloat();
+        Float danceability = jo.get("danceability").getAsFloat();
+
+        audioFeature = new AudioFeatures(id, danceability,
+            energy, valence);
       } else {
         throw new ClientProtocolException(
             "Failed to get tracks: " + response.getStatusLine().getStatusCode()

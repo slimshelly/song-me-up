@@ -11,12 +11,12 @@ public class AudioFeaturesSimple {
   //High valence tracks sound more happy
   private Float valence;
 
-  public AudioFeaturesSimple(String id, Float danceability, Float energy,
-                             Float valence) {
+  public AudioFeaturesSimple(String id, Float d, Float e,
+                             Float f) {
     this.id = id;
-    this.danceability = danceability;
-    this.energy = energy;
-    this.valence = valence;
+    this.danceability = d;
+    this.energy = e;
+    this.valence = f;
   }
 
   public String getId() {

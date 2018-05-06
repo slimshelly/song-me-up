@@ -77,10 +77,10 @@ function playNextSong(songUri) {
   console.log("the paused state is: " + paused);
   console.log("the started state is" + started);
   // reset conditions
-  paused = false;
   started = false;
-  console.log("playing next");
-  playSong(songUri);
+
+    playSong(songUri);
+
 }
 
 function requestNext() {

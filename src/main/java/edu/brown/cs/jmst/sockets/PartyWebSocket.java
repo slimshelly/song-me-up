@@ -2,8 +2,6 @@ package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
 
-import edu.brown.cs.jmst.music.AudioFeatures;
-import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.eclipse.jetty.websocket.api.Session;
@@ -17,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 import edu.brown.cs.jmst.party.Party;
