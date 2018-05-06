@@ -10,9 +10,9 @@ $(document).ready(() => {
     const responseObject = JSON.parse(responseJSON);
     console.log(responseObject);
     let output = responseObject;
-
+    console.log(responseObject.playlists);
 
 
   });
-  
+
 });

@@ -13,26 +13,39 @@
 			<a id="faqs" href="faq">FAQS</a>
 			<a id="home" href="main">HOME</a>
 		</div>
-		<div class="title">Choose a playlist to start your party or have guests pick songs right away!</div>
-		<form action="/action_page.php">
-		  First name:<br>
-		  <input type="text" name="firstname" value="Mickey">
-		  <br>
-		  Last name:<br>
-		  <input type="text" name="lastname" value="Mouse">
-		</form>
+		<div class="title">Choose from your saved playlists to get your party started!</div>
+
+			<!-- PLAYLIST OPTIONS -->
+		<div class="scrolling-wrapper">
+		  <div class="card left">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card middle">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card right">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		  <div class="card">
+		  	<img class="albumArt" src="./photos/flume.jpg">
+		  </div>
+		</div>
+
 		<div class="buttons">
 			<a class="btn" href="./host">GO TO PARTY</a>
-		</div>	
-
-		<!-- PLAYLIST OPTIONS -->
-		<section>
-			<div class="module"></div>
-	  		<div class="module"></div>
-	  		<div class="module"></div>
-	  		<div class="module"></div>
-	  		<div class="module"></div>
-  		</section>
+		</div>
 
 	</body>
 </html>

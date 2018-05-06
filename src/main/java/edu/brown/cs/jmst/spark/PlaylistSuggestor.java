@@ -1,7 +1,14 @@
 package edu.brown.cs.jmst.spark;
 
-import com.google.gson.JsonArray;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
@@ -10,18 +17,30 @@ import spark.Response;
 import spark.Route;
 
 public class PlaylistSuggestor implements Route {
-
+	
+	private static final Gson GSON = new Gson();
+	
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
+		System.out.println("Getting user's playlists");
 	    SmuState state = SmuState.getInstance();
 	    String userid = request.session().attribute("user");
 	    User u = state.getUser(userid);
-	    String query = request.queryMap().value("word");
-	    // SHELL REPLACE THE QUERY BELOW WITH the spotify query to get the user's playlists
-	    // AND UNCOMMENT BOTH LINES AND DELETE LAST LINES
-	    // JsonArray ja = SpotifyQuery.searchSongRaw(query, u.getAuth());
-	    // return SparkInitializer.GSON.toJson(ja);
-	    return null;
+	    List<SpotifyPlaylist> userPlaylists = SpotifyQuery.getUserPlaylist(u.getAuth());
+	    System.out.println("Got playlists");
+	    
+	    List<JsonObject> playlistObjects = new ArrayList<>();
+	    for (SpotifyPlaylist playlist: userPlaylists) {
+	    		JsonObject currPlaylist = new JsonObject();
+	    		currPlaylist.addProperty("name", playlist.getName());
+	    		currPlaylist.addProperty("numberOfTracks", playlist.getSongs().size());
+	    		currPlaylist.addProperty("images", playlist.getName());
+	    		playlistObjects.add(currPlaylist);
+	    }
+	    
+	    Map<String, Object> variables = ImmutableMap.of("playlists", playlistObjects);
+	    System.out.println("About to send to frontend");
+	    return GSON.toJson(variables); // only sending info, not reloading page
 	}
 
 }

@@ -18,48 +18,40 @@ public class SparkInitializer {
   public static final Gson GSON = new Gson();
 
   public static void setHandlers(FreeMarkerEngine freeMarker, boolean web) {
-    String prefix = "/~jmst";
-    prefix = "";
     Spark.webSocket("/songupdates", PartyWebSocket.class);
-    // if (web) {
-    // Spark.webSocket("/~jmst/songupdates", PartyWebSocket.class);
-    // Spark.webSocket("/songupdates", PartyWebSocket.class);
-    // } else {
-    // Spark.webSocket("/songupdates", PartyWebSocket.class);
-    // }
 
-    Spark.get(prefix + "/main", new MainPage(), freeMarker);
-    Spark.get(prefix + "/songmeup", new PreMainPage(), freeMarker);
+    Spark.get("/main", new MainPage(), freeMarker);
+    Spark.get("/", new PreMainPage(), freeMarker);
 
-    Spark.get(prefix + "/logout", new LogoutHandler(), freeMarker);
-    Spark.get(prefix + "/login", new LoginHandler(), freeMarker);
+    Spark.get("/logout", new LogoutHandler(), freeMarker);
+    Spark.get("/login", new LoginHandler(), freeMarker);
     Spark.get(SpotifyAuthentication.REDIRECT_HANDLE, new CallbackHandler(),
         freeMarker);
 
     // PRE PLAYLIST PAGE
     // below leads to joe's party form, fill out before creating party
-    Spark.get(prefix + "/form", new PartyFormHandler(), freeMarker);
-    Spark.post(prefix + "/spotifyPlaylists", new PlaylistSuggestor());
+    Spark.get("/form", new PartyFormHandler(), freeMarker);
+    Spark.post("/spotifyPlaylists", new PlaylistSuggestor());
     // below leads to joe's "you have made a party page"
-    Spark.get(prefix + "/host", new HostHandler(), freeMarker);
+    Spark.get("/host", new HostHandler(), freeMarker);
 
     // PLAYLIST PAGES (2)
     // Spark.get(prefix + "/admin", new AdminPageHandler(), freeMarker);
     // below leads to user's playlist page
-    Spark.get(prefix + "/join", new JoinHandler(), freeMarker);
+    Spark.get("/join", new JoinHandler(), freeMarker);
 
     // GENERATE INFO FOR PLAYLIST PAGE
-    Spark.post(prefix + "/suggestions", new SongSuggestor());
-    Spark.post(prefix + "/refresh", new RefreshToken());
+    Spark.post("/suggestions", new SongSuggestor());
+    Spark.post("/refresh", new RefreshToken());
     // below reloads party playlist on page reload
-    Spark.post(prefix + "/playlist", new PlaylistHandler());
+    Spark.post("/playlist", new PlaylistHandler());
 
-    Spark.get(prefix + "/player", new PlayerPage(), freeMarker);
-    Spark.get(prefix + "/error", new ErrorHandler(), freeMarker);
-    Spark.get(prefix + "/faq", new FAQPage(), freeMarker);
+    Spark.get("/player", new PlayerPage(), freeMarker);
+    Spark.get("/error", new ErrorHandler(), freeMarker);
+    Spark.get("/faq", new FAQPage(), freeMarker);
 
     // NOT RELEVANT, will delete later
-    Spark.get(prefix + "/playlists", new MockPlaylist(), freeMarker);
+    Spark.get("/playlists", new MockPlaylist(), freeMarker);
   }
 
 }

@@ -43,7 +43,14 @@ function checkState() {
 let nextSongInterval = null;
 
 
+function playSomething() {
+    console.log("play song called")
+    playSong(temp_uri);
+}
+
 function playSong(song_uri) {
+
+    console.log("tryna play this song")
 
     if (nextSongInterval != null) {
         window.clearInterval(nextSongInterval);
@@ -55,7 +62,7 @@ function playSong(song_uri) {
 
         play({
             // takes uri passed in and plays with the default player.
-            spotify_uri: [temp_uri],
+            spotify_uri: [song_uri],
             playerInstance: player
         });
 
@@ -75,8 +82,6 @@ function playSong(song_uri) {
 function requestNext() {
     //Sent a REQUEST_NEXT_SONG message to the server using 'con'
     request_next_song();
-    temp_uri = 'spotify:track:2tHfNQnj50VoMZga2rpfdA';
-    playSong(temp_uri);
 }
 
 

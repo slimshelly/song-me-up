@@ -23,7 +23,7 @@ public class MainPage implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect(SpotifyAuthentication.getRootUri() + "/songmeup");
+      res.redirect(SpotifyAuthentication.getRootUri() + "/");
       return null;
     }
     QueryParamsMap qm = req.queryMap();
