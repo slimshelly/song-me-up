@@ -171,12 +171,42 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
+        
+      case MESSAGE_TYPE.NEXT_SONG:
+
+        // data - json object
+        let song = data.payload;
+        let song_uri = song.uri;
+
+        let song_cover = song.album_cover;
+        let song_name = song.song_name;
+        // a list of artist names
+        let song_artists = artist_names;
+
+        // get player to play song
+        playSong(song_uri);
+        
+        // NOTE: song_artists is a LIST of artist names
+        updateMainCover(song_cover, song_name, song_artists);
+        
+        break;
 	  case MESSAGE_TYPE.CONNECT:
 	    new_connect();
 	    break;
     }
   };
 }
+
+
+function request_next_song() {
+    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+    console.log("requesting next song");
+    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+                   "payload": { "id": "", "song_id": ""}
+    };
+    conn.send(JSON.stringify(request));
+}
+
 
 function new_connect(){
 	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
