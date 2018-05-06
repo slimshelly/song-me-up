@@ -82,6 +82,8 @@ public class SpotifyQuery {
       }
     }
   }
+  
+  
 
   public static List<Track> searchSong(String keywords, String access_token)
       throws Exception {
@@ -364,6 +366,81 @@ public class SpotifyQuery {
       throw e;
     }
     return returnAlbums;
+  }
+
+  public static List<SpotifyPlaylist> getUserPlaylist(String access_token)
+      throws Exception {
+
+    List<SpotifyPlaylist> returnPlaylists = new ArrayList<>();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+
+      System.out.println("here1");
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("limit", "10"));
+      
+      System.out.println("here2");
+      HttpGet get = new HttpGet("//api.spotify.com/v1/me/playlists?"
+          + URLEncodedUtils.format(pairs, "UTF-8"));
+      get.setHeader("Authorization", "Bearer " + access_token);
+
+      System.out.println("here3");
+      HttpResponse response = client.execute(get);
+      System.out.println(response);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+        System.out.println("here4");
+        JsonArray playlists =
+            jo.get("playlists").getAsJsonObject().get("items").getAsJsonArray();
+        Iterator<JsonElement> iterator = playlists.iterator();
+
+        while (iterator.hasNext()) {
+
+          System.out.println("here5");
+          JsonObject playlistjo = iterator.next().getAsJsonObject();
+
+          // uri
+          String uri = playlistjo.get("uri").getAsString();
+
+          // id
+          String id = playlistjo.get("id").getAsString();
+
+          
+          // name
+          String name = playlistjo.get("name").getAsString();
+          
+          // track ids
+          
+          System.out.println("here6");
+          JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
+         
+          String track_link = tracks.get("href").getAsString();
+          
+          List<String> track_ids = new ArrayList<>();
+          
+          // type
+          String type = playlistjo.get("type").getAsString();
+          System.out.println("here7");
+          returnPlaylists
+              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
+          
+        }
+
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get playlists: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    System.out.println("here8");
+    return returnPlaylists;
   }
 
 

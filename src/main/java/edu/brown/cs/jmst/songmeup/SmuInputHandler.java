@@ -31,6 +31,7 @@ public class SmuInputHandler implements Commander {
     commands.add(new SongSearch());
     commands.add(new AlbumSearch());
     commands.add(new PlaylistSearch());
+    commands.add(new UserPlaylistSearch());
     commands.add(new MarcoPoloCommand());
     commands.add(new CapsCommand());
     return commands;
@@ -84,6 +85,35 @@ public class SmuInputHandler implements Commander {
         System.out.println(t.toString());
       }
       state.setListMessage(albuminfo);
+    }
+
+    @Override
+    public void print() {
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+  
+  private class UserPlaylistSearch extends Command {
+
+    public UserPlaylistSearch() {
+      super("userPlaylist" + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      List<SpotifyPlaylist> playlists =
+          SpotifyQuery.getUserPlaylist(state.getAuth());
+
+      System.out.println("here9");
+      List<String> playlistinfo = new ArrayList<>();
+      
+      for (SpotifyPlaylist t : playlists) {
+        playlistinfo.add(t.toString());
+      }
+      state.setListMessage(playlistinfo);
     }
 
     @Override

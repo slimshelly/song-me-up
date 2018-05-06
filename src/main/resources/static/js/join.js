@@ -118,19 +118,23 @@ const setup_live_playlist = () => {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
-    console.log(data);
+    console.log("[GUEST] Revieved a message: " + data.type);
+    // console.log(data);
     switch (data.type) {
       default:
-        console.log('Unknown message type!', data.type);
+                console.log('Unknown message type!', data.type);
         break;
       case MESSAGE_TYPE.CONNECT:
+        console.log("[GUEST] Recieved CONNECT message");
         new_connect();
         break;
       case MESSAGE_TYPE.SUGGEST:
+        console.log("[GUEST] Recieved SUGGEST message");
+
         // Check if there is a song currently playing, if not, start playing the added song
         // This should ONLY happen when there is nothing in the playlist and a song is added
         // Otherwise, the javascript should know to call getNextSong() before a song finishes to trigger the next song
-        console.log("Adding a song");
+
         // if ($(".imgContainer").find(".artistInfo").length === 0){
         //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
         //   $nowPlaying.append("<div class='artistInfo'>"
@@ -158,17 +162,19 @@ const setup_live_playlist = () => {
           + "</li>");
         break;
       case MESSAGE_TYPE.REFRESH_SUGG:
-        console.log("Recieved REFRESH_SUGG message (Legal but not used!)");
+        console.log("[GUEST] Recieved REFRESH_SUGG message (Legal but not used!)");
         break;
       case MESSAGE_TYPE.VOTESONG:
-        console.log("Recieved VOTESONG message (ILLEGAL!)");
+        console.log("[GUEST] Recieved VOTESONG message (ILLEGAL!)");
         break;
       case MESSAGE_TYPE.REFRESH_VOTE:
+        console.log("[GUEST] Recieved REFRESH_VOTE message");
         let votingList = data.payload;
         console.log(votingList);
         refresh_voting_block(votingList);
         break;
       case MESSAGE_TYPE.NEXT_SONG:
+        console.log("[GUEST] Recieved NEXT_SONG message");
         let song = data.payload;
         let song_uri = song.uri;
         let song_cover = song.album_cover;
@@ -178,25 +184,28 @@ const setup_live_playlist = () => {
         refresh_now_playing(song_cover, song_name, song_artists);
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
+        console.log("[GUEST] Recieved REFRESH_PLAY message");
         let playingList = data.payload;
-        // loop through json objects in payload
-        playingList.forEach(function(suggestion) {
-          $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
-            + "<div class='playingItem'>"
-            + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-            + "<div class='track'>"
-            + "<div class='song'>" + suggestion.song_name + "</div>"
-            + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
-            + "</div>"
-            + "<div class='buttons'>"
-            + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
-            + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
-            + "</div>"
-            + "</div>"
-            + "</li>");
-        });
+        // // loop through json objects in payload
+        // playingList.forEach(function(suggestion) {
+        //   $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
+        //     + "<div class='playingItem'>"
+        //     + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
+        //     + "<div class='track'>"
+        //     + "<div class='song'>" + suggestion.song_name + "</div>"
+        //     + "<div class='artist'>" + suggestion.artist_names[0] + "</div>"
+        //     + "</div>"
+        //     + "<div class='buttons'>"
+        //     + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+        //     + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+        //     + "</div>"
+        //     + "</div>"
+        //     + "</li>");
+        // });
+        refresh_playing_block(playingList);
         break;
       case MESSAGE_TYPE.REFRESH_ALL:
+        console.log("[GUEST] Recieved REFRESH_ALL message");
         let toPlay = data.payload.play;
         let toVote = data.payload.vote;
         let toSugg = data.payload.sugg;
@@ -214,6 +223,7 @@ function new_connect(){
         "id":$("#user_id").val()}
       };
   conn.send(JSON.stringify(vote));
+  console.log("[GUEST] Sent CONNECT message");
 }
 
 /*
@@ -227,6 +237,7 @@ function new_vote(vote_boolean, songId){
         "vote":vote_boolean}
       };
   conn.send(JSON.stringify(vote));
+  console.log("[GUEST] Sent VOTESONG message");
 }
 
 /*
@@ -243,33 +254,25 @@ function new_song(songId) {
       };
   console.log(JSON.stringify(userSuggestion));
   conn.send(JSON.stringify(userSuggestion));
+  console.log("[GUEST] Sent SUGGEST message");
 }
 
 function request_next_song() {
-    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
-    console.log("requesting next song");
-    let request = {"type": MESSAGE_TYPE.NEXT_SONG,
-                   "payload": { "id": "", "song_id": ""}
-    };
-    conn.send(JSON.stringify(request));
-}
-
-/*
-Send PLAYLIST message to backend when the last song in the playing block is 10 seconds from finishing
-*/
-function get_playlist(songId) {
-  // Send a PLAYLIST message to the server using `conn`
-  let playlistRequest = {"type": MESSAGE_TYPE.REFRESH_PLAY, "payload": {
-        "id":$("#user_id").val()}
-      };
-  conn.send(JSON.stringify(playlistRequest));
+  //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+  console.log("requesting next song");
+  let request = {"type": MESSAGE_TYPE.NEXT_SONG,
+    "payload": { "id": "", "song_id": ""}
+  };
+  conn.send(JSON.stringify(request));
+  console.log("[GUEST] Sent NEXT_SONG message");
 }
 
 /*
 Refresh suggestions in the playlist (bottom block)
 */
 function refresh_suggestions_block(toSuggest) {
-    $playlist.empty();
+  console.log("[GUEST] In function refresh_suggestions_block");
+  $playlist.empty();
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
       $playlist.append("<li id='" + $("#user_id").val() + "'>"
@@ -294,7 +297,8 @@ function refresh_suggestions_block(toSuggest) {
 Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
-    $votingBlock.empty();
+  console.log("[GUEST] In function refresh_voting_block");
+  $votingBlock.empty();
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>"
       + "<div class='votingItem'>"
@@ -319,6 +323,7 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
+  console.log("[GUEST] In function refresh_playing_block");
     $playingBlock.empty();
   // put top song in toPlay in now playing block
   console.log(toPlay);

@@ -1,6 +1,5 @@
 package edu.brown.cs.jmst.spark;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -8,7 +7,6 @@ import com.google.gson.Gson;
 
 import com.google.gson.JsonArray;
 import edu.brown.cs.jmst.party.Party;
-import edu.brown.cs.jmst.party.Suggestion;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import spark.Request;
