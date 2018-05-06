@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -89,7 +90,7 @@ public class Party extends Entity {
 
   public Collection<Suggestion> voteOnSong(String userId, String songId,
       boolean isUpVote) throws PartyException {
-    if (!userIds.contains(userId)) {
+    if (!userIds.contains(userId) && !userId.equals(getHostId())) {
       throw new PartyException("User not found in party.");
     }
     Suggestion voteOn = songQueue.getSuggestionInVoteBlockById(songId);
@@ -138,10 +139,13 @@ public class Party extends Entity {
 
   public JsonArray refreshVoteBlock() throws Exception {
     JsonArray voteBlock = new JsonArray();
-    for (Suggestion s : songQueue.getSongsToVoteOn()) {
+    PriorityBlockingQueue<Suggestion> songsToVote = songQueue.getSongsToVoteOn();
+    Suggestion s;
+    while ((s = songsToVote.poll()) != null) {
       voteBlock.add(s.toJson());
     }
     return voteBlock;
+    //fixed bug with 3 songs, one with score 1, one with 0, one with -1 being put in wrong order
   }
 
   public JsonArray refreshPlayBlock() throws Exception {
