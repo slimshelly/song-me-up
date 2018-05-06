@@ -106,7 +106,7 @@ const setup_live_playlist = () => {
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
   let type = "ws"
   if(window.location.host==="cs.hiram.edu"){
-	type = type + "s";
+	 type = type + "s";
   }
 
   conn = new WebSocket(type + "://"+ partpath + "/songupdates");
@@ -211,12 +211,11 @@ const setup_live_playlist = () => {
         
         // NOTE: song_artists is a LIST of artist names
         refresh_now_playing(song_cover, song_name, song_artists);
-        
         break;
 
-	  case MESSAGE_TYPE.CONNECT:
-	    new_connect();
-	    break;
+  	  case MESSAGE_TYPE.CONNECT:
+  	    new_connect();
+  	    break;
     }
   };
 }
