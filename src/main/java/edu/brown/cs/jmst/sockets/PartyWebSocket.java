@@ -144,31 +144,10 @@ public class PartyWebSocket {
     }
   }
 
-//  public void signalNextSong(JsonObject songToPlay, Party party) throws IOException {
-//    if (party == null) {
-//      return;
-//    }
-//    try {
-//      JsonObject jo = new JsonObject();
-//      jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
-//      jo.add("payload", songToPlay);
-//      for (String partyer_id : party.getPartyGoerIds()) {
-//        Session s = userSession.get(partyer_id);
-//        s.getRemote().sendString(GSON.toJson(jo));
-//      }
-//    } catch (IOException ioe) {
-//      throw ioe;
-//    } catch (Exception e) {
-//      General.printErr(e.getMessage());
-//    }
-//  }
-
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    System.out.println("Is received null? [" + received.equals(null) + "]");
-    System.out.println("Received [" + received.toString() + "]");
     assert received.get("type").getAsInt() < 8
         && received.get("type").getAsInt() >= 0;
     SmuState state = SmuState.getInstance();
@@ -274,7 +253,6 @@ public class PartyWebSocket {
         case NEXT_SONG:
           System.out.println("Received NEXT_SONG message");
           try {
-            System.out.println("I am getting enxt song from back end.");
             Suggestion nextSong = party.getNextSongToPlay();
             
             signalRefreshAll(party); //TODO: only refresh play if possible

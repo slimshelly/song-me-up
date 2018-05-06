@@ -38,7 +38,7 @@ public class PlaylistSuggestor implements Route {
       currPlaylist.addProperty("id", playlist.getId());
       currPlaylist.addProperty("numberOfTracks", playlist.getSongs().size());
       JsonArray ja = new JsonArray();
-      for (String s : playlist.getPlaylist_images()) {
+      for (String s : playlist.getPlaylistImages()) {
         ja.add(s);
       }
       currPlaylist.add("images", ja);

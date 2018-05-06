@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import edu.brown.cs.jmst.music.Track;
-import javafx.scene.layout.Priority;
 
 /**
  * The basis for selecting songs to play. Exactly 3 should exist simultaneously.
@@ -29,7 +28,7 @@ class SongBlock {
   private SongBlock nextBlock;
   private SongBlock prevBlock;
 
-  private int state;
+  protected int state;
 
   private static final int SUGGESTING = 1;
   private static final int VOTING = 2;
@@ -259,8 +258,8 @@ class SongBlock {
   }
 
   protected void becomePlayBlock() {
-//    assert this.state == VOTING;
-//    assert this.songsToPlay.isEmpty();
+    assert this.state == VOTING;
+    assert this.songsToPlay.isEmpty();
     updateSongsToPlay();
     //this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
@@ -268,23 +267,18 @@ class SongBlock {
     }
     this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
-    System.out.println("BECOMING PLAY [2->3] {block state: " + this.state + "}");
     this.state = PLAYING;
-//    assert this.suggestions.isEmpty(); // TODO: temporary!
+    assert this.suggestions.isEmpty(); // TODO: temporary!
   }
 
   protected void becomeSuggBlock() {
-    if (state != PLAYING) {
-      System.out.println("BECOMING SUGG [3->1] {block state: " + this.state + "}");
-    }
-//    assert this.state == PLAYING;
-//    assert this.suggestions.isEmpty();
+    assert this.state == PLAYING;
+    assert this.suggestions.isEmpty();
     this.state = SUGGESTING;
   }
 
   protected void becomeVoteBlock() {
-//    assert this.state == SUGGESTING;
-    System.out.println("BECOMING VOTE [1->2] {block state: " + this.state + "}");
+    assert this.state == SUGGESTING;
     this.state = VOTING;
   }
 
@@ -302,7 +296,7 @@ class SongBlock {
     }
     suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     suggestions.drainTo(nextBlock.suggestions);
-//    assert (suggestions.isEmpty()); // TODO: temporary!
+    assert (suggestions.isEmpty()); // TODO: temporary!
   }
   // TODO: make the above thread-safe by ensuring new suggestions go to the
   // correct block

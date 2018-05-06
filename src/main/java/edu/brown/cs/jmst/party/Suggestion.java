@@ -176,35 +176,6 @@ public class Suggestion implements Comparable<Suggestion> {
     userSubmittedSet.add(userId);
   }
 
-//   /**
-//   * Method to decay the score of a suggestion over time. If a song is voted
-//   on
-//   * and the song has already decayed at least once, then the song's "age"
-//   does
-//   * not increase, so the decay penalty does not get harsher. Otherwise, the
-//   * song's score is reduced by a greater and greater amount until it has been
-//   * passed over by the selection algorithm at least 3 times
-//   */
-//   private void decayScore() {
-//   if (!votedOn) {
-//   age += 1;
-//   }
-//   switch (age) {
-//   case 1: {
-//   score = (2 *score) / 3;
-//   }
-//   case 2: {
-//   score = (score / 2);
-//   }
-//   default: {
-//   score = 0;
-//   }
-//   }
-//   votedOn = false;
-//   }
-
-
-
   /**
    * Compares this object with the specified object for order.  Returns a
    * negative integer, zero, or a positive integer as this object is less

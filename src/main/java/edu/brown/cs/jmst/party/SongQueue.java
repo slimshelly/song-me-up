@@ -7,7 +7,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
-import javafx.scene.layout.Priority;
 
 /**
  * @author tvanderm
@@ -33,15 +32,15 @@ public class SongQueue {
     this.blockA = new SongBlock(SUGGESTING);
     this.blockB = new SongBlock(VOTING);
     this.blockC = new SongBlock(PLAYING);
-    blockA.setNextBlock(blockB);
-    blockA.setPrevBlock(blockC);
-    blockB.setNextBlock(blockC);
-    blockB.setPrevBlock(blockA);
-    blockC.setNextBlock(blockA);
-    blockC.setPrevBlock(blockB);
     this.suggestingBlock = blockA;
-    this.votingBlock = blockC;
-    this.playingBlock = blockB;
+    this.votingBlock = blockB;
+    this.playingBlock = blockC;
+    this.suggestingBlock.setPrevBlock(this.votingBlock);
+    this.votingBlock.setPrevBlock(this.playingBlock);
+    this.playingBlock.setPrevBlock(this.suggestingBlock);
+    this.suggestingBlock.setNextBlock(this.playingBlock);
+    this.votingBlock.setNextBlock(this.suggestingBlock);
+    this.playingBlock.setNextBlock(this.votingBlock);
   }
 
   /**
@@ -127,13 +126,10 @@ public class SongQueue {
    */
   public Suggestion getNextSongToPlay() throws PartyException {
     if (playingBlock.getSongsToPlay().size() != 0) {
-      System.out.println("get next song to play line 128");
       return playingBlock.getNextSongToPlay();
     }
-    System.out.println("Cycling");
     cycle(); //TODO: need to tell front end to update everything!
     if (playingBlock.getSongsToPlay().size() != 0) {
-      System.out.println("get next song to play line 132");
       return playingBlock.getNextSongToPlay();
     } else {
       throw new PartyException(

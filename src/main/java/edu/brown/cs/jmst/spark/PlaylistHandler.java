@@ -23,7 +23,6 @@ public class PlaylistHandler implements Route {
     String userid = request.session().attribute("user");
     User u = state.getUser(userid);
     String partyId = u.getCurrentParty(); // retrieve party id from user
-    System.out.println("partyid: " + partyId);
     Party currParty = state.getParty(partyId); // retrieve party from id
 
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
