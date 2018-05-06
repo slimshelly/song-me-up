@@ -39,7 +39,7 @@ public final class Main {
   public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
   public static final String WEB_ROOT_URI = "https://cs.hiram.edu/~jmst";
   public static final int WEB_PORT = 80;
-  public static final String WEB_IP = "13.59.242.45";
+  public static final String WEB_IP = "172.26.4.178";
   private final SmuInputHandler smuHandler =
       new SmuInputHandler(SmuState.getInstance());
 
