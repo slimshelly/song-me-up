@@ -72,10 +72,11 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_ALL.ordinal());
       jo.add("payload", party.refreshAllBlocks());
-      for (String partyer_id : party.getPartyGoerIds()) {
+      for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
+      System.out.println("Sent REFRESH_ALL message");
     } catch (IOException ioe) {
       throw ioe;
     } catch (Exception e) {
@@ -91,10 +92,11 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_PLAY.ordinal());
       jo.add("payload", party.refreshPlayBlock());
-      for (String partyer_id : party.getPartyGoerIds()) {
+      for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
+      System.out.println("Sent REFRESH_PLAY message");
     } catch (IOException ioe) {
       throw ioe;
     } catch (Exception e) {
@@ -110,10 +112,11 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_VOTE.ordinal());
       jo.add("payload", party.refreshVoteBlock());
-      for (String partyer_id : party.getPartyGoerIds()) {
+      for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
+      System.out.println("Sent REFRESH_VOTE message");
     } catch (IOException ioe) {
       throw ioe;
     } catch (Exception e) {
@@ -129,10 +132,11 @@ public class PartyWebSocket {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_SUGG.ordinal());
       jo.add("payload", party.refreshSuggBlock());
-      for (String partyer_id : party.getPartyGoerIds()) {
+      for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
+      System.out.println("Sent REFRESH_SUGG message");
     } catch (IOException ioe) {
       throw ioe;
     } catch (Exception e) {
@@ -165,16 +169,14 @@ public class PartyWebSocket {
     JsonObject received = parser.parse(message).getAsJsonObject();
     System.out.println("Is received null? [" + received.equals(null) + "]");
     System.out.println("Received [" + received.toString() + "]");
-    assert received.get("type").getAsInt() < 8 //TODO: change the limits
+    assert received.get("type").getAsInt() < 8
         && received.get("type").getAsInt() >= 0;
-   
-
-    System.out.println("hello I GOT HERE! line 174");
-        SmuState state = SmuState.getInstance();
+    SmuState state = SmuState.getInstance();
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
     if (type == MESSAGE_TYPE.CONNECT) {
+      System.out.println("Received CONNECT message");
       userSession.put(user_id, session);
       return;
     }
@@ -184,10 +186,11 @@ public class PartyWebSocket {
     if (partyId != null) {
       Party party = state.getParty(partyId);
       switch (type) {
-        case CONNECT: {
+        case CONNECT: { //unreachable
           break;
         }
         case SUGGEST: {
+          System.out.println("Received SUGGEST message");
           try {
             // get track object from spotify (access to all spotify track
             // fields)
@@ -213,10 +216,11 @@ public class PartyWebSocket {
                   JsonObject jo = new JsonObject();
                   jo.addProperty("type", MESSAGE_TYPE.SUGGEST.ordinal());
                   jo.add("payload", suggestion);
-                  for (String partyer_id : party.getPartyGoerIds()) {
+                  for (String partyer_id : party.getIds()) {
                     Session s = userSession.get(partyer_id);
                     s.getRemote().sendString(GSON.toJson(jo));
                   }
+                  System.out.println("Sent SUGGEST message");
                 } catch (Exception e) {
                   General.printErr("Error accessing Track information. "
                           + e.getMessage());
@@ -229,6 +233,7 @@ public class PartyWebSocket {
           break;
         }
         case VOTESONG: {
+          System.out.println("Received VOTESONG message");
           // retrieve boolean of vote (up or down)
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
@@ -260,9 +265,11 @@ public class PartyWebSocket {
           break;
         }
         case REFRESH_VOTE: {
+          System.out.println("Received REFRESH_VOTE message (illegal!)");
           break;
         }
         case NEXT_SONG:
+          System.out.println("Received NEXT_SONG message");
           try {
             System.out.println("I am getting enxt song from back end.");
             Suggestion nextSong = party.getNextSongToPlay();
@@ -270,10 +277,11 @@ public class PartyWebSocket {
             JsonObject jo = new JsonObject();
             jo.addProperty("type", MESSAGE_TYPE.NEXT_SONG.ordinal());
             jo.add("payload", nextSong.toJson());
-            for (String partyer_id : party.getPartyGoerIds()) {
+            for (String partyer_id : party.getIds()) {
               Session s = userSession.get(partyer_id);
               s.getRemote().sendString(GSON.toJson(jo));
             }
+            System.out.println("Sent NEXT_SONG message");
           } catch (Exception e) {
             General.printErr("Error getting next song. " + e.getMessage());
           }
