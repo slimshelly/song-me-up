@@ -89,13 +89,14 @@ $(document).ready(() => {
 Open socket for web communication and deal with different messages
 */
 const MESSAGE_TYPE = {
-  VOTESONG: 0,
-  ADDSONG: 1,
-  REMOVESONG: 2,
-  PLAYLIST: 3,
-  CONNECT: 4,
-  NEXT_SONG: 8,
-  REQUEST_NEXT_SONG: 9
+    CONNECT: 0,
+    SUGGEST: 1,
+    REFRESH_SUGG: 2,
+    VOTESONG: 3,
+    REFRESH_VOTE: 4,
+    NEXT_SONG: 5,
+    REFRESH_PLAY: 6,
+    REFRESH_ALL: 7
 };
 let conn;
 
