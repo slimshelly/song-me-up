@@ -59,6 +59,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "track"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
       // want to add limit of 10! HELP
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
@@ -81,6 +82,8 @@ public class SpotifyQuery {
       }
     }
   }
+  
+  
 
   public static List<Track> searchSong(String keywords, String access_token)
       throws Exception {
@@ -237,6 +240,7 @@ public class SpotifyQuery {
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "artist"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
       UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
       urlentity.setContentEncoding("application/json");
       get.setEntity(urlentity);
@@ -300,7 +304,8 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "album"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
-
+      pairs.add(new BasicNameValuePair("limit", "10"));
+      
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
@@ -363,6 +368,74 @@ public class SpotifyQuery {
     return returnAlbums;
   }
 
+  public static List<SpotifyPlaylist> getUserPlaylist(String access_token)
+      throws Exception {
+
+    List<SpotifyPlaylist> returnPlaylists = new ArrayList<>();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("limit", "10"));
+      pairs.add(new BasicNameValuePair("offset", "0"));
+      
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/me/playlists?"
+          + URLEncodedUtils.format(pairs, "UTF-8"));
+      get.setHeader("Authorization", "Bearer " + access_token);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+        JsonArray playlists =
+            jo.get("items").getAsJsonArray();
+        Iterator<JsonElement> iterator = playlists.iterator();
+
+        while (iterator.hasNext()) {
+
+          JsonObject playlistjo = iterator.next().getAsJsonObject();
+
+          // uri
+          String uri = playlistjo.get("uri").getAsString();
+
+          // id
+          String id = playlistjo.get("id").getAsString();
+
+          
+          // name
+          String name = playlistjo.get("name").getAsString();
+          
+          // track ids
+          
+          JsonObject tracks = playlistjo.get("tracks").getAsJsonObject();
+         
+          String track_link = tracks.get("href").getAsString();
+          
+          List<String> track_ids = new ArrayList<>();
+          
+          // type
+          String type = playlistjo.get("type").getAsString();
+
+          returnPlaylists
+              .add(new SpotifyPlaylist(id, uri, track_link, track_ids, name, type) );
+          
+        }
+
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get playlists: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+    return returnPlaylists;
+  }
+
 
   public static List<SpotifyPlaylist> searchPlaylist(String keywords, String access_token)
       throws Exception {
@@ -375,6 +448,7 @@ public class SpotifyQuery {
       pairs.add(new BasicNameValuePair("q", keywords));
       pairs.add(new BasicNameValuePair("type", "playlist"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
+      pairs.add(new BasicNameValuePair("limit", "10"));
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));

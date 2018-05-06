@@ -174,9 +174,15 @@ const setup_live_playlist = () => {
         console.log("[HOST] Recieved VOTESONG message (ILLEGAL!)");
         break;
       case MESSAGE_TYPE.REFRESH_VOTE:
+<<<<<<< HEAD
+        let votingList1 = data.payload;
+        console.log(votingList1);
+        refresh_voting_block(votingList1);
+=======
         let votingList = data.payload;
         console.log("[HOST] Recieved REFRESH_VOTE message");
         refresh_voting_block(votingList);
+>>>>>>> 626589ecb37bef585291b899a4dad9d6a46c90a8
         break;
       case MESSAGE_TYPE.NEXT_SONG:
         console.log("[HOST] Recieved NEXT_SONG message");

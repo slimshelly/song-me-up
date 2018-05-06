@@ -1,10 +1,10 @@
 package edu.brown.cs.jmst.party;
 
-import edu.brown.cs.jmst.music.Track;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
 
 /**
@@ -122,13 +122,16 @@ public class SongQueue {
     return playingBlock.getSongsToPlay();
   }
 
-  public Suggestion getNextSongToPlay() throws PartyException {
+  public Suggestion getNextSongToPlay() throws Exception {
     if (playingBlock.getSongsToPlay().size() != 0) {
+      System.out.println("get next song to play line 128");
       return playingBlock.getNextSongToPlay();
+      
     }
     System.out.println("Cycling");
     cycle(); //TODO: need to tell front end to update everything!
     if (playingBlock.getSongsToPlay().size() != 0) {
+      System.out.println("get next song to play line 133");
       return playingBlock.getNextSongToPlay();
     } else {
       throw new PartyException("Voting queue was empty; could not select song t"
