@@ -66,7 +66,7 @@ public class Party extends Entity {
   }
 
   public String getHostName() {
-    return ph.getName();
+    return ph.getName() == null ? ph.getId() : ph.getName();
   }
 
   /**

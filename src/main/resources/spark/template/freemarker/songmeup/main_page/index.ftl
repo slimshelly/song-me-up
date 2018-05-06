@@ -8,6 +8,7 @@
 	</head>
 	<body>
 		<div class="nav-bar">
+			<p>Hello ${name}!</p>
 			<p id="premium" hidden>${premium?c}</p>
 			<a class="logout" id="userStatus" href="logout">LOG OUT</a>
 			<a id="faqs" href="faq">FAQS</a>

@@ -46,7 +46,7 @@ public class HostHandler implements TemplateViewRoute {
               Object> variables = new ImmutableMap.Builder<String, Object>()
                   .put("party_id", p.getId()).put("hostname", p.getHostName())
                   .put("user_id", u.getId()).build();
-          return new ModelAndView(variables, "songmeup/host/host.ftl");
+          return new ModelAndView(variables, "songmeup/host/host_join.ftl");
         } else {
           Party p = state.startParty(u);
           List<BasicNameValuePair> pair = new ArrayList<>();

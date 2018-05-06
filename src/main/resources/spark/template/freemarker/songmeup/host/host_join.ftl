@@ -27,7 +27,7 @@
 				</ul>
 			</div>
 		</nav>
-
+		<div class="title">${hostname}'s Party: ${party_id}</div>
 		<div class="nowPlaying">
 			<div class="imgContainer">
 				<img class="albumArt" src="photos/flume.jpg">

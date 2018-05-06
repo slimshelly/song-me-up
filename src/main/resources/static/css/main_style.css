@@ -38,6 +38,22 @@ a {
 	padding-bottom: 10px;
 }
 
+.nav-bar p {
+	color: white;
+	float: left;
+	margin: 15px 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	
+	font-family: 'Raleway', sans-serif;
+	font-size: 14px;
+    line-height: 1;
+    letter-spacing: 2px;
+	text-decoration: none;
+	background-color: transparent;
+	
+}
+
 .nav-bar a:hover {
 	color: pink;
 }

@@ -121,9 +121,17 @@ a {
 }
 
 
-/* PARTY TITLE - in progress! */
+/* PARTY TITLE - in progress!-- Changed by Sam temporarily.
 .title {
 	clear: both;
+}*/
+.title {
+	font-size: 60px;
+	font-weight: bolder;
+	padding-top: 2%;
+	padding-bottom: 1%;
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
 }
 
 .party {

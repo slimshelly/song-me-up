@@ -34,9 +34,9 @@ public class MainPage implements TemplateViewRoute {
         General.printErr("Could not leave party.");
       }
     }
-
+    String name = u.getName() == null ? u.getId() : u.getName();
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("premium", u.isPremium()).build();
+        .put("premium", u.isPremium()).put("name", name).build();
     return new ModelAndView(variables, "songmeup/main_page/index.ftl");
   }
 
