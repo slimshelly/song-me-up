@@ -161,7 +161,6 @@ const setup_live_playlist = () => {
         let song_cover = song.album_cover;
         let song_name = song.song_name;
         let song_artists = song.artist_names;
-
         playNextSong(song_uri);
         console.log("the song's name is " + song_name);
         console.log("the song's uri is " + song_uri);
