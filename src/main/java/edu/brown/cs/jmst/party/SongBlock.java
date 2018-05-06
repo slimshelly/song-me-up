@@ -261,7 +261,7 @@ class SongBlock {
     assert this.state == VOTING;
     assert this.songsToPlay.isEmpty();
     updateSongsToPlay();
-    //this.songsToPlay.addAll(topSuggestionsQuantity());
+    // this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
