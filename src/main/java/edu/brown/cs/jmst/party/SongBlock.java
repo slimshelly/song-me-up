@@ -9,16 +9,16 @@ import edu.brown.cs.jmst.music.Track;
 
 /**
  * The basis for selecting songs to play. Exactly 3 should exist simultaneously.
- * The lifecycle of a SongBlock has three parts: 1. partygoers add song
- * suggestions 2. partygoers vote on songs added in step 1. Suggestions with
- * sufficiently negative votes are removed entirely 3. the top X songs are
- * played in an order determined by a sorting algorithm designed to optimize the
- * consecutive ordering of songs. Suggestions not played during this step are
- * transferred to the suggestion set of the next song block, but the number of
- * (positive) votes on the suggestion decreases (perhaps inversely proportional
- * to amount of votes already accumulated so that less popular suggestions decay
- * more rapidly)
- * 
+ * The lifecycle of a SongBlock has three parts:
+ * 1. partygoers add song suggestions
+ * 2. partygoers vote on songs added in step 1. Suggestions with sufficiently
+ *      negative votes are removed entirely
+ * 3. the top X songs are played in an order determined by a sorting algorithm
+ *      designed to optimize the consecutive ordering of songs. Suggestions not
+ *      played during this step are transferred to the suggestion set of the
+ *      next song block, but the number of (positive) votes on the suggestion
+ *      decreases (perhaps inversely proportional to amount of votes already
+ *      accumulated so that less popular suggestions decay more rapidly)
  * @author tvanderm
  */
 class SongBlock {
@@ -28,7 +28,7 @@ class SongBlock {
   private SongBlock nextBlock;
   private SongBlock prevBlock;
 
-  private int state;
+  protected int state;
 
   private static final int SUGGESTING = 1;
   private static final int VOTING = 2;
@@ -102,12 +102,9 @@ class SongBlock {
   /**
    * Method for adding a duplicate song suggestion to this block.
    *
-   * @param existingSuggestion
-   *          the Suggestion that already existed
-   * @param userId
-   *          the id String of the user making the suggestion
-   * @throws PartyException
-   *           if the user has suggested this song already
+   * @param existingSuggestion the Suggestion that already existed
+   * @param userId the id String of the user making the suggestion
+   * @throws PartyException if the user has suggested this song already
    */
   protected synchronized void suggestDuplicate(Suggestion existingSuggestion,
       String userId) throws PartyException {
@@ -140,13 +137,10 @@ class SongBlock {
 
   /**
    * Method for updating the score of an existing Suggestion in this block.
-   * 
-   * @param voteOn
-   *          the Suggestion to vote on
-   * @param userId
-   *          the id String of the user making the vote
-   * @param isUpVote
-   *          a boolean; true indicates an up-vote, false indicates a down-vote
+   * @param voteOn the Suggestion to vote on
+   * @param userId the id String of the user making the vote
+   * @param isUpVote a boolean; true indicates an up-vote, false indicates a
+   *                 down-vote
    * @return the updated score of the Suggestion after the vote is made
    */
   protected int vote(Suggestion voteOn, String userId, boolean isUpVote) {
@@ -164,10 +158,6 @@ class SongBlock {
    */
   List<Suggestion> getSongsToPlay() {
     return this.songsToPlay;
-  }
-
-  void updateSongsToPlay() {
-    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
   }
 
   protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
@@ -210,9 +200,8 @@ class SongBlock {
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
 
-  Suggestion getNextSongToPlay() throws Exception {
+  Suggestion getNextSongToPlay() {
     assert this.state == PLAYING;
-    // System.out.println(this.songsToPlay.get(0).getSong().getName());
     return this.songsToPlay.remove(0);
   }
 
@@ -264,39 +253,32 @@ class SongBlock {
   // Method that decays the votes on the not-selected suggestions, then adds the
   // suggestions to the next block's collection of suggestions.
 
+  void updateSongsToPlay() {
+    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
+  }
+
   protected void becomePlayBlock() {
-    // assert this.state == VOTING;
-    // assert this.songsToPlay.isEmpty();
+    assert this.state == VOTING;
+    assert this.songsToPlay.isEmpty();
     updateSongsToPlay();
     // this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
-    this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); // FIXME: <
-                                                                    // 0 or <=
-                                                                    // 0? Ensure
-                                                                    // consistency
-                                                                    // with
-                                                                    // intent
-                                                                    // from the
-                                                                    // decayScore()
-                                                                    // method
+    this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
     this.state = PLAYING;
-    // assert this.suggestions.isEmpty(); // TODO: temporary!
+    assert this.suggestions.isEmpty(); // TODO: temporary!
   }
 
   protected void becomeSuggBlock() {
-    if (state != PLAYING) {
-      System.out.println("block state: " + this.state);
-    }
-    // assert this.state == PLAYING;
-    // assert this.suggestions.isEmpty();
+    assert this.state == PLAYING;
+    assert this.suggestions.isEmpty();
     this.state = SUGGESTING;
   }
 
   protected void becomeVoteBlock() {
-    // assert this.state == SUGGESTING;
+    assert this.state == SUGGESTING;
     this.state = VOTING;
   }
 
@@ -312,15 +294,9 @@ class SongBlock {
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
-    suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); // FIXME: < 0 or
-                                                               // <= 0? Ensure
-                                                               // consistency
-                                                               // with intent
-                                                               // from the
-                                                               // decayScore()
-                                                               // method
+    suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     suggestions.drainTo(nextBlock.suggestions);
-    // assert (suggestions.isEmpty()); // TODO: temporary!
+    assert (suggestions.isEmpty()); // TODO: temporary!
   }
   // TODO: make the above thread-safe by ensuring new suggestions go to the
   // correct block
