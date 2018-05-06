@@ -19,21 +19,19 @@ public class PlaylistHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-	System.out.println("in handle");
     SmuState state = SmuState.getInstance();
     String userid = request.session().attribute("user");
     User u = state.getUser(userid);
     String partyId = u.getCurrentParty(); // retrieve party id from user
     System.out.println("partyid: " + partyId);
     Party currParty = state.getParty(partyId); // retrieve party from id
-    
-    System.out.println("about to get playlist");
+
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
     JsonArray votingBlock = currParty.refreshVoteBlock();
     JsonArray playingBlock = currParty.refreshPlayBlock();
-    
-    System.out.println("about to send songs");
-    Map<String, Object> variables = ImmutableMap.of("suggest", suggestingBlock, "vote", votingBlock, "play", playingBlock);
+
+    Map<String, Object> variables = ImmutableMap.of("suggest",
+            suggestingBlock, "vote", votingBlock, "play", playingBlock);
     return GSON.toJson(variables); // only sending info, not reloading page
   }
 

@@ -34,12 +34,12 @@ import spark.template.freemarker.FreeMarkerEngine;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
-  private static final String DEFAULT_IP = "0.0.0.0";
+  // private static final String DEFAULT_IP = "0.0.0.0";
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
   public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
-  public static final String WEB_ROOT_URI =
-      "http://13.59.8.244:" + Integer.toString(DEFAULT_PORT);
-  public static final String WEB_IP = "172.26.4.178";
+  public static final String WEB_ROOT_URI = "http://smuapp.com";
+  // "http://13.59.8.244:" + Integer.toString(DEFAULT_PORT);
+  // public static final String WEB_IP = "172.26.4.178";
   private final SmuInputHandler smuHandler =
       new SmuInputHandler(SmuState.getInstance());
 
@@ -65,18 +65,18 @@ public final class Main {
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
         .defaultsTo(DEFAULT_PORT);
-    parser.accepts("ip").withRequiredArg().ofType(String.class)
-        .defaultsTo(DEFAULT_IP);
+    // parser.accepts("ip").withRequiredArg().ofType(String.class)
+    // .defaultsTo(DEFAULT_IP);
     parser.accepts("web");
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
       try {
         if (options.has("web")) {
-          runSparkServer(DEFAULT_PORT, WEB_IP, WEB_ROOT_URI, true);
+          runSparkServer(DEFAULT_PORT, WEB_ROOT_URI, true);
         } else {
-          runSparkServer((int) options.valueOf("port"),
-              (String) options.valueOf("ip"), DEFAULT_ROOT_URI, false);
+          runSparkServer((int) options.valueOf("port"), DEFAULT_ROOT_URI,
+              false);
         }
 
         runRepl();
@@ -110,10 +110,10 @@ public final class Main {
     return new FreeMarkerEngine(config);
   }
 
-  private void runSparkServer(int port, String ip, String rootUri, boolean web)
+  private void runSparkServer(int port, String rootUri, boolean web)
       throws Exception {
     Spark.port(port);
-    Spark.ipAddress(ip);
+    // Spark.ipAddress(ip);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 

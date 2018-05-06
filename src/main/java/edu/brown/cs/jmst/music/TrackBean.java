@@ -109,7 +109,7 @@ public class TrackBean extends EntityBean implements Track {
 
   @Override
   public String getUri() throws Exception {
-    return String.format("https://api.spotify.com/tracks/%s", this.id);
+    return String.format("%s", this.uri);
   }
 
   @Override
