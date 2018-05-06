@@ -190,9 +190,30 @@ const setup_live_playlist = () => {
       	$playlist.remove($("#" + $("#user_id").val()));
       	break;
 
-      case MESSAGE_TYPE.PLAYLIST:
-        // apend an entire list of li's to the displaySongs ul
+      case MESSAGE_TYPE.REFRESH_PLAYLIST:
+        let toPlay = data.payload.play;
+        let toVote = data.payload.vote;
+        let toSugg = data.payload.sugg;
+
+      case MESSAGE_TYPE.NEXT_SONG:
+
+        // data - json object
+        let song = data.payload;
+        let song_uri = song.uri;
+
+        let song_cover = song.album_cover;
+        let song_name = song.song_name;
+        // a list of artist names
+        let song_artists = artist_names;
+
+        // get player to play song
+        playSong(song_uri);
+        
+        // NOTE: song_artists is a LIST of artist names
+        refresh_now_playing(song_cover, song_name, song_artists);
+        
         break;
+
 	  case MESSAGE_TYPE.CONNECT:
 	    new_connect();
 	    break;
@@ -309,8 +330,10 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
-    $playingBlock.empty();
-  // put top song in toPlay in now playing block
+  // empty playing block
+  $playingBlock.empty();
+
+  // put top song in toPlay in now playing block - ?
   console.log(toPlay);
   console.log(toPlay[0]);
   // if ($(".imgContainer").find(".artistInfo").length === 0){
@@ -344,8 +367,24 @@ function refresh_playing_block(toPlay) {
   });
 }
 
-function isEmpty( el ){
+function isEmpty( el ) {
     return !$.trim(el.html())
+}
+
+/*
+Update currently playing song at top of page.
+*/
+function refresh_now_playing(song_cover, song_name, song_artists) {
+  // show mulptiples artists!!
+  console.log(toSuggest);
+  $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
+  $nowPlaying.append("<div class='artistInfo'>"
+    + "<span class='now'>Now Playing</span>"
+    + "<span class='trackName'>" + song_name + "</span>"
+    + "<span class='artistName'>" + song_artists[0] + "</span>"
+    + "</div>"
+    );
+  break;
 }
 
 
