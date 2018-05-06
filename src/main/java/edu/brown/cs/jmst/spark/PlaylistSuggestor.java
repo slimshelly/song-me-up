@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.jmst.music.SpotifyPlaylist;
@@ -33,8 +35,9 @@ public class PlaylistSuggestor implements Route {
 	    for (SpotifyPlaylist playlist: userPlaylists) {
 	    		JsonObject currPlaylist = new JsonObject();
 	    		currPlaylist.addProperty("name", playlist.getName());
+	    		currPlaylist.addProperty("id", playlist.getId());
 	    		currPlaylist.addProperty("numberOfTracks", playlist.getSongs().size());
-	    		currPlaylist.addProperty("images", playlist.getName());
+	    		currPlaylist.addProperty("images", playlist.getPlaylistImages());
 	    		playlistObjects.add(currPlaylist);
 	    }
 	    
