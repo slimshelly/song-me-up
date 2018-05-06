@@ -17,13 +17,13 @@
 
 			<!-- PLAYLIST OPTIONS -->
 		<div class="scrolling-wrapper">
-		  <div class="card">
+		  <div class="card left">
 		  	<img class="albumArt" src="./photos/flume.jpg">
 		  </div>
-		  <div class="card">
+		  <div class="card middle">
 		  	<img class="albumArt" src="./photos/flume.jpg">
 		  </div>
-		  <div class="card">
+		  <div class="card right">
 		  	<img class="albumArt" src="./photos/flume.jpg">
 		  </div>
 		  <div class="card">
@@ -42,7 +42,6 @@
 		  	<img class="albumArt" src="./photos/flume.jpg">
 		  </div>
 		</div>
-
 
 		<div class="buttons">
 			<a class="btn" href="./host">GO TO PARTY</a>
