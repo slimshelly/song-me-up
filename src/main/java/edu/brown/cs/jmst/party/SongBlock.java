@@ -264,8 +264,8 @@ class SongBlock {
   // suggestions to the next block's collection of suggestions.
 
   protected void becomePlayBlock() {
-    assert this.state == VOTING;
-    assert this.songsToPlay.isEmpty();
+//    assert this.state == VOTING;
+//    assert this.songsToPlay.isEmpty();
     this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
@@ -281,7 +281,7 @@ class SongBlock {
                                                                     // method
     this.suggestions.drainTo(nextBlock.suggestions);
     this.state = PLAYING;
-    assert this.suggestions.isEmpty(); // TODO: temporary!
+//    assert this.suggestions.isEmpty(); // TODO: temporary!
   }
 
   protected void becomeSuggBlock() {
@@ -292,7 +292,7 @@ class SongBlock {
   }
 
   protected void becomeVoteBlock() {
-    assert this.state == SUGGESTING;
+//    assert this.state == SUGGESTING;
     this.state = VOTING;
   }
 
