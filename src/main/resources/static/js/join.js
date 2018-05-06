@@ -317,10 +317,8 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
-  // empty playing block
-  $playingBlock.empty();
-
-  // put top song in toPlay in now playing block - ?
+    $playingBlock.empty();
+  // put top song in toPlay in now playing block
   console.log(toPlay);
   console.log(toPlay[0]);
   // if ($(".imgContainer").find(".artistInfo").length === 0){
@@ -354,7 +352,7 @@ function refresh_playing_block(toPlay) {
   });
 }
 
-function isEmpty( el ) {
+function isEmpty( el ){
     return !$.trim(el.html())
 }
 

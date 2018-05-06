@@ -84,11 +84,18 @@ $(document).ready(() => {
 Open socket for web communication and deal with different messages
 */
 const MESSAGE_TYPE = {
-  VOTESONG: 0,
-  ADDSONG: 1,
-  REMOVESONG: 2,
-  PLAYLIST: 3
+
+    CONNECT: 0,
+    SUGGEST: 1,
+    REFRESH_SUGG: 2,
+    VOTESONG: 3,
+    REFRESH_VOTE: 4,
+    NEXT_SONG: 5,
+    REFRESH_PLAY: 6,
+    REFRESH_ALL: 7
+
 };
+
 let conn;
 
 // Setup the WebSocket connection for live updating of scores.
@@ -171,12 +178,46 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.PLAYLIST:
         // apend an entire list of li's to the displaySongs ul
         break;
+
+      case MESSAGE_TYPE.NEXT_SONG:
+
+        // data - json object
+        let song = data.payload;
+        let song_uri = song.uri;
+
+        let song_cover = song.album_cover;
+        let song_name = song.song_name;
+        // a list of artist names
+        let song_artists = artist_names;
+
+        // get player to play song
+        playSong(song_uri);
+        
+        // NOTE: song_artists is a LIST of artist names
+        updateMainCover(song_cover, song_name, song_artists);
+        
+        break;
 	  case MESSAGE_TYPE.CONNECT:
 	    new_connect();
 	    break;
+
+    case MESSAGE_TYPE.REFRESH:
+      new_connect();
+      break;
     }
   };
 }
+
+
+function request_next_song() {
+    //Sent a REQUEST_NEXT_SONG message to the server using 'con'
+    console.log("requesting next song");
+    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+                   "payload": { "id": "", "song_id": ""}
+    };
+    conn.send(JSON.stringify(request));
+}
+
 
 function new_connect(){
 	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
