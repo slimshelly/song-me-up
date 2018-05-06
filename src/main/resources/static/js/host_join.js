@@ -191,7 +191,7 @@ Update currently playing song at top of page.
 function refresh_now_playing(song_cover, song_name, song_artists) {
   // show multiple artists!!
   // $nowPlaying.imgContainer.artistInfo.empty();
-
+  $nowPlaying.empty();
   $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
   $nowPlaying.append("<div class='artistInfo'>"
     + "<span class='now'>Now Playing</span>"
