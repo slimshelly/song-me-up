@@ -29,7 +29,7 @@ public class PlaylistHandler implements Route {
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
     JsonArray votingBlock = currParty.refreshVoteBlock();
     JsonArray playingBlock = currParty.refreshPlayBlock();
-
+//TODO:
     Map<String, Object> variables = ImmutableMap.of("suggest",
             suggestingBlock, "vote", votingBlock, "play", playingBlock);
     return GSON.toJson(variables); // only sending info, not reloading page

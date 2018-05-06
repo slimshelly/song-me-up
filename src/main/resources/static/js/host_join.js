@@ -291,6 +291,7 @@ function refresh_voting_block(toVote) {
       + "<div class='track'>" 
       + "<div class='song'>" + voteSong.song_name + "</div>"
       + "<div class='artist'>" + voteSong.artist_names[0] + "</div>"
+      + "<div class='score'>" + voteSong.score + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"

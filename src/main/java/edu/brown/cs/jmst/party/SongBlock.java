@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import edu.brown.cs.jmst.music.Track;
+import javafx.scene.layout.Priority;
 
 /**
  * The basis for selecting songs to play. Exactly 3 should exist simultaneously.
@@ -66,8 +67,8 @@ class SongBlock {
     this.prevBlock = prevBlock;
   }
 
-  protected Collection<Suggestion> getSuggestions() {
-    return this.suggestions;
+  protected PriorityBlockingQueue<Suggestion> getSuggestions() {
+    return new PriorityBlockingQueue<>(this.suggestions);
   }
 
   int size() {
@@ -127,8 +128,8 @@ class SongBlock {
    *          the id String of the user making the suggestion
    * @return the new Suggestion that was added to the block's suggestion queue
    */
-  protected Suggestion suggestUnique(Track song, String userId) {
-    Suggestion suggested = new Suggestion(song, userId);
+  protected Suggestion suggestUnique(Track song, String userId, Integer order) {
+    Suggestion suggested = new Suggestion(song, userId, order);
     // TODO: lock the queue to make this thread-safe
     suggestions.add(suggested);
     // TODO: unlock the queue
