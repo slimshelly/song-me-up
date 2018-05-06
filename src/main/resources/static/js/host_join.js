@@ -122,7 +122,25 @@ const setup_live_playlist = () => {
       default:
         console.log('Unknown message type!', data.type);
         break;
-
+      case MESSAGE_TYPE.CONNECT:
+        new_connect();
+        break;
+      case MESSAGE_TYPE.SUGGEST:
+        console.log("Adding a song");
+        $playlist.append("<li id='" + $("#user_id").val() + "'>"
+          + "<div class='suggestingItem'>"
+          + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
+          + "<div class='track'>"
+          + "<div class='song'>" + data.payload.song_name + "</div>"
+          + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
+          + "</div>"
+          + "<div class='buttons'>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+          + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+          + "</div>"
+          + "</div>"
+          + "</li>");
+        break;
       case MESSAGE_TYPE.VOTESONG:
         // update number of votes for a specific song on the playlist
         console.log("A VOTE HAPPENED");
@@ -146,63 +164,38 @@ const setup_live_playlist = () => {
 
             + "</li>");
         });
-
         break;
-
-      case MESSAGE_TYPE.SUGGEST:
-        console.log("Addsonging");
-        console.log("inside"); // NOT WORKING
-        console.log(data.payload);
-        $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-          + "<div class='playlistItem'>"
-          + "<img class='albumCover' src='" + data.payload.album_cover + "'>"
-          + "<div class='track'>"
-          + "<div class='song'>" + data.payload.song_name + "</div>"
-
-          + "<div class='artist'>" + data.payload.artist_names[0] + "</div>"
-
-          + "</div>"
-          + "<div class='buttons'>"
-          + "<a href='javascript:;' onclick='new_vote(false, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-          + "<a href='javascript:;' onclick='new_vote(true, \"" + data.payload.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-          + "</div>"
-          + "</div>"
-
-          + "</li>");
+      case MESSAGE_TYPE.REFRESH_SUGG:
+        console.log("Recieved REFRESH_SUGG message (Legal but not used!)");
         break;
-
-      case MESSAGE_TYPE.REMOVESONG:
-        $playlist.remove($("#" + $("#user_id").val())); // removes li of ul, referenced by userId
+      case MESSAGE_TYPE.VOTESONG:
+        console.log("Recieved VOTESONG message (ILLEGAL!)");
         break;
-
-      case MESSAGE_TYPE.PLAYLIST:
-        // apend an entire list of li's to the displaySongs ul
+      case MESSAGE_TYPE.REFRESH_VOTE:
+        let votingList = data.payload;
+        console.log(votingList);
+        refresh_voting_block(votingList);
         break;
-
       case MESSAGE_TYPE.NEXT_SONG:
-
-        // data - json object
         let song = data.payload;
         let song_uri = song.uri;
-
         let song_cover = song.album_cover;
         let song_name = song.song_name;
-        // a list of artist names
         let song_artists = artist_names;
-
-        // get player to play song
         playSong(song_uri);
-        
-        // NOTE: song_artists is a LIST of artist names
-        updateMainCover(song_cover, song_name, song_artists);
-        
+        refresh_now_playing(song_cover, song_name, song_artists);
         break;
-	  case MESSAGE_TYPE.CONNECT:
-	    new_connect();
-	    break;
-
-    case MESSAGE_TYPE.REFRESH:
-      new_connect();
+      case MESSAGE_TYPE.REFRESH_PLAY:
+        let playingList = data.payload;
+        // loop through json objects in payload
+        refresh_playing_block(playingList);
+    case MESSAGE_TYPE.REFRESH_ALL:
+      let toPlay = data.payload.play;
+      let toVote = data.payload.vote;
+      let toSugg = data.payload.sugg;
+      refresh_playing_block(toPlay);
+      refresh_voting_block(toVote);
+      refresh_suggestions_block(toSugg);
       break;
     }
   };
@@ -212,7 +205,7 @@ const setup_live_playlist = () => {
 function request_next_song() {
     //Sent a REQUEST_NEXT_SONG message to the server using 'con'
     console.log("requesting next song");
-    let request = {"type":MESSAGE_TYPE.REQUEST_NEXT_SONG,
+    let request = {"type":MESSAGE_TYPE.NEXT_SONG,
                    "payload": { "id": "", "song_id": ""}
     };
     conn.send(JSON.stringify(request));
@@ -248,8 +241,8 @@ function new_song(songId) {
   console.log("i want to add a song");
   console.log(songId);
   console.log($("#user_id").val());
-  let userSuggestion = {"type":MESSAGE_TYPE.ADDSONG, "payload": {
-        "id":$("#user_id").val(), 
+  let userSuggestion = {"type":MESSAGE_TYPE.SUGGEST, "payload": {
+        "id":$("#user_id").val(),
         "song_id":songId}
       };
   conn.send(JSON.stringify(userSuggestion));
@@ -270,23 +263,24 @@ function get_playlist(songId) {
 Refresh suggestions in the playlist (bottom block)
 */
 function refresh_suggestions_block(toSuggest) {
+  $playlist.empty();
   toSuggest.forEach(function(suggestion) {
     console.log(suggestion);
-    $playlist.append("<li id='" + $("#user_id").val() + "'>" 
-    + "<div class='playlistItem'>"
-    + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
-    + "<div class='track'>" 
-    + "<div class='song'>" + suggestion.song.name + "</div>"
-    + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
+    $playlist.append("<li id='" + $("#user_id").val() + "'>"
+      + "<div class='suggestingItem'>"
+      + "<img class='albumCover' src='" + suggestion.song.album_cover + "'>"
+      + "<div class='track'>"
+      + "<div class='song'>" + suggestion.song.name + "</div>"
+      + "<div class='artist'>" + suggestion.song.artistNames[0] + "</div>"
 
-    + "</div>"
-    + "<div class='buttons'>"
-    + "<a href='javascript:;' onclick='new_vote(false, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-    + "<a href='javascript:;' onclick='new_vote(true, \"" + suggestion.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
-    + "</div>"
-    + "</div>"
+      + "</div>"
+      + "<div class='buttons'>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
+      + "</div>"
+      + "</div>"
 
-    + "</li>");
+      + "</li>");
   });
 }
 
@@ -294,6 +288,7 @@ function refresh_suggestions_block(toSuggest) {
 Refresh songs being voted on in the playlist (middle block)
 */
 function refresh_voting_block(toVote) {
+  $votingBlock.empty();
   toVote.forEach(function(voteSong) {
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
       + "<div class='votingItem'>"
@@ -317,18 +312,19 @@ function refresh_voting_block(toVote) {
 Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
+  $playingBlock.empty();
   toPlay.forEach(function(playSong) {
-    $playingBlock.append("<li id='" + $("#user_id").val() + "'>" 
-      + "<div class='votingItem'>"
+    $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
+      + "<div class='playingItem'>"
       + "<img class='albumCover' src='" + playSong.song.album_cover + "'>"
-      + "<div class='track'>" 
+      + "<div class='track'>"
       + "<div class='song'>" + playSong.song.name + "</div>"
       + "<div class='artist'>" + playSong.song.artistNames[0] + "</div>"
 
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + playSong.song.id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
+      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
       + "</div>"
       + "</div>"
 

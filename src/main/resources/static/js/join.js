@@ -203,6 +203,7 @@ const setup_live_playlist = () => {
         refresh_playing_block(toPlay);
         refresh_voting_block(toVote);
         refresh_suggestions_block(toSugg);
+        break;
     }
   };
 }

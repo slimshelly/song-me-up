@@ -257,6 +257,9 @@ class SongBlock {
   }
 
   protected void becomeSuggBlock() {
+    if (state != PLAYING) {
+      System.out.println("block state: " + this.state);
+    }
     assert this.state == PLAYING;
     assert this.suggestions.isEmpty();
     this.state = SUGGESTING;
