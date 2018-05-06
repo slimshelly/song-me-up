@@ -73,7 +73,7 @@ public class Party extends Entity {
    * @param userId the ID string of the user submitting the suggestion
    * @throws PartyException
    */
-  public Suggestion suggest(Track song, String userId) throws PartyException {
+  public SuggestResult suggest(Track song, String userId) throws PartyException {
     return songQueue.suggest(song, userId);
   }
 

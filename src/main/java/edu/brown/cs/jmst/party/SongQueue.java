@@ -5,6 +5,7 @@ import edu.brown.cs.jmst.music.Track;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
 
 /**
  * @author tvanderm
@@ -45,19 +46,20 @@ public class SongQueue {
    * @return the Suggestion object added to the suggestions, or null if it was
    *         a duplicate suggestion
    */
-  public Suggestion suggest(Track song, String userId) throws PartyException {
+  public SuggestResult suggest(Track song, String userId) throws PartyException {
     Suggestion existingSuggestion;
     if ((existingSuggestion = votingBlock.getSuggestionByTrack(song)) != null) {
       votingBlock.suggestDuplicate(existingSuggestion, userId);
-      return null;
+      return new SuggestResult(STATUS_TYPE.VOTE);
     } else if (votingBlock.size() < MIN_VOTE_BLOCK_SIZE) {
-      return votingBlock.suggestUnique(song, userId);
-      //TODO: distinguish that this suggestion was added to votingBlock, not suggestingBlock
+      votingBlock.suggestUnique(song, userId); //TODO: return value unneeded?
+      return new SuggestResult(STATUS_TYPE.VOTE);
     } else if ((existingSuggestion = suggestingBlock.getSuggestionByTrack(song)) != null) {
       suggestingBlock.suggestDuplicate(existingSuggestion, userId);
-      return null;
+      return new SuggestResult(STATUS_TYPE.DUPLICATE_SUGG);
     } else {
-      return suggestingBlock.suggestUnique(song, userId);
+      return new SuggestResult(STATUS_TYPE.UNIQUE_SUGG,
+              suggestingBlock.suggestUnique(song, userId));
     }
   }
 
