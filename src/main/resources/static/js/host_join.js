@@ -252,6 +252,7 @@ Send VOTESONG message to backend when a user votes on a song - params are boolea
 */
 function new_vote(vote_boolean, songId){
   // Send a VOTESONG message to the server using `conn`
+  
   console.log("");
   let vote = {"type":MESSAGE_TYPE.VOTESONG, "payload": {
         "id":$("#user_id").val(), 
@@ -260,6 +261,7 @@ function new_vote(vote_boolean, songId){
       };
   conn.send(JSON.stringify(vote));
   console.log("[HOST] Sent VOTESONG message");
+  //colorButton(songId, vote_boolean);
 }
 
 /*
@@ -311,6 +313,13 @@ function refresh_voting_block(toVote) {
   console.log("[HOST] In function refresh_voting_block");
   $votingBlock.empty();
   toVote.forEach(function(voteSong) {
+	  upColorClass = "";
+	  downColorClass = "";
+	  if(voteSong.user_vote_status == 1){
+		 upColorClass = " upColor"; 
+	  } else if(voteSong.user_vote_status == -1){
+		 downColorClass = " downColor";
+	  }
     $votingBlock.append("<li id='" + $("#user_id").val() + "'>" 
       + "<div class='votingItem'>"
       + "<img class='albumCover' src='" + voteSong.album_cover + "'>"
@@ -318,11 +327,10 @@ function refresh_voting_block(toVote) {
       + "<div class='song'>" + voteSong.song_name + "</div>"
       + "<div class='artist'>" + voteSong.artist_names[0] + "</div>"
       + "<div class='score'>" + voteSong.score + "</div>"
-
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' class='upbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' class='downbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' class='downbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ downColorClass + "'></i></a>"
+      + "<a href='javascript:;' class='upbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up"+ downColorClass + "'></i></a>"
       + "</div>"
       + "</div>"
 
@@ -366,7 +374,19 @@ function isEmpty( el ){
     return !$.trim(el.html())
 }
 
-function toggleDownVote(element) {
+function colorButton(id, isup){
+	console.log(id);
+	console.log(isup);
+	if(isup){
+		$("#" + id + "up").addClass("upColor");
+		//$("#" + id + "down").removeClass("downColor");
+	}else{
+		$("#" + id + "down").addClass("downColor");
+		//$("#" + id + "up").removeClass("upColor");
+	}
+}
+
+/* function toggleDownVote(element) {
   console.log("down clicked");
   console.log(element);
   element.classList.toggleClass("downColor");
@@ -383,12 +403,12 @@ function toggleUpVote(element) {
   element.classList.add("upColor");
   element.setAttribute("id", "upColor");
   console.log(element);
-}
+} */
 
-$( "a" ).click(function() {
+/* $( "a" ).click(function() {
   console.log("UP CLICKED OK");
   $( this ).toggleClass( "upColor" );
-});
+}); */
 
 
 /*
