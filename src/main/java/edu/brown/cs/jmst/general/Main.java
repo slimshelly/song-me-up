@@ -37,7 +37,7 @@ public final class Main {
   // private static final String DEFAULT_IP = "0.0.0.0";
   private static final Version DEFAULT_VERSION = new Version(2, 3, 20);
   public static final String DEFAULT_ROOT_URI = "http://localhost:4567";
-  public static final String WEB_ROOT_URI = "http://www.smuapp.com";
+  public static final String WEB_ROOT_URI = "http://smuapp.com";
   // "http://13.59.8.244:" + Integer.toString(DEFAULT_PORT);
   // public static final String WEB_IP = "172.26.4.178";
   private final SmuInputHandler smuHandler =
