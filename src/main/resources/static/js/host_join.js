@@ -11,9 +11,7 @@ $(document).ready(() => {
     const responseObject = JSON.parse(responseJSON);
     console.log(responseObject);
     let output = responseObject;
-    refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
-    refresh_voting_block(output.vote);
-    refresh_playing_block(output.play);
+    refresh_all(output);
     if (!jQuery.isEmptyObject(output.now_playing)) {
       refresh_now_playing(output.now_playing.album_cover, output.now_playing.song_name, output.now_playing.artist_names);
       setUp();
@@ -94,17 +92,13 @@ function request_next_song() {
 function togglePlay() {
   console.log("In function togglePlay");
   // do nothing if no song playing
-  if ( isEmpty($nowPlaying) ) {
+  if (isEmpty($nowPlaying) ) {
     return;
   }
   // otherwise, toggle
   let element = document.getElementById("playPause");
   element.classList.toggle("fa-play");
   element.classList.toggle("fa-pause");
-}
-
-function isEmpty( el ){
-  return !$.trim(el.html())
 }
 
 /*

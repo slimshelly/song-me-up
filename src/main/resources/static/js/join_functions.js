@@ -83,6 +83,10 @@ const MESSAGE_TYPE = {
   REFRESH_ALL: 7
 };
 
+function isEmpty( el ){
+  return !$.trim(el.html())
+}
+
 function refresh_now_playing(song_cover, song_name, song_artists) {
   $nowPlaying.empty();
   $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
@@ -189,6 +193,7 @@ function refresh_voting_block(toVote) {
 
 function refresh_playing_block(toPlay) {
   console.log("In function refresh_playing_block");
+  $playingBlock.empty();
   toPlay.forEach(function(playSong) {
     $playingBlock.append(
       "<li id='" + $userId + "'>"
