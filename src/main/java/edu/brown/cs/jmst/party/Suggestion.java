@@ -26,6 +26,8 @@ public class Suggestion implements Comparable<Suggestion> {
   private Integer order;
 
 
+  private int popularity;
+
   private Float valence;
   private Float danceability;
   private Float energy;
@@ -52,6 +54,15 @@ public class Suggestion implements Comparable<Suggestion> {
     this.userVoteMap.put(userId, 1);
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
     userSubmittedSet.add(userId);
+
+    try {
+      this.popularity = song.getPopularity();
+    } catch (Exception e) {
+      System.err.println("EXCEPTION THROWN! (Suggestion, line 59)");
+      e.printStackTrace();
+      this.popularity = 0;
+    }
+
 
     this.valence = features.getValence();
     this.danceability = features.getDanceability();
@@ -226,8 +237,47 @@ public class Suggestion implements Comparable<Suggestion> {
   public int compareTo(Suggestion o) {
     int scoreComp = o.score - this.score;
     if (scoreComp == 0) {
+      int popComp = o.popularity - this.popularity;
+      if (popComp == 0) {
+        return this.order - o.order;
+      }
+      return popComp;
+    }
+    return scoreComp;
+  }
+
+  public int compareToJustScore(Suggestion o) {
+    int scoreComp = o.score - this.score;
+    if (scoreComp == 0) {
       return this.order - o.order;
     }
     return scoreComp;
   }
+
+  public int compareToOrderOnly(Suggestion o) {
+    return this.order - o.order;
+  }
+
+  /**
+   * Method for finding the 'distance' to another Suggestion. Used as a measure
+   * of how similar the two tracks are.
+   * @param that a Suggestion to find the 'distance' to
+   * @return the 'distance' between this Suggestion object and the given
+   *         Suggestion, as a Double.
+   */
+  Double distanceTo(Suggestion that) {
+    Float vDif = this.valence - that.valence; //positive means THIS > that
+    Float dDif = this.danceability - that.danceability; //positive means THIS > that
+    Float eDif = this.energy - that.energy; //positive means THIS > that
+    //TODO: consider weighting the different things! (like multiply vDif squared by 2)
+    Float sum = (vDif * vDif) + (dDif * dDif) + (eDif * eDif);
+    return Math.sqrt(sum);
+//    Double toReturn = Math.sqrt(sum);
+//    if (vDif + dDif + eDif > 0) {
+//      return toReturn;
+//    } else {
+//      return -1 * toReturn;
+//    }
+  }
+
 }

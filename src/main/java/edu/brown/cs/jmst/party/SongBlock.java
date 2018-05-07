@@ -207,24 +207,52 @@ class SongBlock {
     return this.songsToPlay.remove(0);
   }
 
-  protected Suggestion nextSong(Suggestion prev, Collection<Suggestion> top,
-      int sortMode) {
+  List<Suggestion> orderSmoothly(Suggestion start, List<Suggestion> topSongs) {
+    // This is the greediest ordering method possible!
+    Suggestion prev = start;
+    List<Suggestion> smoothOrder = new ArrayList<>();
+    smoothOrder.add(start);
+    while (!topSongs.isEmpty()) {
+      Suggestion closest = topSongs.remove(0);
+      Double bestDistance = prev.distanceTo(closest);
+      for (Suggestion s : topSongs) {
+        Double dist = closest.distanceTo(s);
+        if (dist < bestDistance) {
+          closest = s;
+        }
+      }
+      prev = closest;
+      smoothOrder.add(prev);
+    }
+    return smoothOrder;
+  }
+  //THOUGHTS: find greedy path, then start constructing other paths and abandon
+  // them if they start to be longer than the greedy one. Problem: redoing some of the work if I do it this way
+  /*
+    0123
+    0132
+    0213
+    0231
+    0312
+    0321
+ */
+  protected List<Suggestion> updateSongsToPlay2(int sortMode, Suggestion prev) {
+    List<Suggestion> topSongs = new ArrayList<>(topSuggestionsQuantity());
+    assert !topSongs.isEmpty();
     switch (sortMode) {
       case VOTES_ONLY: {
-        // TODO: top (which is the collection returned by topSuggestions) is
-        // already in the desired order
+        this.songsToPlay = topSongs;
+        return this.songsToPlay;
       }
       case BALANCED: {
-        // TODO: find shortest ordering of top, using the first element as the
-        // starting point
+
+        // TODO: find shortest ordering of top, using the first element as the starting point
       }
       case SMOOTHED: {
-        // TODO: find shortest ordering of top, using the previously played song
-        // as the starting point
+        // TODO: find shortest ordering of top, using the previously played song as the starting point
       }
       case NO_VOTES: {
-        // TODO: find shortest ordering of suggestions, and take the top from
-        // there
+        // TODO: find shortest ordering of suggestions, and take the top from there
         // NOTE: this option probably won't be implemented
       }
       case ORDER: {
