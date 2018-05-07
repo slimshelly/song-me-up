@@ -164,11 +164,12 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.NEXT_SONG:
         console.log("[HOST] Recieved NEXT_SONG message");
         // data - json object
-        song = data.payload;
-        song_uri = song.uri;
-        song_cover = song.album_cover;
-        song_name = song.song_name;
-        song_artists = song.artist_names;
+
+        let song = data.payload;
+        let song_uri = song.uri;
+        let song_cover = song.album_cover;
+        let song_name = song.song_name;
+        let song_artists = song.artist_names;
         playNextSong(song_uri);
         console.log("the song's name is " + song_name);
         console.log("the song's uri is " + song_uri);

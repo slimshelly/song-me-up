@@ -100,16 +100,14 @@ public class SmuInputHandler implements Commander {
   private class GetPlaylistTracks extends Command {
 
     public GetPlaylistTracks() {
-      super("getPlaylistTracks " + "(.+)" + "$" + "(.+)" + "$");
+      super("getPlaylistTracks " + "(.+) " + "(.+)" + "$");
     }
 
     @Override
     public void execute(List<String> toks) throws Exception {
-      System.out.println("here");
       List<Track> tracks = 
           SpotifyQuery.getPlaylistTracks(toks.get(0), toks.get(1), state.getAuth());
       
-      System.out.println("here2");
       
       List<String> trackinfo = new ArrayList<>();
       for (Track t : tracks) {

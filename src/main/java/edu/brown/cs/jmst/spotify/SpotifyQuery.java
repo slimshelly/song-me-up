@@ -169,49 +169,37 @@ public class SpotifyQuery {
     Float valence;
     String id;
 
+    AudioFeatures audioFeature = new AudioFeatures();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/audio-features/" + song_id);
+      get.setHeader("Authorization", "Bearer " + access_token);
 
-    return new AudioFeaturesSimple("", (float)1, (float)2, (float) 3);
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+     
+        valence = jo.get("valence").getAsFloat();
+        energy = jo.get("energy").getAsFloat();
+        danceability = jo.get("danceability").getAsFloat();
+        id = jo.get("id").getAsString();
+        
+        System.out.println("audio3");
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
 
-//    
-//    AudioFeatures audioFeature = new AudioFeatures();
-//    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-//      HttpPost get = new HttpPost("https://api.spotify.com/v1/audio-features/" + song_id);
-//      get.setHeader("Authorization", "Bearer " + access_token);
-//      List<BasicNameValuePair> pairs = new ArrayList<>();
-//      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
-//      urlentity.setContentEncoding("application/json");
-//      get.setEntity(urlentity);
-//      
-//      System.out.println(get);
-//      
-//      HttpResponse response = client.execute(get);
-//      if (response.getStatusLine().getStatusCode() == 200) {
-//        System.out.println("audio2");
-//        String json_string = EntityUtils.toString(response.getEntity());
-//        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-//     
-//        valence = jo.get("valence").getAsFloat();
-//        energy = jo.get("energy").getAsFloat();
-//        danceability = jo.get("danceability").getAsFloat();
-//        id = jo.get("id").getAsString();
-//        
-//        System.out.println("audio3");
-//      } else {
-//        throw new ClientProtocolException(
-//            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
-//                + " " + response.toString());
-//      }
-//    } catch (UnsupportedEncodingException e) {
-//      throw e;
-//    } catch (ClientProtocolException e) {
-//      throw e;
-//    } catch (IOException e) {
-//      throw e;
-//    }
-//
-//    System.out.println("audio4");
-//    // TODO: query spotify and get ONLY THESE THREE FIELDS
-//    return new AudioFeaturesSimple("", danceability, energy, valence);
+    // TODO: query spotify and get ONLY THESE THREE FIELDS
+    return new AudioFeaturesSimple("", danceability, energy, valence);
   }
 
   /**
@@ -504,36 +492,31 @@ public class SpotifyQuery {
   public static List<Track> getPlaylistTracks(String user_id, String playlist_id, String access_token)
       throws Exception {
 
-    System.out.println("playlist 1");
     List<Track> returnTracks = new ArrayList<>();
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
 
-      System.out.println("playlist 2");
       List<BasicNameValuePair> pairs = new ArrayList<>();
-      pairs.add(new BasicNameValuePair("user_id", user_id));
-      pairs.add(new BasicNameValuePair("playlist_id", playlist_id));
       pairs.add(new BasicNameValuePair("limit", "10"));
-      pairs.add(new BasicNameValuePair("offset", "0"));
-      
-      HttpGet get = new HttpGet("https://api.spotify.com/v1/me/playlists?"
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + user_id
+          + "/playlists/" + playlist_id + "/tracks?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
 
-      System.out.println("playlist 3");
       HttpResponse response = client.execute(get);
       
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 
-        System.out.println("playlist 4");
         JsonArray tracks =
             jo.get("items").getAsJsonArray();
         Iterator<JsonElement> iterator = tracks.iterator();
 
         while (iterator.hasNext()) {
-          System.out.println("playlist 5");
-          JsonObject trackjo = iterator.next().getAsJsonObject();
+          
+          JsonObject currjo = iterator.next().getAsJsonObject();
+          
+          JsonObject trackjo = currjo.get("track").getAsJsonObject();
           String id = trackjo.get("id").getAsString();
           String name = trackjo.get("name").getAsString();
           String uri = trackjo.get("uri").getAsString();
@@ -556,7 +539,7 @@ public class SpotifyQuery {
               trackjo.get("album").getAsJsonObject().get("id").getAsString();
           String album_art = getAlbumArt(album_id, access_token);
 
-          returnTracks.add(new TrackBean(id, name, explicit, popularity, duration_ms,
+          returnTracks.add(new TrackBean("", name, explicit, popularity, duration_ms,
               artist_ids, artist_names, album_id, uri, album_art));
         }
       }
