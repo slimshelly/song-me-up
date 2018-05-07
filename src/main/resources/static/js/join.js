@@ -181,7 +181,7 @@ const setup_live_playlist = () => {
         let song_uri = song.uri;
         let song_cover = song.album_cover;
         let song_name = song.song_name;
-        let song_artists = artist_names;
+        let song_artists = song.artist_names;
         refresh_now_playing(song_cover, song_name, song_artists);
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
@@ -369,14 +369,15 @@ Update currently playing song at top of page.
 */
 function refresh_now_playing(song_cover, song_name, song_artists) {
   // show multiple artists!!
-  console.log(toSuggest);
+  // $nowPlaying.imgContainer.artistInfo.empty();
+  $nowPlaying.empty();
   $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
   $nowPlaying.append("<div class='artistInfo'>"
     + "<span class='now'>Now Playing</span>"
     + "<span class='trackName'>" + song_name + "</span>"
     + "<span class='artistName'>" + song_artists[0] + "</span>"
     + "</div>"
-    );
+  );
 }
 
 

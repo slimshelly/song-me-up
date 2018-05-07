@@ -202,7 +202,6 @@ class SongBlock {
   // given the Collection of suggestions from topSuggestions, and with the
   // knowledge of the previous song played, get an acceptable choice for the
   // next song to play (out of the collection of top songs)
-
   Suggestion getNextSongToPlay() {
     assert this.state == PLAYING;
     return this.songsToPlay.remove(0);

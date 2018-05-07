@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -28,9 +29,11 @@ public class PlaylistHandler implements Route {
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
     JsonArray votingBlock = currParty.refreshVoteBlock();
     JsonArray playingBlock = currParty.refreshPlayBlock();
+    JsonObject nowPlaying = currParty.getNowPlaying().toJson();
 //TODO:
     Map<String, Object> variables = ImmutableMap.of("suggest",
-            suggestingBlock, "vote", votingBlock, "play", playingBlock);
+            suggestingBlock, "vote", votingBlock, "play", playingBlock,
+            "now_playing", nowPlaying);
     return GSON.toJson(variables); // only sending info, not reloading page
   }
 

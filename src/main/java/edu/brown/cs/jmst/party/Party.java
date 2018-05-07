@@ -28,6 +28,8 @@ public class Party extends Entity {
   private SongMeUpPlaylist partyPlaylist; // Holds current playlist state
   public static final int ID_LENGTH = 6;
 
+  private Suggestion nowPlaying;
+
   public Party(User host, String id, SongMeUpPlaylist partyPlaylist)
       throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
@@ -76,7 +78,12 @@ public class Party extends Entity {
   }
 
   public Suggestion getNextSongToPlay() throws Exception {
-    return songQueue.getNextSongToPlay();
+    this.nowPlaying = songQueue.getNextSongToPlay();
+    return nowPlaying;
+  }
+
+  public Suggestion getNowPlaying() {
+    return nowPlaying;
   }
 
   public Collection<Suggestion> voteOnSong(String userId, String songId,
