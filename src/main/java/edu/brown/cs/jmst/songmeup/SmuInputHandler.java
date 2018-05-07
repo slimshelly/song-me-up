@@ -67,7 +67,7 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-  
+
   private class getAudioFeature extends Command {
 
     public getAudioFeature() {
@@ -80,7 +80,8 @@ public class SmuInputHandler implements Commander {
       AudioFeaturesSimple audioFeature =
           SpotifyQuery.getSimpleFeatures(toks.get(0), state.getAuth());
       List<String> trackinfo = new ArrayList<>();
-      trackinfo.add("danciability is" + Float.toString(audioFeature.getDanceability()));
+      trackinfo.add(
+          "danciability is" + Float.toString(audioFeature.getDanceability()));
       trackinfo.add("energy is" + Float.toString(audioFeature.getEnergy()));
       trackinfo.add("valence is" + Float.toString(audioFeature.getValence()));
       state.setListMessage(trackinfo);
@@ -95,21 +96,17 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-  
 
   private class GetPlaylistTracks extends Command {
 
     public GetPlaylistTracks() {
-      super("getPlaylistTracks " + "(.+)" + "$" + "(.+)" + "$");
+      super("getPlaylistTracks " + "(.+) " + "(.+)" + "$");
     }
 
     @Override
     public void execute(List<String> toks) throws Exception {
-      System.out.println("here");
       List<Track> tracks = 
           SpotifyQuery.getPlaylistTracks(toks.get(0), toks.get(1), state.getAuth());
-      
-      System.out.println("here2");
       
       List<String> trackinfo = new ArrayList<>();
       for (Track t : tracks) {
@@ -127,9 +124,6 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-  
-  
-  
 
   private class AlbumSearch extends Command {
 
@@ -144,7 +138,7 @@ public class SmuInputHandler implements Commander {
           SpotifyQuery.searchAlbum(toks.get(0), state.getAuth());
 
       List<String> albuminfo = new ArrayList<>();
-      
+
       for (Album t : albums) {
         albuminfo.add(t.toString());
         System.out.println(t.toString());
@@ -160,7 +154,7 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-  
+
   private class UserPlaylistSearch extends Command {
 
     public UserPlaylistSearch() {
@@ -174,7 +168,7 @@ public class SmuInputHandler implements Commander {
 
       System.out.println("here9");
       List<String> playlistinfo = new ArrayList<>();
-      
+
       for (SpotifyPlaylist t : playlists) {
         playlistinfo.add(t.toString());
       }
@@ -189,7 +183,6 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-  
 
   private class PlaylistSearch extends Command {
 
@@ -204,7 +197,7 @@ public class SmuInputHandler implements Commander {
           SpotifyQuery.searchPlaylist(toks.get(0), state.getAuth());
 
       List<String> playlistinfo = new ArrayList<>();
-      
+
       for (SpotifyPlaylist t : playlists) {
         playlistinfo.add(t.toString());
       }
@@ -247,7 +240,6 @@ public class SmuInputHandler implements Commander {
     }
 
   }
-
 
   /**
    * This is just an example command. The class defines the regex to match in

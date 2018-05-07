@@ -103,13 +103,6 @@ const MESSAGE_TYPE = {
 };
 let conn;
 
-let song;
-let song_uri;
-let song_cover;
-let song_name;
-let song_artists;
-
-
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`

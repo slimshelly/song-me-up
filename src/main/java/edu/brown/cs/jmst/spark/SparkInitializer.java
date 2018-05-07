@@ -21,7 +21,8 @@ public class SparkInitializer {
     Spark.webSocket("/songupdates", PartyWebSocket.class);
 
     Spark.get("/main", new MainPage(), freeMarker);
-    Spark.get("/", new PreMainPage(), freeMarker);
+    Spark.get("/songmeup", new PreMainPage(), freeMarker);
+    Spark.redirect.get("/", "/songmeup");
 
     Spark.get("/logout", new LogoutHandler(), freeMarker);
     Spark.get("/login", new LoginHandler(), freeMarker);
