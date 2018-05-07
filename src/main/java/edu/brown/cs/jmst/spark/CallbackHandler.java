@@ -21,19 +21,18 @@ public class CallbackHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
-    // User u = state.getUser(req.session().id());
     QueryParamsMap qm = req.queryMap();
     String code = qm.value("code");
     String state = qm.value("state");
 
-    String storedState = req.cookies().get("spotify_auth_state");
-    res.removeCookie("spotify_auth_state");
+    String storedState = req.cookie(SpotifyAuthentication.STATE_KEY);
     General.printInfo("State: " + state);
     General.printInfo("Stored: " + storedState);
     SparkErrorEnum err = null;
     if (state == null || !state.equals(storedState)) {
       err = SparkErrorEnum.STATE_MISMATCH;
     } else {
+      res.removeCookie("spotify_auth_state");
       try {
         User u = SmuState.getInstance().addUser(code);
         req.session().attribute("user", u.getId());

@@ -100,6 +100,13 @@ const MESSAGE_TYPE = {
 };
 let conn;
 
+let song;
+let song_uri;
+let song_cover;
+let song_name;
+let song_artists;
+
+
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
@@ -175,6 +182,7 @@ const setup_live_playlist = () => {
         break;
       case MESSAGE_TYPE.NEXT_SONG:
         console.log("[GUEST] Recieved NEXT_SONG message");
+
         let song = data.payload;
         let song_uri = song.uri;
         let song_cover = song.album_cover;
