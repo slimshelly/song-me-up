@@ -169,47 +169,49 @@ public class SpotifyQuery {
     Float valence;
     String id;
 
-    
-    AudioFeatures audioFeature = new AudioFeatures();
-    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      HttpPost get = new HttpPost("https://api.spotify.com/v1/audio-features/" + song_id);
-      get.setHeader("Authorization", "Bearer " + access_token);
-      List<BasicNameValuePair> pairs = new ArrayList<>();
-      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
-      urlentity.setContentEncoding("application/json");
-      get.setEntity(urlentity);
-      
-      System.out.println(get);
 
-      System.out.println("audio1");
-      HttpResponse response = client.execute(get);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        System.out.println("audio2");
-        String json_string = EntityUtils.toString(response.getEntity());
-        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-     
-        valence = jo.get("valence").getAsFloat();
-        energy = jo.get("energy").getAsFloat();
-        danceability = jo.get("danceability").getAsFloat();
-        id = jo.get("id").getAsString();
-        
-        System.out.println("audio3");
-      } else {
-        throw new ClientProtocolException(
-            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
-                + " " + response.toString());
-      }
-    } catch (UnsupportedEncodingException e) {
-      throw e;
-    } catch (ClientProtocolException e) {
-      throw e;
-    } catch (IOException e) {
-      throw e;
-    }
+    return new AudioFeaturesSimple("", (float)1, (float)2, (float) 3);
 
-    System.out.println("audio4");
-    // TODO: query spotify and get ONLY THESE THREE FIELDS
-    return new AudioFeaturesSimple("", danceability, energy, valence);
+//    
+//    AudioFeatures audioFeature = new AudioFeatures();
+//    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+//      HttpPost get = new HttpPost("https://api.spotify.com/v1/audio-features/" + song_id);
+//      get.setHeader("Authorization", "Bearer " + access_token);
+//      List<BasicNameValuePair> pairs = new ArrayList<>();
+//      UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(pairs, "UTF-8");
+//      urlentity.setContentEncoding("application/json");
+//      get.setEntity(urlentity);
+//      
+//      System.out.println(get);
+//      
+//      HttpResponse response = client.execute(get);
+//      if (response.getStatusLine().getStatusCode() == 200) {
+//        System.out.println("audio2");
+//        String json_string = EntityUtils.toString(response.getEntity());
+//        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+//     
+//        valence = jo.get("valence").getAsFloat();
+//        energy = jo.get("energy").getAsFloat();
+//        danceability = jo.get("danceability").getAsFloat();
+//        id = jo.get("id").getAsString();
+//        
+//        System.out.println("audio3");
+//      } else {
+//        throw new ClientProtocolException(
+//            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+//                + " " + response.toString());
+//      }
+//    } catch (UnsupportedEncodingException e) {
+//      throw e;
+//    } catch (ClientProtocolException e) {
+//      throw e;
+//    } catch (IOException e) {
+//      throw e;
+//    }
+//
+//    System.out.println("audio4");
+//    // TODO: query spotify and get ONLY THESE THREE FIELDS
+//    return new AudioFeaturesSimple("", danceability, energy, valence);
   }
 
   /**

@@ -175,8 +175,10 @@ public class PartyWebSocket {
             // suggest the song to the current party
             JsonObject track = SpotifyQuery.getRawTrack(song_id, u.getAuth());
             Track song = new TrackBean(track, u.getAuth());
+            System.out.println("Line 178 PartyWebSocket.java (before getSimpleFeatures)");
             AudioFeaturesSimple features = SpotifyQuery.getSimpleFeatures(song_id,
                     u.getAuth());
+            System.out.println("Line 181 PartyWebSocket.java (after getSimpleFeatures)");
             SuggestResult suggested = party.suggest(song, user_id, features);
             STATUS_TYPE status = suggested.getStatus();
             switch (status) {
