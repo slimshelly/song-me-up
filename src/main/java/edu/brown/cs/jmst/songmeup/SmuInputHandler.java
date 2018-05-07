@@ -7,6 +7,7 @@ import edu.brown.cs.jmst.command.Command;
 import edu.brown.cs.jmst.command.Commander;
 import edu.brown.cs.jmst.general.General;
 import edu.brown.cs.jmst.music.Album;
+import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
@@ -29,6 +30,8 @@ public class SmuInputHandler implements Commander {
   public List<Command> getCommands() {
     List<Command> commands = new ArrayList<>();
     commands.add(new SongSearch());
+    commands.add(new getAudioFeature());
+    commands.add(new GetPlaylistTracks());
     commands.add(new AlbumSearch());
     commands.add(new PlaylistSearch());
     commands.add(new UserPlaylistSearch());
@@ -64,6 +67,68 @@ public class SmuInputHandler implements Commander {
     }
 
   }
+  
+  private class getAudioFeature extends Command {
+
+    public getAudioFeature() {
+      super("getAudioFeature " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      assert toks.size() == 1;
+      AudioFeaturesSimple audioFeature =
+          SpotifyQuery.getSimpleFeatures(toks.get(0), state.getAuth());
+      List<String> trackinfo = new ArrayList<>();
+      trackinfo.add("danciability is" + Float.toString(audioFeature.getDanceability()));
+      trackinfo.add("energy is" + Float.toString(audioFeature.getEnergy()));
+      trackinfo.add("valence is" + Float.toString(audioFeature.getValence()));
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+  
+
+  private class GetPlaylistTracks extends Command {
+
+    public GetPlaylistTracks() {
+      super("getPlaylistTracks " + "(.+)" + "$" + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      System.out.println("here");
+      List<Track> tracks = 
+          SpotifyQuery.getPlaylistTracks(toks.get(0), toks.get(1), state.getAuth());
+      
+      System.out.println("here2");
+      
+      List<String> trackinfo = new ArrayList<>();
+      for (Track t : tracks) {
+        trackinfo.add(t.toString());
+      }
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+  
+  
   
 
   private class AlbumSearch extends Command {
