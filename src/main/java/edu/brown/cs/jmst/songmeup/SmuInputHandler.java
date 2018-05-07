@@ -3,6 +3,8 @@ package edu.brown.cs.jmst.songmeup;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+
 import edu.brown.cs.jmst.command.Command;
 import edu.brown.cs.jmst.command.Commander;
 import edu.brown.cs.jmst.general.General;
@@ -11,6 +13,7 @@ import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
+import edu.brown.cs.jmst.spotify.SpotifyQueryRaw;
 
 /**
  * Handles REPL input
@@ -30,6 +33,7 @@ public class SmuInputHandler implements Commander {
   public List<Command> getCommands() {
     List<Command> commands = new ArrayList<>();
     commands.add(new SongSearch());
+    commands.add(new getPlaylistTracksRaw());
     commands.add(new getAudioFeature());
     commands.add(new GetPlaylistTracks());
     commands.add(new AlbumSearch());
@@ -39,7 +43,7 @@ public class SmuInputHandler implements Commander {
     commands.add(new CapsCommand());
     return commands;
   }
-
+  
   private class SongSearch extends Command {
 
     public SongSearch() {
@@ -54,6 +58,35 @@ public class SmuInputHandler implements Commander {
       List<String> trackinfo = new ArrayList<>();
       for (Track t : tracks) {
         trackinfo.add(t.toString());
+      }
+      state.setListMessage(trackinfo);
+    }
+
+    @Override
+    public void print() {
+      // TODO Auto-generated method stub
+      for (String s : state.getListMessage()) {
+        General.printInfo(s);
+      }
+    }
+
+  }
+
+  private class getPlaylistTracksRaw extends Command {
+
+    public getPlaylistTracksRaw() {
+      super("getPlaylistTracksRaw " + "(.+) " + "(.+)" + "$");
+    }
+
+    @Override
+    public void execute(List<String> toks) throws Exception {
+      
+      JsonArray tracks =
+          SpotifyQueryRaw.getPlaylistTracksRaw(toks.get(0), toks.get(1), state.getAuth());
+      List<String> trackinfo = new ArrayList<>();
+      
+      for (int i = 0; i < tracks.size(); i++) {
+        trackinfo.add(tracks.getAsJsonObject().toString());
       }
       state.setListMessage(trackinfo);
     }

@@ -17,12 +17,11 @@ public class SeedPlaylist implements Route {
 	    SmuState state = SmuState.getInstance();
 	    String userid = request.session().attribute("user");
 	    User u = state.getUser(userid);
-	    String playlistId = request.queryMap().value("id");
+	    String playlistId = request.queryMap().value("playlist_id");
+	    String ownerId = request.queryMap().value("owner_id");
 	    System.out.println("Getting spotify raw tracks");
-	    System.out.println(playlistId);
-	    System.out.println(userid);
 	    try {
-	    JsonArray ja = SpotifyQueryRaw.getPlaylistTracksRaw(userid, playlistId, u.getAuth());
+	    JsonArray ja = SpotifyQueryRaw.getPlaylistTracksRaw(ownerId, playlistId, u.getAuth());
 	    return SparkInitializer.GSON.toJson(ja);
 	    } catch(Exception e) {
 	    		General.printInfo(e.getMessage());
