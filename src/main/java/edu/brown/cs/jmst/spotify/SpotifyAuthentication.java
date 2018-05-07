@@ -1,6 +1,9 @@
 package edu.brown.cs.jmst.spotify;
 
 import java.util.Base64;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SpotifyAuthentication {
   public static final String CLIENT_ID = "4dbc736d594345a99c6e00bf776f5464";
@@ -54,6 +57,22 @@ public class SpotifyAuthentication {
 
   public static String getRedirectUri() {
     return REDIRECT_URI;
+  }
+
+  private static Set<String> statekeys =
+      Collections.synchronizedSet(new HashSet<>());
+
+  public static synchronized String getNewState() {
+    String key = SpotifyAuthentication.randomString(16);
+    while (statekeys.contains(key)) {
+      key = SpotifyAuthentication.randomString(16);
+    }
+    statekeys.add(key);
+    return key;
+  }
+
+  public static synchronized boolean hasState(String testString) {
+    return statekeys.remove(testString);
   }
 
 }
