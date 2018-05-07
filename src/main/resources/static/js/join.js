@@ -26,6 +26,7 @@ $(document).ready(() => {
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
     refresh_playing_block(output.play);
+
   });
 
 	/*
@@ -99,13 +100,6 @@ const MESSAGE_TYPE = {
     REFRESH_ALL: 7
 };
 let conn;
-
-let song;
-let song_uri;
-let song_cover;
-let song_name;
-let song_artists;
-
 
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_playlist = () => {

@@ -152,13 +152,46 @@ public class SpotifyQuery {
     return albumURL;
   }
 
-  public static AudioFeaturesSimple getSimpleFeatures(String id,
-                                                      String access_token) {
-    Float danceability = (float )1.0;
-    Float energy = (float) 1.0;
-    Float valence = (float) 1.0;
+
+  public static AudioFeaturesSimple getSimpleFeatures(String song_id,
+                                                      String access_token) throws IOException {
+    Float danceability;
+    Float energy;
+    Float valence;
+    String id;
+
+    AudioFeatures audioFeature = new AudioFeatures();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/audio-features/" + song_id);
+      get.setHeader("Authorization", "Bearer " + access_token);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+     
+        valence = jo.get("valence").getAsFloat();
+        energy = jo.get("energy").getAsFloat();
+        danceability = jo.get("danceability").getAsFloat();
+        id = jo.get("id").getAsString();
+        
+        System.out.println("audio3");
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw e;
+    } catch (ClientProtocolException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
+
     // TODO: query spotify and get ONLY THESE THREE FIELDS
-    return new AudioFeaturesSimple("id", danceability, energy, valence);
+    return new AudioFeaturesSimple("", danceability, energy, valence);
+
   }
 
   /**
@@ -427,62 +460,65 @@ public class SpotifyQuery {
     return returnPlaylists;
   }
 
-//
-//  public static List<Track> getPlaylistTracks(String user_id, String playlist_id, String access_token)
-//      throws Exception {
-//
-//    List<Track> returnTracks = new ArrayList<>();
-//    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-//
-//      List<BasicNameValuePair> pairs = new ArrayList<>();
-//      pairs.add(new BasicNameValuePair("limit", "10"));
-//      pairs.add(new BasicNameValuePair("offset", "0"));
-//      
-//      HttpGet get = new HttpGet("https://api.spotify.com/v1/me/playlists?"
-//          + URLEncodedUtils.format(pairs, "UTF-8"));
-//      get.setHeader("Authorization", "Bearer " + access_token);
-//
-//      HttpResponse response = client.execute(get);
-//      if (response.getStatusLine().getStatusCode() == 200) {
-//        String json_string = EntityUtils.toString(response.getEntity());
-//        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-//
-//        JsonArray playlists =
-//            jo.get("items").getAsJsonArray();
-//        Iterator<JsonElement> iterator = playlists.iterator();
-//
-//        while (iterator.hasNext()) {
-//          JsonObject trackjo = iterator.next().getAsJsonObject();
-//          String id = trackjo.get("id").getAsString();
-//          String name = trackjo.get("name").getAsString();
-//          String uri = trackjo.get("uri").getAsString();
-//          boolean explicit = trackjo.get("explicit").getAsBoolean();
-//          int popularity = trackjo.get("popularity").getAsInt();
-//          int duration_ms = trackjo.get("duration_ms").getAsInt();
-//          JsonArray artists = trackjo.get("artists").getAsJsonArray();
-//          // General.printInfo(artists.toString());
-//          List<String> artist_ids = new ArrayList<>();
-//          List<String> artist_names = new ArrayList<>();
-//          
-//          Iterator<JsonElement> iterator2 = artists.iterator();
-//          while (iterator2.hasNext()) {
-//            JsonObject ajo = iterator2.next().getAsJsonObject();
-//            artist_ids.add(ajo.get("id").getAsString());
-//            artist_names.add(ajo.get("id").getAsString());
-//          }
-//
-//          String album_id =
-//              trackjo.get("album").getAsJsonObject().get("id").getAsString();
-//          String album_art = getAlbumArt(album_id, access_token);
-//
-//          returnTracks.add(new TrackBean(id, name, explicit, popularity, duration_ms,
-//              artist_ids, artist_names, album_id, uri, album_art));
-//        }
-//      }
-//        
-//      }
-//    return returnTracks;
-//  }
+  public static List<Track> getPlaylistTracks(String user_id, String playlist_id, String access_token)
+      throws Exception {
+
+    List<Track> returnTracks = new ArrayList<>();
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+
+      List<BasicNameValuePair> pairs = new ArrayList<>();
+      pairs.add(new BasicNameValuePair("limit", "10"));
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + user_id
+          + "/playlists/" + playlist_id + "/tracks?"
+          + URLEncodedUtils.format(pairs, "UTF-8"));
+      get.setHeader("Authorization", "Bearer " + access_token);
+
+      HttpResponse response = client.execute(get);
+      
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+        JsonArray tracks =
+            jo.get("items").getAsJsonArray();
+        Iterator<JsonElement> iterator = tracks.iterator();
+
+        while (iterator.hasNext()) {
+          
+          JsonObject currjo = iterator.next().getAsJsonObject();
+          
+          JsonObject trackjo = currjo.get("track").getAsJsonObject();
+          String id = trackjo.get("id").getAsString();
+          String name = trackjo.get("name").getAsString();
+          String uri = trackjo.get("uri").getAsString();
+          boolean explicit = trackjo.get("explicit").getAsBoolean();
+          int popularity = trackjo.get("popularity").getAsInt();
+          int duration_ms = trackjo.get("duration_ms").getAsInt();
+          JsonArray artists = trackjo.get("artists").getAsJsonArray();
+          // General.printInfo(artists.toString());
+          List<String> artist_ids = new ArrayList<>();
+          List<String> artist_names = new ArrayList<>();
+          
+          Iterator<JsonElement> iterator2 = artists.iterator();
+          while (iterator2.hasNext()) {
+            JsonObject ajo = iterator2.next().getAsJsonObject();
+            artist_ids.add(ajo.get("id").getAsString());
+            artist_names.add(ajo.get("id").getAsString());
+          }
+
+          String album_id =
+              trackjo.get("album").getAsJsonObject().get("id").getAsString();
+          String album_art = getAlbumArt(album_id, access_token);
+
+          returnTracks.add(new TrackBean("", name, explicit, popularity, duration_ms,
+              artist_ids, artist_names, album_id, uri, album_art));
+        }
+      }
+        
+      }
+    
+    return returnTracks;
+  }
 
   
   public static List<SpotifyPlaylist> searchPlaylist(String keywords, String access_token)
