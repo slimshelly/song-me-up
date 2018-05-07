@@ -24,6 +24,8 @@ $(document).ready(() => {
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
     refresh_playing_block(output.play);
+    refresh_now_playing(output.now_playing);
+    playNextSong(output.now_playing.song_uri);
   });
 
   /*

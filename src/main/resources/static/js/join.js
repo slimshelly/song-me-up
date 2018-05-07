@@ -26,6 +26,7 @@ $(document).ready(() => {
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
     refresh_playing_block(output.play);
+    // refresh_now_playing(output.nowPlaying);
   });
 
 	/*
@@ -182,8 +183,8 @@ const setup_live_playlist = () => {
         break;
       case MESSAGE_TYPE.NEXT_SONG:
         console.log("[GUEST] Recieved NEXT_SONG message");
-
         let song = data.payload;
+        console.log(song);
         let song_uri = song.uri;
         let song_cover = song.album_cover;
         let song_name = song.song_name;
@@ -375,7 +376,6 @@ Update currently playing song at top of page.
 */
 function refresh_now_playing(song_cover, song_name, song_artists) {
   // show multiple artists!!
-  console.log(toSuggest);
   $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
   $nowPlaying.append("<div class='artistInfo'>"
     + "<span class='now'>Now Playing</span>"
