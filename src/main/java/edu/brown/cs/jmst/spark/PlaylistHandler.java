@@ -20,6 +20,7 @@ public class PlaylistHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+    System.out.println("IN PLAYLIST HANDLER");
     SmuState state = SmuState.getInstance();
     String userid = request.session().attribute("user");
     User u = state.getUser(userid);
@@ -29,8 +30,15 @@ public class PlaylistHandler implements Route {
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
     JsonArray votingBlock = currParty.refreshVoteBlock();
     JsonArray playingBlock = currParty.refreshPlayBlock();
-    JsonObject nowPlaying = currParty.getNowPlaying().toJson();
-//TODO:
+    System.out.println("About to get now playing");
+    JsonObject nowPlaying = new JsonObject();
+    System.out.println("Here's now playing");
+    System.out.println(currParty.getNowPlaying());
+    if (currParty.getNowPlaying() != null) {
+    	  nowPlaying = currParty.getNowPlaying().toJson();
+    }
+
+    System.out.println("About to send variables");
     Map<String, Object> variables = ImmutableMap.of("suggest",
             suggestingBlock, "vote", votingBlock, "play", playingBlock,
             "now_playing", nowPlaying);

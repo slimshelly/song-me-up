@@ -28,7 +28,7 @@ public class Party extends Entity {
   private SongMeUpPlaylist partyPlaylist; // Holds current playlist state
   public static final int ID_LENGTH = 6;
 
-  private Suggestion nowPlaying;
+  private Suggestion nowPlaying = null;
 
   public Party(User host, String id, SongMeUpPlaylist partyPlaylist)
       throws PartyException, SpotifyException {

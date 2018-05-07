@@ -23,13 +23,13 @@ public class PlaylistSuggestor implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    System.out.println("Getting user's playlists");
+    // System.out.println("Getting user's playlists");
     SmuState state = SmuState.getInstance();
     String userid = request.session().attribute("user");
     User u = state.getUser(userid);
     List<SpotifyPlaylist> userPlaylists =
         SpotifyQuery.getUserPlaylist(u.getAuth());
-    System.out.println("Got playlists");
+    // System.out.println("Got playlists");
 
     List<JsonObject> playlistObjects = new ArrayList<>();
     for (SpotifyPlaylist playlist : userPlaylists) {
@@ -47,7 +47,7 @@ public class PlaylistSuggestor implements Route {
 
     Map<String, Object> variables =
         ImmutableMap.of("playlists", playlistObjects);
-    System.out.println("About to send to frontend");
+    // System.out.println("About to send to frontend");
     return GSON.toJson(variables); // only sending info, not reloading page
   }
 

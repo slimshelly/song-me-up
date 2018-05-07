@@ -15,6 +15,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   setUp();
 };
 
+
 function showCurrentState() {
   player.getCurrentState().then(state => {
     if (!state) {
@@ -64,6 +65,9 @@ function playSong(song_uri) {
     window.clearInterval(nextSongInterval);
   }
   nextSongInterval = window.setInterval(checkState, 1000);
+  console.log("IN PLAYSONG");
+  console.log("player : " + player);
+  console.log("song uri " + song_uri);
   if (started === false) {
     play({
       // takes uri passed in and plays with the default player.
@@ -86,9 +90,7 @@ function playNextSong(songUri) {
   console.log("the started state is" + started);
   // reset conditions
   started = false;
-
-    playSong(songUri);
-
+  playSong(songUri);
 }
 
 function requestNext() {
