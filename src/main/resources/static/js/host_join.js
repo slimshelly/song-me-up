@@ -103,7 +103,7 @@ const setup_live_playlist = () => {
   //let host = window.location.host;
   //conn = new WebSocket("ws://"+ host + "/songupdates");
 
-    let completepath = window.location.host + window.location.pathname;
+  let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
   let type = "ws"
   if(window.location.host==="cs.hiram.edu"){

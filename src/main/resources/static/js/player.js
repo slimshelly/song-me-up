@@ -7,6 +7,13 @@ let started = false;
 
 let nextSongInterval = null;
 
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  // get first token
+  console.log("hello");
+  setUp();
+};
+
 function showCurrentState() {
   player.getCurrentState().then(state => {
     if (!state) {
@@ -101,14 +108,6 @@ const play = ({spotify_uri, playerInstance: {_options: {getOAuthToken, id}}}) =>
   });
 };
 
-$(document).ready(() => {
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    // get first token
-    console.log("hello")
-    setUp();
-  };
-});
-
 function setUp() {
   $.post("./refresh", responseJSON => {
     // parse response
@@ -116,57 +115,47 @@ function setUp() {
     freshToken = responseObject.access_token;
     // initialize player after new token
     token = freshToken;
-    player = new Spotify.Player({
-      name: 'Host Player',
-      getOAuthToken: cb => {
-        cb(token);
-      }
-    });
-    // Error handling
-    player.addListener('initialization_error', ({ message }) => { console.error(message); });
-    player.addListener('authentication_error', ({ message }) => { console.error(message); });
-    player.addListener('account_error', ({ message }) => { console.error(message); });
-    player.addListener('playback_error', ({ message }) => { console.error(message); });
 
-    // Playback status updates
-    player.addListener('player_state_changed', state => { console.log(state); });
-
-    // Ready
-    player.addListener('ready', ({ device_id }) => {
-      console.log('Ready with Device ID', device_id);
-    });
-
-    // Not Ready
-    player.addListener('not_ready', ({ device_id }) => {
-      console.log('Device ID has gone offline', device_id);
-    });
+    console.log("creating player");
+    let player = create_new_player();
+    console.log("made the player");
 
     // Connect to the player!
     player.connect();
-    console.log("connected to player?");
-    // // Connect to the player!
-    // player.connect();
-    // player.connect().then(success => {
-    //   if (success) {
-    //     player.addListener('ready', ({device_id}) => {
-    //       console.log('Ready with Device ID', device_id);
-    //     });
-    //     // Error handling
-    //     player.addListener('initialization_error', ({message}) => {
-    //       console.error(message);
-    //     });
-    //     player.addListener('authentication_error', ({message}) => {
-    //       console.error(message);
-    //     });
-    //     player.addListener('account_error', ({message}) => {
-    //       console.error(message);
-    //     });
-    //     player.addListener('playback_error', ({message}) => {
-    //       console.error(message);
-    //     });
-    //   }
-    // });
+    player.connect().then(success => {
+      if (success) {
+        player.addListener('ready', ({device_id}) => {
+          console.log('Ready with Device ID', device_id);
+        });
+        // Error handling
+        player.addListener('initialization_error', ({message}) => {
+          console.error(message);
+        });
+        player.addListener('authentication_error', ({message}) => {
+          console.error(message);
+        });
+        player.addListener('account_error', ({message}) => {
+          console.error(message);
+        });
+        player.addListener('playback_error', ({message}) => {
+          console.error(message);
+        });
+      }
+    });
   });
+}
+
+// create a new player
+function create_new_player() {
+  console.log("about to make le player!");
+  player = new Spotify.Player({
+    name: 'Host Player',
+    getOAuthToken: cb => {
+      cb(token);
+    }
+  });
+  console.log("about to return the player");
+  return player;
 }
 
 function seek() {

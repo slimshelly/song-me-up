@@ -27,13 +27,13 @@ public class CallbackHandler implements TemplateViewRoute {
     String state = qm.value("state");
 
     String storedState = req.cookies().get("spotify_auth_state");
+    res.removeCookie("spotify_auth_state");
     General.printInfo("State: " + state);
     General.printInfo("Stored: " + storedState);
     SparkErrorEnum err = null;
     if (state == null || !state.equals(storedState)) {
       err = SparkErrorEnum.STATE_MISMATCH;
     } else {
-      res.removeCookie("spotify_auth_state");
       try {
         User u = SmuState.getInstance().addUser(code);
         req.session().attribute("user", u.getId());
