@@ -38,7 +38,7 @@ public class SparkInitializer {
 
     // PLAYLIST PAGES (2)
     Spark.get("/join", new JoinHandler(), freeMarker);
-    
+
     // INSERT SEED PLAYLIST INTO PLAYLIST PAGE
     Spark.post("/seedPlaylist", new SeedPlaylist());
 
@@ -51,9 +51,6 @@ public class SparkInitializer {
     Spark.get("/player", new PlayerPage(), freeMarker);
     Spark.get("/error", new ErrorHandler(), freeMarker);
     Spark.get("/faq", new FAQPage(), freeMarker);
-
-    // NOT RELEVANT, will delete later
-    Spark.get("/playlists", new MockPlaylist(), freeMarker);
   }
 
 }

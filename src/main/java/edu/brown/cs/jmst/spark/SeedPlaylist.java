@@ -11,7 +11,7 @@ import spark.Response;
 import spark.Route;
 
 public class SeedPlaylist implements Route {
-	
+
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
 	    SmuState state = SmuState.getInstance();
@@ -30,5 +30,6 @@ public class SeedPlaylist implements Route {
 	    }
 	    
 	}
+
 
 }

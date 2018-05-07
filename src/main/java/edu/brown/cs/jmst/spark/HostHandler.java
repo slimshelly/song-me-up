@@ -39,9 +39,12 @@ public class HostHandler implements TemplateViewRoute {
         return null;
       }
       try {
-
         if (qm.hasKey("party_id")) {
           Party p = state.getParty(qm.value("party_id"));
+          if (!p.getHostId().equals(u.getId())) {
+            res.redirect(u.getCurrentPartyUrl(p));
+            return null;
+          }
           Map<String,
               Object> variables = new ImmutableMap.Builder<String, Object>()
                   .put("party_id", p.getId()).put("hostname", p.getHostName())
