@@ -31,61 +31,17 @@ import edu.brown.cs.jmst.music.SpotifyPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.music.TrackBean;
 
+/**
+ * A class for converting spotify queries into BACKEND objects.
+ * @author maddiebecker
+ *
+ */
 public class SpotifyQuery {
-
-  public static JsonObject getRawTrack(String song_id, String access_token)
-      throws IOException {
-    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      HttpGet get = new HttpGet("https://api.spotify.com/v1/tracks/" + song_id);
-      get.setHeader("Authorization", "Bearer " + access_token);
-
-      HttpResponse response = client.execute(get);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        String json_string = EntityUtils.toString(response.getEntity());
-        return new JsonParser().parse(json_string).getAsJsonObject();
-      } else {
-        throw new ClientProtocolException(
-            "Failed to get track: " + response.getStatusLine().getStatusCode()
-                + " " + response.toString());
-      }
-    }
-  }
-
-  public static JsonArray searchSongRaw(String keywords, String access_token)
-      throws IOException, UnsupportedEncodingException,
-      ClientProtocolException {
-    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-      List<BasicNameValuePair> pairs = new ArrayList<>();
-      pairs.add(new BasicNameValuePair("q", keywords));
-      pairs.add(new BasicNameValuePair("type", "track"));
-      pairs.add(new BasicNameValuePair("market", "from_token"));
-      pairs.add(new BasicNameValuePair("limit", "10"));
-      // want to add limit of 10! HELP
-
-      HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
-          + URLEncodedUtils.format(pairs, "UTF-8"));
-      get.setHeader("Authorization", "Bearer " + access_token);
-
-      HttpResponse response = client.execute(get);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        String json_string = EntityUtils.toString(response.getEntity());
-        JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-
-        return jo.get("tracks").getAsJsonObject().get("items").getAsJsonArray();
-      } else {
-        throw new ClientProtocolException(
-            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
-                + " " + response.toString());
-      }
-    }
-  }
-  
-  
 
   public static List<Track> searchSong(String keywords, String access_token)
       throws Exception {
     List<Track> songs = new ArrayList<>();
-    JsonArray ja = searchSongRaw(keywords, access_token);
+    JsonArray ja = SpotifyQueryRaw.searchSongRaw(keywords, access_token);
     for (JsonElement aJa : ja) {
       JsonObject trackjo = aJa.getAsJsonObject();
       String id = trackjo.get("id").getAsString();
@@ -152,7 +108,7 @@ public class SpotifyQuery {
     return albumURL;
   }
 
-
+  
   public static AudioFeaturesSimple getSimpleFeatures(String song_id,
                                                       String access_token) throws IOException {
     Float danceability;
@@ -518,9 +474,7 @@ public class SpotifyQuery {
               artist_ids, artist_names, album_id, uri, album_art));
         }
       }
-     
-      }
-    
+    }
     return returnTracks;
   }
 

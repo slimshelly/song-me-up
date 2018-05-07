@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
-import edu.brown.cs.jmst.spotify.SpotifyQuery;
+import edu.brown.cs.jmst.spotify.SpotifyQueryRaw;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -17,7 +17,7 @@ public class SongSuggestor implements Route {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     String query = req.queryMap().value("word");
-    JsonArray ja = SpotifyQuery.searchSongRaw(query, u.getAuth());
+    JsonArray ja = SpotifyQueryRaw.searchSongRaw(query, u.getAuth());
     return SparkInitializer.GSON.toJson(ja);
   }
 

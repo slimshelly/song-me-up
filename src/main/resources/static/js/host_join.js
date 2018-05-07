@@ -4,6 +4,15 @@ let $playingBlock;
 let $results;
 let $nowPlaying;
 
+// run below code only on first page load
+window.onload = function () {
+  if (localStorage.getItem("hasCodeRunBefore") === null) {
+      
+      document.getElementById("modal_query").style.display = "normal";
+      localStorage.setItem("hasCodeRunBefore", true);
+  }
+}
+
 $(document).ready(() => {
 
   // access playlist to add songs to later
@@ -24,7 +33,7 @@ $(document).ready(() => {
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
     refresh_playing_block(output.play);
-    if (!jQuery.isEmptyObject(output.nowPlaying)) {
+    if (!jQuery.isEmptyObject(output.now_playing)) {
       refresh_now_playing(output.now_playing.album_cover, output.now_playing.song_name, output.now_playing.artist_names);
       setUp();
       playNextSong(output.now_playing.uri);
@@ -35,7 +44,8 @@ $(document).ready(() => {
   Toggle color for up and down buttons
   */
   $("#down").click(function () {
-    new_vote(false,"SongId");
+    // new_vote(false,"SongId");
+    console.log("down clicked");
     if (document.getElementById("up").classList.contains("upColor")) {
       $("#up").toggleClass("upColor");
     }
@@ -43,7 +53,8 @@ $(document).ready(() => {
   });
 
   $("#up").click(function () {
-    new_vote(true,"SongId");
+    // new_vote(true,"SongId");
+    console.log("up clicked");
     if (document.getElementById("down").classList.contains("downColor")) {
       $("#down").toggleClass("downColor");
     }
@@ -221,14 +232,14 @@ function request_next_song() {
                    "payload": { "id": $("#user_id").val() , "song_id": ""}
     };
     conn.send(JSON.stringify(request));
-  console.log("[HOST] Sent NEXT_SONG message");
+    console.log("[HOST] Sent NEXT_SONG message");
 }
 
 
 function new_connect(){
-	  let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
+	let vote = {"type":MESSAGE_TYPE.CONNECT, "payload": {
         "id":$("#user_id").val()}
-      };
+  };
   conn.send(JSON.stringify(vote));
   console.log("[HOST] Sent CONNECT message");
 }
@@ -307,8 +318,8 @@ function refresh_voting_block(toVote) {
 
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
+      + "<a href='javascript:;' class='upbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down' id='down'></i></a>"
+      + "<a href='javascript:;' class='downbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up' id='up'></i></a>"
       + "</div>"
       + "</div>"
 
@@ -330,23 +341,76 @@ function refresh_playing_block(toPlay) {
       + "<div class='track'>"
       + "<div class='song'>" + playSong.song_name + "</div>"
       + "<div class='artist'>" + playSong.artist_names[0] + "</div>"
-
       + "</div>"
-      + "<div class='buttons'>"
-      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
-      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
-      + "</div>"
-      + "</div>"
-
       + "</li>");
   });
 }
 
 function togglePlay() {
   console.log("in");
+
+  // do nothing if no song playing
+  if ( isEmpty($nowPlaying) ) {
+    return;
+  }
+  // otherwise, toggle
   let element = document.getElementById("playPause");
   element.classList.toggle("fa-play");
   element.classList.toggle("fa-pause");
-  // element.setAttribute("style", "font-size:55px;");
-  // element.classList.toggle("fa-pause");
 }
+
+function isEmpty( el ){
+    return !$.trim(el.html())
+}
+
+function toggleDownVote(element) {
+  console.log("down clicked");
+  console.log(element);
+  element.classList.toggleClass("downColor");
+  console.log(element);
+  // if (document.getElementById("up").classList.contains("upColor")) {
+  //   $("#up").toggleClass("upColor");
+  // }
+  // $("#down").toggleClass("downColor");
+}
+
+function toggleUpVote(element) {
+  console.log("up clicked");
+  console.log(element);
+  element.classList.add("upColor");
+  element.setAttribute("id", "upColor");
+  console.log(element);
+}
+
+$( "a" ).click(function() {
+  console.log("UP CLICKED OK");
+  $( this ).toggleClass( "upColor" );
+});
+
+
+/*
+MOVE PARTY CODE TO TOP LEFT OF PAGE
+*/
+function remove(element) {
+  let $code = $("#modal_query");
+
+  var op = 1;  // initial opacity
+  var timer = setInterval(function () {
+      if (op <= 0.1){
+          clearInterval(timer);
+          element.style.display = 'none';
+      }
+      element.style.opacity = op;
+      element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+      op -= op * 0.1;
+  }, 50);
+}
+
+function move_code() {
+  let element = document.getElementById('party_code');
+  // element.animate({height: "300px"});
+}
+
+
+
+

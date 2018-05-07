@@ -1,5 +1,6 @@
 
 let $playlists;
+let $albumArt;
 
 $(document).ready(() => {
 
@@ -18,12 +19,27 @@ $(document).ready(() => {
     output.forEach(function(playlist) {
       console.log(playlist);
       $playlists.append("<div class='card'>"
-        + "<img class='albumArt' src='" + playlist.images[0] + "'>"
+        + "<img class='albumArt' id='" + playlist.id + "' src='" + playlist.images[0] + "' onclick='seed_playlist(\"" + playlist.id + "\")'>"
         + "<div class='middle'><div class='text'>John Doe</div></div>"
         + "</div>");
-
     });
-
   });
 
 });
+
+/*
+Send SEED PLAYLIST to backend to add to playlist
+*/
+function seed_playlist(playlist_id) {
+
+  const postParameters = {id: playlist_id};
+  console.log(postParameters);
+
+  $.post("./seedPlaylist", postParameters, responseJSON => {
+    const responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    let output = responseObject.playlists;
+    console.log(responseObject.playlists);
+  });
+}
+

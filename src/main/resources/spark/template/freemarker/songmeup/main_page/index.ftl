@@ -20,6 +20,7 @@
 				<a class="btn gray" id="host" href="form">HOST A PARTY</a>
 				<a class="btn gray" id="joinbtn">JOIN A PARTY</a>
 			</div>
+
 			<!-- The Modal -->
 			<div id="modal_query" class="modal">
 
@@ -29,9 +30,12 @@
 				<p>Enter the party code:</p>
 				<p id="bad_id" hidden>Party code is 6 letters.</p>
 				<input class="textfield" type="text" id="party_id_box">
+				<a class="btn" id="proceed">GOT IT</a>
 			  </div>
 
 			</div>
+
+			<!-- HOW IT WORKS explanation -->
 			<div class="more" id="down">
 	    		<a class="arrow" href="#">
 	      			<span class="bottom"></span>

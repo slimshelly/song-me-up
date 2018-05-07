@@ -36,7 +36,7 @@ $(document).ready(() => {
 	*/
 	$("#down").click(function () {
     console.log("down clicked");
-		new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
+		// new_vote(false,"SongId"); //TODO: pretty sure this is literally passing the string "SongId" instead of the actual value
 		if (document.getElementById("up").classList.contains("upColor")) {
 			$("#up").toggleClass("upColor");
 		}
@@ -45,7 +45,7 @@ $(document).ready(() => {
 
 	$("#up").click(function () {
     console.log("up clicked");
-		new_vote(true,"SongId");
+		// new_vote(true,"SongId");
 		if (document.getElementById("down").classList.contains("downColor")) {
 			$("#down").toggleClass("downColor");
 		}
@@ -327,21 +327,6 @@ Refresh songs being played in the playlist (top block)
 */
 function refresh_playing_block(toPlay) {
   console.log("[GUEST] In function refresh_playing_block");
-    $playingBlock.empty();
-  // put top song in toPlay in now playing block
-  console.log(toPlay);
-  console.log(toPlay[0]);
-  // if ($(".imgContainer").find(".artistInfo").length === 0){
-  //   $nowPlaying.append("<img class='albumArt' src='" + data.payload.album_cover + "'>");
-  //   $nowPlaying.append("<div class='artistInfo'>"
-  //     + "<span class='now'>Now Playing</span>"
-  //     + "<span class='trackName'>" + data.payload.song_name + "</span>"
-  //     + "<span class='artistName'>" + data.payload.artist_names[0] + "</span>"
-  //     + "</div>"
-  //     );
-  //   break; // don't put song in playlist - are we sure about this?
-  // }
-
   // put rest of songs at top of playlist
   toPlay.forEach(function(playSong) {
     $playingBlock.append("<li id='" + $("#user_id").val() + "'>"
@@ -350,14 +335,7 @@ function refresh_playing_block(toPlay) {
       + "<div class='track'>"
       + "<div class='song'>" + playSong.song_name + "</div>"
       + "<div class='artist'>" + playSong.artist_names[0] + "</div>"
-
       + "</div>"
-      + "<div class='buttons'>"
-      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-down' id='down_disabled'></i></a>"
-      + "<a href='javascript:;' ><i class='fa fa-chevron-circle-up' id='up_disabled'></i></a>"
-      + "</div>"
-      + "</div>"
-
       + "</li>");
   });
 }

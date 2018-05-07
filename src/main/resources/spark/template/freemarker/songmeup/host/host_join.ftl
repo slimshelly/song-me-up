@@ -3,7 +3,7 @@
 		<script src="js/jquery-3.1.1.js"></script>
 		<script src="js/player.js"></script>
 		<script src="js/host_join.js"></script>
-		<!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
+		<link rel="stylesheet" type="text/css" href="css/party_code.css">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/join.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,16 +28,31 @@
 				</ul>
 			</div>
 		</nav>
-		<div class="title">${hostname}'s Party: ${party_id}</div>
+		<div class="title">${hostname}'s Party</div>
+
+		<!-- The Modal -->
+		<div id="modal_query" class="modal">
+
+		  <!-- Modal content -->
+		  <div id="modal_cont" class="modal-content">
+			<p style="text-align: center;">Here's the code for your party:</p>
+			<p id="party_code" style="text-align: center; font-weight: bold; font-size: 24px;">${party_id}</p>
+			<p style="text-align: center;">Share this code at any time so that people can suggest and vote on songs!</p>
+			<a class="btn" href="#" onclick="remove(document.getElementById('modal_query'));move_code();">GOT IT</a>
+		  </div>
+
+		</div>
+
+
 		<div class="nowPlaying">
 			<div class="imgContainer">
 			</div>
 		</div>
 		<div class="musicControls">
-						<i class="fas fa-backward fa-4x" onclick="seek()"></i>
-						<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
-						<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
-					</div>
+			<i class="fas fa-backward fa-4x" onclick="seek()"></i>
+			<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
+			<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
+		</div>
 
 		<div class="content">
 			<div class="playlist" id="playlist">
