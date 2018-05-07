@@ -342,7 +342,6 @@ public class SpotifyQuery {
 
       HttpResponse response = client.execute(get);
       if (response.getStatusLine().getStatusCode() == 200) {
-    	    System.out.println("got response");
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
         
@@ -352,21 +351,18 @@ public class SpotifyQuery {
 
 
         for (JsonElement playlist : playlists) {
-          System.out.println("in loop");
           JsonObject playlistjo = playlist.getAsJsonObject();
-          System.out.println("got playlistjo");
-
           // uri
           String uri = playlistjo.get("uri").getAsString();
-          System.out.println("got uri");
-
+          
+          JsonObject owner = playlistjo.get("owner").getAsJsonObject();
+          String owner_id = owner.get("id").getAsString();
+          System.out.println("The Playlist Owner's ID is " + owner_id);
           // id
           String id = playlistjo.get("id").getAsString();
-          System.out.println("got id");
 
           // images
           JsonArray playlist_images = playlistjo.get("images").getAsJsonArray();
-          System.out.println("got images 1");
           List<String> images = new ArrayList<>();
           for (JsonElement playlist_image : playlist_images) {
             JsonObject ajo = playlist_image.getAsJsonObject();
@@ -389,20 +385,11 @@ public class SpotifyQuery {
 //          JsonArray playlist_tracks = tracks.get("items").getAsJsonArray();
 //          System.out.println("got tracks");
           List<String> track_ids = new ArrayList<>();
-//          Iterator<JsonElement> iterator3 = playlist_tracks.iterator();
-//          System.out.println("made iterator");
-//          while (iterator3.hasNext()) {
-//            JsonObject ajo = iterator3.next().getAsJsonObject();
-//            JsonObject ajo2 = ajo.get("track").getAsJsonObject();
-//            track_ids.add(ajo2.get("id").getAsString());
-//          }
-//          System.out.println("got track ids");
-
           // type
           String type = playlistjo.get("type").getAsString();
           System.out.println("about to add playlist");
           returnPlaylists
-                  .add(new SpotifyPlaylist(id, uri, num_of_tracks, track_ids, name, type, images));
+                  .add(new SpotifyPlaylist(owner_id, id, uri, num_of_tracks, track_ids, name, type, images));
 
         }
 
@@ -417,7 +404,7 @@ public class SpotifyQuery {
   }
 
   
-  public static List<Track> getPlaylistTracks(String user_id, String playlist_id, String access_token)
+  public static List<Track> getPlaylistTracks(String owner_id, String playlist_id, String access_token)
       throws Exception {
 
     List<Track> returnTracks = new ArrayList<>();
@@ -426,7 +413,7 @@ public class SpotifyQuery {
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("limit", "10"));
 
-      HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + user_id
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + owner_id
           + "/playlists/" + playlist_id + "/tracks?"
           + URLEncodedUtils.format(pairs, "UTF-8"));
       get.setHeader("Authorization", "Bearer " + access_token);
@@ -515,6 +502,12 @@ public class SpotifyQuery {
           // id
           String id = playlistjo.get("id").getAsString();
           
+
+          JsonObject owner = playlistjo.get("owner").getAsJsonObject();
+          String owner_id = owner.get("id").getAsString();
+          System.out.println("The Playlist Owner's ID is " + owner_id);
+          // id
+          
           // playlist images
           JsonArray playlist_images = playlistjo.get("images").getAsJsonArray();
           List<String> images = new ArrayList<>();
@@ -539,7 +532,7 @@ public class SpotifyQuery {
           String type = playlistjo.get("type").getAsString();
 
           returnPlaylists
-              .add(new SpotifyPlaylist(id, uri, num_of_tracks, track_ids, name, type, images) );
+              .add(new SpotifyPlaylist(owner_id, id, uri, num_of_tracks, track_ids, name, type, images) );
           
         }
 

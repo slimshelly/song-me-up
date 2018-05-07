@@ -6,6 +6,7 @@ import edu.brown.cs.jmst.beans.Entity;
 
 public class SpotifyPlaylist extends Entity {
 	
+  private String owner_id;
 	private String id;
 	private String uri;
 	private String type;
@@ -14,14 +15,19 @@ public class SpotifyPlaylist extends Entity {
 	private String name;
 	private List<String> playlist_images;
 	
-	public SpotifyPlaylist(String id, String uri, int num_of_tracks, List<String> track_ids, String name, String type, List<String> playlist_images) {
-		this.id = id;
+	public SpotifyPlaylist(String owner_id, String id, String uri, int num_of_tracks, List<String> track_ids, String name, String type, List<String> playlist_images) {
+		this.owner_id = owner_id;
+	  this.id = id;
 		this.uri = uri;
 		this.num_of_tracks = num_of_tracks;
 		this.track_ids = track_ids;
 		this.name = name;
 		this.type = type;
 		this.playlist_images = playlist_images;
+	}
+	
+	public String getOwnerId() {
+	  return owner_id;
 	}
 	
 	public String getId() {
@@ -74,7 +80,7 @@ public class SpotifyPlaylist extends Entity {
 	
 	@Override
 	public String toString() {
-		return String.format("Name: '%s', Id: '%s', uri: '%s'", this.name, this.id, this.uri);
+		return String.format("Name: '%s', OwnerId: '%s', Id: '%s', uri: '%s'", this.name, this.owner_id, this.id, this.uri);
 	}
 
 	public List<String> getPlaylistImages() {
