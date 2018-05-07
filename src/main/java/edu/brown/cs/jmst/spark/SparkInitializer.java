@@ -40,7 +40,7 @@ public class SparkInitializer {
     // Spark.get(prefix + "/admin", new AdminPageHandler(), freeMarker);
     // below leads to user's playlist page
     Spark.get("/join", new JoinHandler(), freeMarker);
-    
+
     // INSERT SEED PLAYLIST INTO PLAYLIST PAGE
     Spark.post("/seedPlaylist", new SeedPlaylist());
 
