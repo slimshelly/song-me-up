@@ -7,6 +7,13 @@ let started = false;
 
 let nextSongInterval = null;
 
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  // get first token
+  console.log("hello");
+  setUp();
+};
+
 function showCurrentState() {
   player.getCurrentState().then(state => {
     if (!state) {
@@ -101,14 +108,6 @@ const play = ({spotify_uri, playerInstance: {_options: {getOAuthToken, id}}}) =>
   });
 };
 
-$(document).ready(() => {
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    // get first token
-    console.log("hello")
-    setUp();
-  };
-});
-
 function setUp() {
   $.post("./refresh", responseJSON => {
     // parse response
@@ -116,12 +115,11 @@ function setUp() {
     freshToken = responseObject.access_token;
     // initialize player after new token
     token = freshToken;
-    player = new Spotify.Player({
-      name: 'Host Player',
-      getOAuthToken: cb => {
-        cb(token);
-      }
-    });
+
+    console.log("creating player");
+    let player = create_new_player();
+    console.log("made the player");
+
     // Connect to the player!
     player.connect();
     player.connect().then(success => {
@@ -145,6 +143,19 @@ function setUp() {
       }
     });
   });
+}
+
+// create a new player
+function create_new_player() {
+  console.log("about to make le player!");
+  player = new Spotify.Player({
+    name: 'Host Player',
+    getOAuthToken: cb => {
+      cb(token);
+    }
+  });
+  console.log("about to return the player");
+  return player;
 }
 
 function seek() {
