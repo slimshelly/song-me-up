@@ -56,29 +56,32 @@ $(document).ready(() => {
 	Generate song suggestions based on user input. Send POST request on each key press inside search bar.
 	*/
   $("#playlist").keyup(event => {
-    	let song = document.getElementById('songName').value;
-    	console.log(song);
+      let song = document.getElementById('songName').value;
+      console.log(song);
 
-	    if (song.length === 0) {
-	    	$results.hide();
-	    }
-	    else {
-        $results.show();
-		   	const postParameters = {word: song};
-		    console.log(postParameters);
-			  $results.empty();
-		    // send input to backend to generate song suggestions
-		    $.post("./suggestions", postParameters, responseJSON => {
+      if (song.length === 0) {
+        $("#dropdown").hide();
+      }
+      else {
+        $("#dropdown").show();
+        const postParameters = {word: song};
+        console.log(postParameters);
+        // $results.empty();
+        // send input to backend to generate song suggestions
+        $.post("./suggestions", postParameters, responseJSON => {
 
-				const responseObject = JSON.parse(responseJSON);
-				console.log(responseObject);
-				let output = responseObject;
-
-				for(const sug of output){
-          $results.append("<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>");
-        };
-		  });
-		}
+			const responseObject = JSON.parse(responseJSON);
+			console.log(responseObject);
+			let output = responseObject;
+			console.log(output);
+			let temp_html = "";
+			for(const sug of output){
+			  temp_html = temp_html + "<a href='javascript:;' onclick='new_song(\"" + sug.id.toString() + "\");'><div class='option'>" + sug.name + "</div></a>";
+			};
+			console.log(temp_html);
+			$results.html(temp_html);
+      });
+    }
   });
 
   $results.click(function () {
