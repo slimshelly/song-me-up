@@ -42,13 +42,25 @@ public class ErrorHandler implements TemplateViewRoute {
       } else {
         redirect_url = "\"join?" + param + "\"";
       }
-      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("errmsg", errInfo).put("redirect", redirect_url).build();
+      Map<String,
+          Object> variables = new ImmutableMap.Builder<String, Object>()
+              .put("errmsg", errInfo).put("redirect", redirect_url)
+              .put("link_name", "Your Party").build();
       return new ModelAndView(variables, "songmeup/error.ftl");
     } else {
-      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("errmsg", errInfo).build();
-      return new ModelAndView(variables, "songmeup/error.ftl");
+      if (u == null || !u.loggedIn()) {
+        Map<String,
+            Object> variables = new ImmutableMap.Builder<String, Object>()
+                .put("errmsg", errInfo).put("redirect", "\"login\"")
+                .put("link_name", "Login").build();
+        return new ModelAndView(variables, "songmeup/error.ftl");
+      } else {
+        Map<String,
+            Object> variables = new ImmutableMap.Builder<String, Object>()
+                .put("errmsg", errInfo).put("redirect", "\"main\"")
+                .put("link_name", "Main").build();
+        return new ModelAndView(variables, "songmeup/error.ftl");
+      }
     }
 
   }
