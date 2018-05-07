@@ -19,7 +19,7 @@ $(document).ready(() => {
     output.forEach(function(playlist) {
       console.log(playlist);
       $playlists.append("<div class='card'>"
-        + "<img class='albumArt' id='" + playlist.id + "' src='" + playlist.images[0] + "' onclick='seed_playlist(\"" + playlist.id + "\")'>"
+        + "<img class='albumArt' id='" + playlist.id + "' src='" + playlist.images[0] + "' onclick='seed_playlist(\"" + playlist.owner_id + "\",\"" + playlist.id + "\")'>"
         + "<div class='middle'><div class='text'>John Doe</div></div>"
         + "</div>");
     });
@@ -30,9 +30,9 @@ $(document).ready(() => {
 /*
 Send SEED PLAYLIST to backend to add to playlist
 */
-function seed_playlist(playlist_id) {
+function seed_playlist(owner_id, playlist_id) {
 
-  const postParameters = {id: playlist_id};
+  const postParameters = {playlist_id: playlist_id, owner_id: owner_id};
   console.log(postParameters);
 
   $.post("./seedPlaylist", postParameters, responseJSON => {

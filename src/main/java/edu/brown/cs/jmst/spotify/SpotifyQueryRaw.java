@@ -3,7 +3,6 @@ package edu.brown.cs.jmst.spotify;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -16,13 +15,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.brown.cs.jmst.general.General;
-import edu.brown.cs.jmst.music.Track;
-import edu.brown.cs.jmst.music.TrackBean;
 
 /**
  * A class for raw JSON queries from Spotify. Not yet turning them into backend objects.
@@ -67,6 +63,8 @@ public class SpotifyQueryRaw {
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+        
+        
 
         return jo.get("tracks").getAsJsonObject().get("items").getAsJsonArray();
       } else {
@@ -85,6 +83,9 @@ public class SpotifyQueryRaw {
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("limit", "10"));
       
+      System.out.println(user_id);
+      System.out.println(playlist_id);
+      
       HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + user_id
               + "/playlists/" + playlist_id + "/tracks?"
               + URLEncodedUtils.format(pairs, "UTF-8"));
@@ -95,10 +96,14 @@ public class SpotifyQueryRaw {
       
       if (response.getStatusLine().getStatusCode() == 200) {
     	  	System.out.println("GOT PLAYLIST RAW TRACKS");
+
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+        JsonArray tracks =
+            jo.get("items").getAsJsonArray();
         
-        return jo.get("items").getAsJsonArray();
+        return tracks;
       } else {
           throw new ClientProtocolException(
                   "Failed to get tracks: " + response.getStatusLine().getStatusCode()
