@@ -7,7 +7,7 @@ let started = false;
 
 let nextSongInterval = null;
 
-
+// SETS UP PLAYER IMMEDIATELY
 window.onSpotifyWebPlaybackSDKReady = () => {
   // get first token
   console.log("hello");
@@ -108,6 +108,7 @@ const play = ({spotify_uri, playerInstance: {_options: {getOAuthToken, id}}}) =>
   });
 };
 
+// Sets up spotify player with token from backend
 function setUp() {
   $.post("./refresh", responseJSON => {
     // parse response
@@ -117,7 +118,7 @@ function setUp() {
     token = freshToken;
 
     console.log("creating player");
-    let player = create_new_player();
+    let player = create_new_player(); // create new player
     console.log("made the player");
 
     // Connect to the player!
