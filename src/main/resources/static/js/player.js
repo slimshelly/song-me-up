@@ -1,6 +1,7 @@
 let player;
 let token;
 let freshToken;
+let currSong;
 let temp_uri = 'spotify:track:2Th9BGKvfZG8bKQSACitwG';
 let paused = false;
 let started = false;

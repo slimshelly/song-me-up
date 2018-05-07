@@ -8,6 +8,7 @@ public class SpotifyAuthentication {
   public static final String REDIRECT_HANDLE = "/callback";
   private static String ROOT_URI;
   private static String REDIRECT_URI;
+  public static final String STATE_KEY = "spotify_auth_state";
   public static final String ENCODED_CLIENT_KEY = Base64.getEncoder()
       .encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes());
 
