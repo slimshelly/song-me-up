@@ -172,16 +172,6 @@ public class SpotifyQuery {
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 //
         String id = jo.get("id").getAsString();
-//        Float acousticness = jo.get("acousticness").getAsFloat();
-//        Integer duration_ms = jo.get("duration_ms").getAsInt();
-//        Float instrumentalness = jo.get("instrumentalness").getAsFloat();
-//        Integer key = jo.get("key").getAsInt();
-//        Float liveness = jo.get("liveness").getAsFloat();
-//        Float loudness = jo.get("loudness").getAsFloat();
-//        Integer mode = jo.get("mode").getAsInt();
-//        Float speechiness =jo.get("speechiness").getAsFloat();
-//        Float tempo = jo.get("tempo").getAsFloat();
-//        Integer time_signature = jo.get("time_signature").getAsInt();
 
         Float valence = jo.get("valence").getAsFloat();
         Float energy = jo.get("energy").getAsFloat();
@@ -345,7 +335,6 @@ public class SpotifyQuery {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
         
-        System.out.println("got as json object");
         JsonArray playlists =
             jo.get("items").getAsJsonArray();
 
@@ -357,7 +346,6 @@ public class SpotifyQuery {
           
           JsonObject owner = playlistjo.get("owner").getAsJsonObject();
           String owner_id = owner.get("id").getAsString();
-          System.out.println("The Playlist Owner's ID is " + owner_id);
           // id
           String id = playlistjo.get("id").getAsString();
 
@@ -367,9 +355,7 @@ public class SpotifyQuery {
           for (JsonElement playlist_image : playlist_images) {
             JsonObject ajo = playlist_image.getAsJsonObject();
             images.add(ajo.get("url").getAsString());
-            System.out.println("got url");
           }
-          System.out.println("got images");
 
           // name
           String name = playlistjo.get("name").getAsString();
@@ -380,14 +366,9 @@ public class SpotifyQuery {
           // number of tracks
           int num_of_tracks = tracks.get("total").getAsInt();
 
-          // track ids - HALP
-
-//          JsonArray playlist_tracks = tracks.get("items").getAsJsonArray();
-//          System.out.println("got tracks");
           List<String> track_ids = new ArrayList<>();
           // type
           String type = playlistjo.get("type").getAsString();
-          System.out.println("about to add playlist");
           returnPlaylists
                   .add(new SpotifyPlaylist(owner_id, id, uri, num_of_tracks, track_ids, name, type, images));
 
@@ -505,7 +486,6 @@ public class SpotifyQuery {
 
           JsonObject owner = playlistjo.get("owner").getAsJsonObject();
           String owner_id = owner.get("id").getAsString();
-          System.out.println("The Playlist Owner's ID is " + owner_id);
           // id
           
           // playlist images

@@ -47,6 +47,7 @@ public class PartyWebSocket {
     // sessions.add(session);
     // // Build the CONNECT message
     JsonObject jo = new JsonObject();
+    System.out.println("Sent CONNECT message");
     jo.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
     // Send the CONNECT message
     session.getRemote().sendString(GSON.toJson(jo));
@@ -148,7 +149,9 @@ public class PartyWebSocket {
     JsonObject received = parser.parse(message).getAsJsonObject();
     assert received.get("type").getAsInt() < 8
         && received.get("type").getAsInt() >= 0;
-    SmuState state = SmuState.getInstance();
+        System.out.print("before received");
+    SmuState state = SmuState.getInstance(); 
+    
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();

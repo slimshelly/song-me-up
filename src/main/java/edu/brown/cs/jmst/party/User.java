@@ -147,6 +147,8 @@ public class User extends Entity {
   }
 
   public String leaveParty() throws PartyException {
+    // make the user's CURR_PARTy == null
+    System.out.println(display_name + "just left party ID " + curr_party);
     if (curr_party != null) {
       String retval = curr_party;
       curr_party = null;
@@ -157,9 +159,12 @@ public class User extends Entity {
   }
 
   public void joinParty(String id) throws PartyException {
+    
+    System.out.println("user is joining party of ID " + id);
     if (curr_party != null) {
       throw new PartyException("Already in a party.");
     } else {
+      System.out.println("user is already in party of ID " + id);
       curr_party = id;
     }
   }

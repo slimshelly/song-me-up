@@ -19,9 +19,9 @@ public class SeedPlaylist implements Route {
 	    User u = state.getUser(userid);
 	    String playlistId = request.queryMap().value("playlist_id");
 	    String ownerId = request.queryMap().value("owner_id");
-	    System.out.println("Getting spotify raw tracks");
 	    try {
 	    JsonArray ja = SpotifyQueryRaw.getPlaylistTracksRaw(ownerId, playlistId, u.getAuth());
+	    
 	    return SparkInitializer.GSON.toJson(ja);
 	    } catch(Exception e) {
 	    		General.printInfo(e.getMessage());
