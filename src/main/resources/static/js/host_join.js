@@ -134,7 +134,7 @@ const setup_live_playlist = () => {
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
   let type = "ws"
   if(window.location.host==="smuapp.com"){
-	type = type + "";  
+	type = type + "s";  
   }
   conn = new WebSocket(type + "://"+ partpath + "/songupdates");
   conn.onerror = err => {
