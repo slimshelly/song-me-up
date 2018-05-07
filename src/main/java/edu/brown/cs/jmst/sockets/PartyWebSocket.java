@@ -35,7 +35,7 @@ public class PartyWebSocket {
   private static final BidiMap<String, Session> userSession =
       new DualHashBidiMap<>();
 
-  private static enum MESSAGE_TYPE {
+  private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
     REFRESH_PLAY, REFRESH_ALL
   }

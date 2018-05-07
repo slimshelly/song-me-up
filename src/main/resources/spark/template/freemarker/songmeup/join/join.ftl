@@ -31,8 +31,8 @@
 		</div>
 
 		<div class="nowPlaying">
-			<div class="imgContainer" id="bobby">
-			</div>
+            <div class="imgContainer">
+            </div>
 		</div>
 
 		<div class="content">
