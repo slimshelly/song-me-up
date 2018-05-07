@@ -2,10 +2,7 @@ package edu.brown.cs.jmst.party;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -13,7 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.jmst.beans.Entity;
-import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
@@ -58,7 +54,9 @@ public class Party extends Entity {
 
   public void removePartyGoer(User u) throws PartyException {
     u.leaveParty();
+    System.out.println("removing user from partigoers");
     partygoers.remove(u);
+    System.out.println("removing user ID from userIds");
     userIds.remove(u.getId());
   }
 
@@ -95,9 +93,13 @@ public class Party extends Entity {
     return songQueue.vote(voteOn, userId, isUpVote);
   }
 
+  // **??
   public void end() throws PartyException {
+    // all users need to leave (be removed) 
     for (User u : partygoers) {
-      u.leaveParty();
+      // set the user's currParty ID to null
+      removePartyGoer(u);
+      
     }
   }
 
