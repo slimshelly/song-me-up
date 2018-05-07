@@ -26,7 +26,9 @@ $(document).ready(() => {
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
     refresh_playing_block(output.play);
-    refresh_now_playing(output.now_playing.album_cover, output.now_playing.song_name, output.now_playing.artist_names);
+    if (!jQuery.isEmptyObject(output.nowPlaying)) {
+      refresh_now_playing(output.now_playing.album_cover, output.now_playing.song_name, output.now_playing.artist_names);
+    }
   });
 
 	/*
