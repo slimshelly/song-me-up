@@ -53,9 +53,6 @@ public class SparkInitializer {
     Spark.get("/player", new PlayerPage(), freeMarker);
     Spark.get("/error", new ErrorHandler(), freeMarker);
     Spark.get("/faq", new FAQPage(), freeMarker);
-
-    // NOT RELEVANT, will delete later
-    Spark.get("/playlists", new MockPlaylist(), freeMarker);
   }
 
 }

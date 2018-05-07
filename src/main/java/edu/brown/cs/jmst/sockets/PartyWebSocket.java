@@ -67,10 +67,11 @@ public class PartyWebSocket {
     try {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_ALL.ordinal());
-      jo.add("payload", party.refreshAllBlocks());
       for (String partyer_id : party.getIds()) {
+        jo.add("payload", party.refreshAllBlocks(partyer_id));
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
+        jo.remove("payload");
       }
       System.out.println("Sent REFRESH_ALL message");
     } catch (IOException ioe) {
@@ -107,10 +108,11 @@ public class PartyWebSocket {
     try {
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.REFRESH_VOTE.ordinal());
-      jo.add("payload", party.refreshVoteBlock());
       for (String partyer_id : party.getIds()) {
+        jo.add("payload", party.refreshVoteBlock(partyer_id));
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
+        jo.remove("payload");
       }
       System.out.println("Sent REFRESH_VOTE message");
     } catch (IOException ioe) {

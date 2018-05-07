@@ -208,10 +208,40 @@ class SongBlock {
   }
 
   List<Suggestion> orderSmoothly(Suggestion start, List<Suggestion> topSongs) {
+    int numSongs = topSongs.size();
+    List<List<Suggestion>> possibleOrders = new ArrayList<>();
+    for (Suggestion s : topSongs) {
+      List<Suggestion> order = new ArrayList<>();
+      order.add(start);
+      order.add(s);
+      possibleOrders.add(order);
+    }
+    numSongs -= 1;
+    while (numSongs > 0) {
+      int numCopies = numSongs;
+      while (numCopies > 0) {
+        for (List<Suggestion> order : possibleOrders) {
+          possibleOrders.add(new ArrayList<>(order));
+        }
+        numCopies -= 1;
+      }
+      for (List<Suggestion> order : possibleOrders) {
+        for (Suggestion s : topSongs) {
+          if (!order.contains(s)) {
+            order.add(s);
+          }
+        }
+      }
+      numSongs -= 1;
+    }
+
+
+
+
     // This is the greediest ordering method possible!
     Suggestion prev = start;
-    List<Suggestion> smoothOrder = new ArrayList<>();
-    smoothOrder.add(start);
+    List<Suggestion> greedyOrder = new ArrayList<>();
+    greedyOrder.add(start);
     while (!topSongs.isEmpty()) {
       Suggestion closest = topSongs.remove(0);
       Double bestDistance = prev.distanceTo(closest);
@@ -222,9 +252,12 @@ class SongBlock {
         }
       }
       prev = closest;
-      smoothOrder.add(prev);
+      greedyOrder.add(prev);
     }
-    return smoothOrder;
+
+
+
+    return null;
   }
   //THOUGHTS: find greedy path, then start constructing other paths and abandon
   // them if they start to be longer than the greedy one. Problem: redoing some of the work if I do it this way

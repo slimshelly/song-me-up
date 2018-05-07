@@ -22,13 +22,13 @@ public class PlaylistHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     System.out.println("IN PLAYLIST HANDLER");
     SmuState state = SmuState.getInstance();
-    String userid = request.session().attribute("user");
-    User u = state.getUser(userid);
+    String userId = request.session().attribute("user");
+    User u = state.getUser(userId);
     String partyId = u.getCurrentParty(); // retrieve party id from user
     Party currParty = state.getParty(partyId); // retrieve party from id
-
+    //TODO: call refreshAll() ??
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
-    JsonArray votingBlock = currParty.refreshVoteBlock();
+    JsonArray votingBlock = currParty.refreshVoteBlock(userId);
     JsonArray playingBlock = currParty.refreshPlayBlock();
     System.out.println("About to get now playing");
     JsonObject nowPlaying = new JsonObject();
@@ -39,7 +39,7 @@ public class PlaylistHandler implements Route {
     }
 
     System.out.println("About to send variables");
-    Map<String, Object> variables = ImmutableMap.of("suggest",
+    Map<String, Object> variables = ImmutableMap.of("sugg",
             suggestingBlock, "vote", votingBlock, "play", playingBlock,
             "now_playing", nowPlaying);
     return GSON.toJson(variables); // only sending info, not reloading page

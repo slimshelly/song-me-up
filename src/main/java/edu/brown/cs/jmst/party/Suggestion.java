@@ -96,6 +96,12 @@ public class Suggestion implements Comparable<Suggestion> {
     return jo;
   }
 
+  public JsonObject toJson(String userId) throws Exception {
+    JsonObject jo = this.toJson();
+    jo.addProperty("user_vote_status", this.getUserVoteStatus(userId));
+    return jo;
+  }
+
   public Track getSong() { // TODO: does this need to be public?
     return this.song;
   }
@@ -176,6 +182,10 @@ public class Suggestion implements Comparable<Suggestion> {
       }
     }
     return this.score;
+  }
+
+  public int getUserVoteStatus(String userId) {
+    return userVoteMap.getOrDefault(userId, 0);
   }
 
   public boolean hasBeenVotedOnByUser(String userId) {

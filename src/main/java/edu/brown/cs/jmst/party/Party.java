@@ -135,15 +135,14 @@ public class Party extends Entity {
     return suggBlock;
   }
 
-  public JsonArray refreshVoteBlock() throws Exception {
+  public JsonArray refreshVoteBlock(String userId) throws Exception {
     JsonArray voteBlock = new JsonArray();
     PriorityBlockingQueue<Suggestion> voteSongs = songQueue.getSongsToVoteOn();
     Suggestion s;
     while ((s = voteSongs.poll()) != null) {
-      voteBlock.add(s.toJson());
+      voteBlock.add(s.toJson(userId));
     }
     return voteBlock;
-    //fixed bug with 3 songs with different scores being put in wrong order
   }
 
   public JsonArray refreshPlayBlock() throws Exception {
@@ -154,10 +153,10 @@ public class Party extends Entity {
     return playBlock;
   }
 
-  public JsonObject refreshAllBlocks() throws Exception {
+  public JsonObject refreshAllBlocks(String userId) throws Exception {
     JsonObject allBlocks = new JsonObject();
     allBlocks.add("sugg", refreshSuggBlock());
-    allBlocks.add("vote", refreshVoteBlock());
+    allBlocks.add("vote", refreshVoteBlock(userId));
     allBlocks.add("play", refreshPlayBlock());
     return allBlocks;
   }

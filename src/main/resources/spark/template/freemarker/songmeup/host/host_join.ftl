@@ -2,6 +2,7 @@
 	<head>
 		<script src="js/jquery-3.1.1.js"></script>
 		<script src="js/player.js"></script>
+        <script src="js/join_functions.js"></script>
 		<script src="js/host_join.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/party_code.css">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
