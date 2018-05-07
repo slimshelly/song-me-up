@@ -17,9 +17,11 @@ public class LoginHandler implements TemplateViewRoute {
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
     String state = SpotifyAuthentication.randomString(16);
+    res.removeCookie("spotify_auth_state");
     res.cookie("spotify_auth_state", state);
-    String scope = "user-read-private playlist-read-private user-read-email user-read-birthdate streaming user-modify-playback-state";
-    
+    String scope =
+        "user-read-private playlist-read-private user-read-email user-read-birthdate streaming user-modify-playback-state";
+
     List<BasicNameValuePair> pairs = new ArrayList<>();
     pairs.add(new BasicNameValuePair("response_type", "code"));
     pairs.add(
