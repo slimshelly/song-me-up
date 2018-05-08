@@ -20,17 +20,17 @@ import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
-
+	
+  private boolean open;
   private User ph;
   private Set<User> partygoers;
   private Set<String> userIds; // Just user ID strings (excluding host!)
   private SongQueue songQueue; // Contains the algorithm's block system
-  private SongMeUpPlaylist partyPlaylist; // Holds current playlist state
   public static final int ID_LENGTH = 6;
 
   private Suggestion nowPlaying = null;
 
-  public Party(User host, String id, SongMeUpPlaylist partyPlaylist)
+  public Party(User host, String id)
       throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
@@ -43,13 +43,9 @@ public class Party extends Entity {
     userIds = Collections.synchronizedSet(new HashSet<>());
     // total_votes = Collections.synchronizedMap(new HashMap<>());
     songQueue = new SongQueue();
-    this.partyPlaylist = partyPlaylist;
+    open = false;
   }
-
-  public SongMeUpPlaylist getPlaylist() {
-    return this.partyPlaylist;
-  }
-
+  
   public void addPartyGoer(User pg) throws PartyException {
     pg.joinParty(this.id);
     partygoers.add(pg);

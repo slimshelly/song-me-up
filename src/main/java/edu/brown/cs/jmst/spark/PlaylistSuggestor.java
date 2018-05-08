@@ -23,13 +23,11 @@ public class PlaylistSuggestor implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    // System.out.println("Getting user's playlists");
     SmuState state = SmuState.getInstance();
     String userid = request.session().attribute("user");
     User u = state.getUser(userid);
     List<SpotifyPlaylist> userPlaylists =
         SpotifyQuery.getUserPlaylist(u.getAuth());
-    // System.out.println("Got playlists");
 
     List<JsonObject> playlistObjects = new ArrayList<>();
     for (SpotifyPlaylist playlist : userPlaylists) {
@@ -38,9 +36,11 @@ public class PlaylistSuggestor implements Route {
       
       System.out.println("in playlist suggester. owner id is " + playlist.getOwnerId());
       
+      // add properties to currPlaylist object
       currPlaylist.addProperty("name", playlist.getName());
       currPlaylist.addProperty("id", playlist.getId());
-      currPlaylist.addProperty("numberOfTracks", playlist.getSongs().size());
+      currPlaylist.addProperty("numberOfTracks", playlist.getNumOfTracks());
+      
       JsonArray ja = new JsonArray();
       for (String s : playlist.getPlaylistImages()) {
         ja.add(s);
