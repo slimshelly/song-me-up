@@ -24,19 +24,19 @@ public class MainPage implements TemplateViewRoute {
     String userid = req.session().attribute("user");
     User u = state.getUser(userid);
     if (u == null || !u.loggedIn()) {
-      res.redirect(SpotifyAuthentication.getRootUri() + "/");
+      res.redirect(SpotifyAuthentication.getRootUri() + "/songmeup");
       return null;
     }
     QueryParamsMap qm = req.queryMap();
     if (qm.hasKey("leave")) {
-      
+
       String user_partyid = u.getCurrentParty();
       Party p = state.getParty(user_partyid);
       // if user is host, end the party.
       if (p.getHostId().equals(userid)) {
         System.out.println("host tried to leave party");
         p.end();
-        
+
       } else {
         try {
           state.leaveParty(u, u.getCurrentParty());
@@ -44,7 +44,7 @@ public class MainPage implements TemplateViewRoute {
           General.printErr("Could not leave party.");
         }
       }
-      
+
     }
     String name = u.getName() == null ? u.getId() : u.getName();
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
