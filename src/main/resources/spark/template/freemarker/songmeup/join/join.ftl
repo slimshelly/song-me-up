@@ -10,6 +10,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+		<div class = "hello"> HELLO </div>
+
 		<input type="hidden" id="user_id" value="${user_id}">
 			<!-- The Modal -->
 			<div id="modal_query" class="modal">

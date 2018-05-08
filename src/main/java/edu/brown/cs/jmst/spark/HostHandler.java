@@ -39,6 +39,7 @@ public class HostHandler implements TemplateViewRoute {
                 Object> variables = new ImmutableMap.Builder<String, Object>()
                     .put("party_id", p.getId()).put("hostname", p.getHostName())
                     .put("user_id", u.getId()).build();
+    	        p.setOpen(true);
             return new ModelAndView(variables, "songmeup/host/host_join.ftl");
     	      } else {
     	    	  	res.redirect(u.getCurrentPartyUrl(p));

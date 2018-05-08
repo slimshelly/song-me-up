@@ -1,4 +1,10 @@
-
+/*
+.hello {
+	position:absolute;
+  	top:10;
+  	left:15
+}
+*/
 body {
 	background: white;
 	margin: 0;
@@ -184,7 +190,6 @@ a {
 /*	margin-left: 10%;*/
 }
 
-
 /* SEARCH BAR */
 .search {
 	background: #ddd;
@@ -265,6 +270,8 @@ input[type=text] {
 }
 
 .buttons {
+	display: flex;
+	justify-content: flex-end;
 	margin-right: 10px;
 }
 
@@ -426,5 +433,21 @@ p {
 	font-family: 'Raleway', sans-serif;
 	font-size: 24px;
 }
+
+.score {
+	margin-right: 5px;
+}
+
+
+.track {
+	margin-left: 5%; 
+	width: 100%;
+	border: 1px solid black;
+}
+
+.score {
+	float: right;
+}
+
 
 

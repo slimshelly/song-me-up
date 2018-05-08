@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.party;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
@@ -41,27 +43,35 @@ public class Party extends Entity {
   }
 
   public void addPartyGoer(User pg) throws PartyException {
-    System.out.println("-------adding partiy goer " + pg);
     pg.joinParty(this.id);
     partygoers.add(pg);
     partyGoerIds.add(pg.getId());
     System.out.println(partygoers.size());
     System.out.println(partyGoerIds.size());
   }
-
+  
+  public void setOpen(boolean b) {
+	  this.open = b;
+  }
+  
+  public boolean getOpen() {
+	  return this.open;
+  }
+  
   public void removePartyGoer(User u) throws PartyException {
-
     u.leaveParty();
-    System.out.println("removing " + u.getName() + " from partigoers");
     partygoers.remove(u);
-    System.out.println("removing " + u.getName() + "  from partyGoerIds");
     partyGoerIds.remove(u.getId());
+<<<<<<< HEAD
 
     System.out.println("number of ids is " + this.getIds().size());
     System.out
         .println("number of party goers is " + this.getPartyGoerIds().size());
     // after removing party goer
+    
 
+=======
+>>>>>>> 125bf259d08e0ef8fc7c31a0c0fe473731409c3f
   }
 
   public String getHostName() {
@@ -69,14 +79,13 @@ public class Party extends Entity {
   }
 
   /**
-   * @param song
-   *          A Track to add to the current pool of suggestions
-   * @param userId
-   *          the ID string of the user submitting the suggestion
+   * @param song A Track to add to the current pool of suggestions
+   * @param userId the ID string of the user submitting the suggestion
    * @throws PartyException
    */
   public SuggestResult suggest(Track song, String userId,
-      AudioFeaturesSimple features) throws PartyException {
+                               AudioFeaturesSimple features)
+      throws PartyException {
     return songQueue.suggest(song, userId, features);
   }
 
@@ -101,34 +110,25 @@ public class Party extends Entity {
   // **??
   public void end() throws PartyException {
 
+    
+    try {
+      PartyWebSocket.signalLeaveParty(this);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
     System.out.println("number of ids is " + this.getIds().size());
     System.out.println("number of party goers is " + this.getIds().size());
     System.out.println("before ending party");
     for (String g : this.getIds()) {
       System.out.println(g);
     }
-
-    System.out.println("******** number of party goers is ");
-    for (String g : this.getPartyGoerIds()) {
-      System.out.println(g);
-    }
-
+    
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null
       removePartyGoer(u);
-
-    }
-
-    System.out.println("after ending party");
-    System.out.println("number of ids is " + this.getIds().size());
-    for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-    System.out
-        .println("number of party goers is " + this.getPartyGoerIds().size());
-    for (String g : this.getPartyGoerIds()) {
-      System.out.println(g);
     }
   }
 
