@@ -48,7 +48,15 @@ public class Party extends Entity {
     System.out.println(partygoers.size());
     System.out.println(partyGoerIds.size());
   }
-
+  
+  public void setOpen(boolean b) {
+	  this.open = b;
+  }
+  
+  public boolean getOpen() {
+	  return this.open;
+  }
+  
   public void removePartyGoer(User u) throws PartyException {
 
     u.leaveParty();
