@@ -221,6 +221,10 @@ textarea:focus, input:focus{
     width: 80%;
 	border-radius: 25px;
 	border: 1px solid black;
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* The Close Button */
