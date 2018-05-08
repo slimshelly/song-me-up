@@ -33,8 +33,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="#"><li>Listeners</li></a>
-					<a href="#"><li>Info</li></a>
+					<a href=""><li>Listeners</li></a>
 					<a href="main?leave=true"><li>Leave Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
 				</ul>

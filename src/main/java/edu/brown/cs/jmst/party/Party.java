@@ -29,6 +29,8 @@ public class Party extends Entity {
 
   private Suggestion nowPlaying = null;
   private List<Suggestion> topVoted = new ArrayList<>();
+  private List<Suggestion> songsPlayed = new ArrayList<>();
+  private int songsPlayedPosition = -1;
 
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
@@ -65,7 +67,12 @@ public class Party extends Entity {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-
+    try {
+      PartyWebSocket.signalLeft(this, u.getId());
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public String getHostName() {
@@ -84,8 +91,22 @@ public class Party extends Entity {
     return songQueue.suggest(song, userId, features);
   }
 
+  public Suggestion getPrevSongToPlay() throws Exception {
+    if (songsPlayed.isEmpty()) {
+      throw new PartyException("No previous song to play!");
+    }
+    if (songsPlayed.size() < songsPlayedPosition - 1) {
+      throw new PartyException("Invalid position in list of played songs!");
+    }
+    this.nowPlaying = songsPlayed.remove(songsPlayedPosition - 1);
+    this.songsPlayedPosition -= 1;
+    return nowPlaying;
+  }
+
   public Suggestion getNextSongToPlay() throws Exception {
     this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    this.songsPlayed.add(nowPlaying);
+    this.songsPlayedPosition += 1;
     if (this.topVoted.size() < 5) {
       this.topVoted.add(nowPlaying);
     } else {
@@ -129,10 +150,6 @@ public class Party extends Entity {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null
