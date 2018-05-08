@@ -24,6 +24,7 @@ public class SparkInitializer {
 
   public static void setHandlers(FreeMarkerEngine freeMarker, boolean web) {
     Spark.webSocket("/songupdates", PartyWebSocket.class);
+    Spark.webSocketIdleTimeoutMillis(1000 * 60 * 60);
     Spark.get("/main", new MainPage(), freeMarker);
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
     Spark.redirect.get("/", "/songmeup");
