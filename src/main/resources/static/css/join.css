@@ -170,6 +170,7 @@ a {
 }
 
 .playlist ul li {
+
 	min-height: 50px;
 	background-color: white;
 	transition-property: background-color;
@@ -186,8 +187,12 @@ a {
 	justify-content: center;
 }
 
-.playlist ul li div {
-/*	margin-left: 10%;*/
+.track {
+	/*display: inline-block;*/
+}
+
+.score {
+	transform: translateY(7px);
 }
 
 /* SEARCH BAR */
@@ -244,10 +249,6 @@ input[type=text] {
 }
 
 /* PLAYLIST APPEARANCE */
-.track {
-	margin-right: 65%;
-}
-
 
 .playingItem {
 	display: flex;
@@ -258,6 +259,7 @@ input[type=text] {
 
 .votingItem {
 	display: flex;
+	flex-grow: 5;
 	align-items: center;
 	justify-content: space-between;
 	background-color: lightgreen; /*temporary, just to visually distinguish*/
@@ -333,7 +335,6 @@ input[type=text] {
 .artistInfo {
 	margin-top: 5%;
 	display: block;
-	width: 100%;
 }
 
 .now {
@@ -442,12 +443,9 @@ p {
 .track {
 	margin-left: 5%; 
 	width: 100%;
-	border: 1px solid black;
 }
 
 .score {
 	float: right;
 }
-
-
 
