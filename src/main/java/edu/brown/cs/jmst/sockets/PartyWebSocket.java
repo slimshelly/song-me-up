@@ -217,20 +217,28 @@ public class PartyWebSocket {
         && received.get("type").getAsInt() >= 0;
     System.out.print("before received");
     SmuState state = SmuState.getInstance();
-
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
+    User u = state.getUser(user_id);
+    String partyId = u.getCurrentParty();
+    Party party = null;
+    if (partyId != null) {
+      party = state.getParty(partyId);
+    }
     if (type == MESSAGE_TYPE.CONNECT) {
       System.out.println("Received CONNECT message");
       userSession.put(user_id, session);
+      if (party != null) {
+        signalJoined(party, user_id);
+      } else {
+        System.err.println("Party is null!");
+      }
       return;
     }
     String song_id = inputPayload.get("song_id").getAsString();
-    User u = state.getUser(user_id);
-    String partyId = u.getCurrentParty();
-    if (partyId != null) {
-      Party party = state.getParty(partyId);
+
+    if (party != null) {
       switch (type) {
         case CONNECT: { // unreachable
           break;
@@ -330,6 +338,7 @@ public class PartyWebSocket {
           break;
         }
         case LEAVE_PARTY:
+          signalLeft(party, user_id);
           break;
         case REFRESH_ALL:
           break;
