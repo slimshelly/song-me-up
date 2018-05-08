@@ -1,7 +1,12 @@
 package edu.brown.cs.jmst.party;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import com.google.gson.JsonArray;
@@ -62,10 +67,6 @@ public class Party extends Entity {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out
-        .println("number of party goers is " + this.getPartyGoerIds().size());
 
   }
 
@@ -138,15 +139,12 @@ public class Party extends Entity {
   public void end() throws PartyException {
 
     try {
+      System.out.println("signal end party");
       PartyWebSocket.signalLeaveParty(this);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out.println("number of party goers is " + this.getIds().size());
-    System.out.println("before ending party");
     for (String g : this.getIds()) {
       System.out.println(g);
     }

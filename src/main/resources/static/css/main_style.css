@@ -290,3 +290,10 @@ textarea:focus, input:focus{
     cursor: pointer;
 }
 
+@media only screen and (max-width:600px) { 
+	.btn{
+		font-size: 28px;
+		width: 50%;
+	}
+}
+

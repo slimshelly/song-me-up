@@ -15,6 +15,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -48,7 +49,10 @@ public class User extends Entity {
     if (jo.get("images").isJsonNull() || jo.get("images").getAsJsonArray().size() == 0 || jo.get("images").getAsJsonArray().get(0).isJsonNull()) {
         image = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Antu_im-invisible-user.svg/2000px-Antu_im-invisible-user.svg.png";
     } else {
-        image = jo.get("images").getAsJsonArray().get(0).getAsString();
+      //get images array
+      JsonArray images = jo.get("images").getAsJsonArray();
+      String image_url = images.get(0).getAsJsonObject().get("url").getAsString();
+      image = image_url;
     }
 
     id = jo.get("id").getAsString();

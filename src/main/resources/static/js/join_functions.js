@@ -8,6 +8,7 @@ let $modal;
 let $leavereason;
 
 $(document).ready(() => {
+
   $dropdown = $("#dropdown");
   $nowPlaying = $(".imgContainer");
   $playingBlock = $("#playing");
@@ -16,6 +17,15 @@ $(document).ready(() => {
   $votingBlock = $("#voting");
   $modal = $("#modal_query");
   $leavereason = $("#leave_reason");
+
+  /*
+  SLIDE UP PLAYLIST AND MUSIC CONTROLS IF NOTHING INSIDE
+  */
+  // if ( isEmpty($(".imgContainer")) ) {
+  //     $(".musicControls").animate({bottom: '180px'});
+  //     $(".content").animate({bottom: '190px'});
+  // }
+
   /*
   Toggle color for up and down buttons
   */
@@ -242,6 +252,12 @@ function refresh_now_playing(song_cover, song_name, song_artists) {
     + "<span class='artistName'>" + song_artists[0] + "</span>"
     + "</div>"
   );
+  /*
+  SLIDE DOWN PLAYLIST AND MUSIC CONTROLS WHEN PLAY IS CLICKED
+  */
+  $(".musicControls").animate({top: '160px'});
+  $(".content").animate({top: '200px'});
+
 }
 
 function refresh_suggestions_block(toSuggest) {
@@ -322,3 +338,5 @@ function refresh_all(allBlocks) {
   refresh_voting_block(allBlocks.vote);
   refresh_playing_block(allBlocks.play);
 }
+
+
