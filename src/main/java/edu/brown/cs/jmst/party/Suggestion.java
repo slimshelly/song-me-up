@@ -126,16 +126,20 @@ public class Suggestion implements Comparable<Suggestion> {
    */
   void decayScore() {
     this.age += 1;
-    switch (age) {
+    if (this.score > 0) {
+      switch (age) {
       case 1: {
         score = (2 * score) / 3;
+        break;
       }
       case 2: {
         score = (score / 2);
+        break;
       }
       default: {
         score = 0; //TODO: maybe this should be -1?
       }
+    } 
     }
   }
 
