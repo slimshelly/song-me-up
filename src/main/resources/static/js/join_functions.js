@@ -6,6 +6,9 @@ let $userId;
 let $votingBlock;
 let $modal;
 let $leavereason;
+let $users;
+let $modal_users;
+let $close;
 
 $(document).ready(() => {
 
@@ -17,7 +20,21 @@ $(document).ready(() => {
   $votingBlock = $("#voting");
   $modal = $("#modal_query");
   $leavereason = $("#leave_reason");
-
+  $users = $("#user_data");
+  $modal_users = $("#modal_users");
+  $modal_users.css("display","none");
+  $close = $("#close_modal");
+  //two things close the modal, clicking the x, clicking outside it.
+  $close.click(function(){
+    $modal_users.css("display","none");
+  });
+  let other_modal = document.getElementById("modal_users");
+	window.onclick = function(event) {
+		if (event.target == other_modal) {
+			console.log("haha");
+			$modal_users.css("display","none");
+		}
+	}
   /*
   SLIDE UP PLAYLIST AND MUSIC CONTROLS IF NOTHING INSIDE
   */
@@ -25,25 +42,6 @@ $(document).ready(() => {
   //     $(".musicControls").animate({bottom: '180px'});
   //     $(".content").animate({bottom: '190px'});
   // }
-
-  /*
-  Toggle color for up and down buttons
-  */
-  $("#down").click(function () {
-    console.log("down clicked");
-    if (document.getElementById("up").classList.contains("upColor")) {
-      $("#up").toggleClass("upColor");
-    }
-    $("#down").toggleClass("downColor");
-  });
-
-  $("#up").click(function () {
-    console.log("up clicked");
-    if (document.getElementById("down").classList.contains("downColor")) {
-      $("#down").toggleClass("downColor");
-    }
-    $("#up").toggleClass("upColor");
-  });
 
   /*
   Generate song suggestions based on user input. Send POST request on each key press inside search bar.
@@ -91,9 +89,8 @@ const MESSAGE_TYPE = {
   REFRESH_PLAY: 6,
   REFRESH_ALL: 7,
   LEAVE_PARTY: 8,
-  USER_JOINED: 9,
-  PREV_SONG: 11
-
+  UPDATE_USERS: 9,
+  PREV_SONG: 10
 };
 
 function isEmpty( el ){
@@ -161,11 +158,9 @@ const setup_live_playlist = () => {
         console.log("Recieved LEAVE_PARTY message");
         leave_party("The party has ended. Click below to go back to main or join a new party!");
         break;     
-      case MESSAGE_TYPE.USER_JOINED:
-        console.log("Recieved USER_JOINED message");
-        break;
-      case MESSAGE_TYPE.USER_LEFT:
-        console.log("Recieved USER_LEFT message");
+      case MESSAGE_TYPE.UPDATE_USERS:
+        console.log("Recieved UPDATE_USERS message");
+		update_users(data.payload);
         break;
       case MESSAGE_TYPE.PREV_SONG:
         console.log("Recieved PREV_SONG message");
@@ -176,6 +171,23 @@ const setup_live_playlist = () => {
     }
   };
 };
+
+function show_listeners(){
+	console.log("Showing");
+	$modal_users.css("display","block");
+}
+
+function update_users(userlist){
+	let userdata = "";
+	$users.empty();
+	for(const single_user_data in userlist){
+		userdata = userdata + "<p>"+single_user_data.name+"</p>";
+	}
+	/* userlist.forEach(function(single_user_data) {
+        
+    }); */
+	$users.append(userdata);
+}
 
 function leave_party(info) {
    $leavereason.html(info);
@@ -342,10 +354,6 @@ function refresh_all(allBlocks) {
   refresh_suggestions_block(allBlocks.sugg);
   refresh_voting_block(allBlocks.vote);
   refresh_playing_block(allBlocks.play);
-}
-
-function get_everyone() {
-  console.log("getting everyone!")
 }
 
 
