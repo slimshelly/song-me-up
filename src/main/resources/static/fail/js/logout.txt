@@ -1,1 +1,0 @@
-<a href="https://www.spotify.com/us/logout/" class="logout-link" data-tracking="{'category': 'menu', 'action': 'log-out'}">Log Out</a>

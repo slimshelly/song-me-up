@@ -6,6 +6,7 @@ let $joinbtn;
 let $close;
 let $badid;
 let $text;
+const regex_id = new RegExp('[A-Z]{6}$');
 $(document).ready(() => {
 	$modal = $("#modal_query");
 	$joinbtn = $("#joinbtn");
@@ -71,34 +72,27 @@ $(document).ready(() => {
 			$text.val("");
 		}
 	}
-	let regex_id = new RegExp('[A-Z]{6}$');
+	
 	$(document).keypress(event => {
         // 13 is the key code for the Enter key
         if (event.which === 13) {
-			if($modal.css("display")==="block"){
-				let currval = $text.val().toUpperCase();
-				console.log(currval);
-				if(regex_id.test(currval)){
-					const postParameters = {"party_id": currval};
-					window.location = "./join?" + jQuery.param(postParameters);
-				}else{
-					$badid.show();
-				}
-			}
+			join_id();
 		}
 	});
+	
 });
 
 function join_id(){
-	let party_id = prompt("Enter the party code:", "######");
-	
-	
-	const postParameters = {"party_id": party_id};
-	/* let completepath = window.location.host + window.location.pathname;
-	let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
-	let newPath = partpath + "/join?" + jQuery.param(postParameters);
-	console.log(newPath); */
-	window.location = "./join?" + jQuery.param(postParameters);
+	if($modal.css("display")==="block"){
+		let currval = $text.val().toUpperCase();
+		console.log(currval);
+		if(regex_id.test(currval)){
+			const postParameters = {"party_id": currval};
+			window.location = "./join?" + jQuery.param(postParameters);
+		}else{
+			$badid.show();
+		}
+	}
 }
 
 

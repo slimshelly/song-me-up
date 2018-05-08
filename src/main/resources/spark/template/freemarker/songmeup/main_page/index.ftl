@@ -30,7 +30,7 @@
 				<p>Enter the party code:</p>
 				<p id="bad_id" hidden>Party code is 6 letters.</p>
 				<input class="textfield" type="text" id="party_id_box">
-				<a class="btn" id="proceed">GOT IT</a>
+				<a class="btn" id="proceed" onclick="join_id()">LET'S PARTY</a>
 			  </div>
 
 			</div>

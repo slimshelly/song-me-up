@@ -83,16 +83,78 @@ const MESSAGE_TYPE = {
   REFRESH_ALL: 7
 };
 
-function refresh_now_playing(song_cover, song_name, song_artists) {
-  $nowPlaying.empty();
-  $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
-  $nowPlaying.append(
-    "<div class='artistInfo'>"
-    + "<span class='now'>Now Playing</span>"
-    + "<span class='trackName'>" + song_name + "</span>"
-    + "<span class='artistName'>" + song_artists[0] + "</span>"
-    + "</div>"
-  );
+function isEmpty( el ){
+  return !$.trim(el.html())
+}
+
+let conn;
+
+// Setup the WebSocket connection for live updating of scores.
+const setup_live_playlist = () => {
+  let completepath = window.location.host + window.location.pathname;
+  let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
+  let type = "ws";
+  if(window.location.host==="cs.hiram.edu"){
+    type = type + "s";
+  }
+  conn = new WebSocket(type + "://"+ partpath + "/songupdates");
+  conn.onerror = err => {
+    console.log('Connection error:', err);
+  };
+
+  conn.onmessage = msg => {
+    const data = JSON.parse(msg.data);
+    console.log("Revieved a message: " + data.type);
+    // console.log(data);
+    switch (data.type) {
+      default:
+        console.log('Unknown message type!', data.type);
+        break;
+      case MESSAGE_TYPE.CONNECT:
+        console.log("Recieved CONNECT message");
+        new_connect(conn);
+        break;
+      case MESSAGE_TYPE.SUGGEST:
+        console.log("ecieved SUGGEST message");
+        add_suggestion(data.payload);
+        break;
+      case MESSAGE_TYPE.REFRESH_SUGG:
+        console.log("Recieved REFRESH_SUGG message (Legal but not used!)");
+        refresh_suggestions_block(data.payload);
+        break;
+      case MESSAGE_TYPE.VOTESONG:
+        console.log("Recieved VOTESONG message (ILLEGAL!)");
+        break;
+      case MESSAGE_TYPE.REFRESH_VOTE:
+        console.log("Recieved REFRESH_VOTE message");
+        refresh_voting_block(data.payload);
+        break;
+      case MESSAGE_TYPE.NEXT_SONG:
+        console.log("Recieved NEXT_SONG message");
+        playNextSong(data.payload.uri);
+        refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
+        break;
+      case MESSAGE_TYPE.REFRESH_PLAY:
+        console.log("Recieved REFRESH_PLAY message");
+        refresh_playing_block(data.payload);
+        break;
+      case MESSAGE_TYPE.REFRESH_ALL:
+        console.log("[HOST] Recieved REFRESH_ALL message");
+        refresh_all(data.payload);
+        break;
+    }
+  };
+};
+
+
+function request_next_song() {
+  console.log("In function request_next_song");
+  let request = {
+    "type":MESSAGE_TYPE.NEXT_SONG,
+    "payload": { "id": $userId , "song_id": ""}
+  };
+  conn.send(JSON.stringify(request));
+  console.log("[HOST] Sent NEXT_SONG message");
 }
 
 function new_connect(){
@@ -138,6 +200,18 @@ function add_suggestion(sugg) {
     + "</div>"
     + "</div>"
     + "</li>");
+}
+
+function refresh_now_playing(song_cover, song_name, song_artists) {
+  $nowPlaying.empty();
+  $nowPlaying.append("<img class='albumArt' src='" + song_cover + "'>");
+  $nowPlaying.append(
+    "<div class='artistInfo'>"
+    + "<span class='now'>Now Playing</span>"
+    + "<span class='trackName'>" + song_name + "</span>"
+    + "<span class='artistName'>" + song_artists[0] + "</span>"
+    + "</div>"
+  );
 }
 
 function refresh_suggestions_block(toSuggest) {
@@ -189,6 +263,7 @@ function refresh_voting_block(toVote) {
 
 function refresh_playing_block(toPlay) {
   console.log("In function refresh_playing_block");
+  $playingBlock.empty();
   toPlay.forEach(function(playSong) {
     $playingBlock.append(
       "<li id='" + $userId + "'>"

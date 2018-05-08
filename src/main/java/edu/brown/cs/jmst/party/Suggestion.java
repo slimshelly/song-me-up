@@ -290,4 +290,27 @@ public class Suggestion implements Comparable<Suggestion> {
 //    }
   }
 
+  /**
+   * Method for finding the 'distance' to another Suggestion. Used as a measure
+   * of how similar the two tracks are. Takes into account the inverse of
+   * popularity, so that there's a rough alternation between more and less
+   * popular songs.
+   * @param that a Suggestion to find the 'distance' to
+   * @return the 'distance' between this Suggestion object and the given
+   *         Suggestion, as a Double.
+   */
+  Double distanceToInversePopularity(Suggestion that) {
+    Float vDif = this.valence - that.valence; //positive means THIS > that
+    Float dDif = this.danceability - that.danceability; //positive means THIS > that
+    Float eDif = this.energy - that.energy; //positive means THIS > that
+    Float pDif = ((Double) (1.0 / this.popularity)).floatValue()
+            - ((Double) (1.0 / that.popularity)).floatValue();
+    if (pDif < 0.0) {
+      pDif *= -1;
+    }
+    //TODO: consider weighting the different things! (like multiply vDif squared by 2)
+    Float sum = (vDif * vDif) + (dDif * dDif) + (eDif * eDif) + (pDif * pDif);
+    return Math.sqrt(sum);
+  }
+
 }
