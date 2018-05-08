@@ -32,17 +32,17 @@
 		<div class="title">${hostname}'s Party</div>
 
 		<!-- The Modal -->
-<!-- 		<div id="modal_query" class="modal"> -->
+		<div id="modal_query" class="modal">
 
 		  <!-- Modal content -->
-<!-- 		  <div id="modal_cont" class="modal-content">
+		  <div id="modal_cont" class="modal-content">
 			<p style="text-align: center;">Here's the code for your party:</p>
 			<p id="party_code" style="text-align: center; font-weight: bold; font-size: 24px;">${party_id}</p>
 			<p style="text-align: center;">Share this code at any time so that people can suggest and vote on songs!</p>
 			<a class="btn" href="#" onclick="remove(document.getElementById('modal_query'));move_code();">GOT IT</a>
 		  </div>
 
-		</div> -->
+		</div>
 
 
 		<div class="nowPlaying">
