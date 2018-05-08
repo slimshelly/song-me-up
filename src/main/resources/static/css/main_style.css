@@ -87,6 +87,7 @@ p {
 	margin: 15px 15px;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	font-size: 18px;
 }
 
 .nav-bar p {
@@ -97,7 +98,7 @@ p {
 	padding-bottom: 10px;
 	
 	font-family: 'Raleway', sans-serif;
-	font-size: 24px;
+	font-size: 18px;
     line-height: 1;
     letter-spacing: 2px;
 	text-decoration: none;
