@@ -80,7 +80,8 @@ const MESSAGE_TYPE = {
   REFRESH_VOTE: 4,
   NEXT_SONG: 5,
   REFRESH_PLAY: 6,
-  REFRESH_ALL: 7
+  REFRESH_ALL: 7,
+  LEAVE_PARTY: 8
 };
 
 function isEmpty( el ){
@@ -142,9 +143,18 @@ const setup_live_playlist = () => {
         console.log("[HOST] Recieved REFRESH_ALL message");
         refresh_all(data.payload);
         break;
+      case MESSAGE_TYPE.LEAVE_PARTY:
+        console.log("[HOST] Recieved LEAVE_PARTY message");
+        leave_party();
+        break;
+        
     }
   };
 };
+
+function leave_party() {
+   
+}
 
 
 function request_next_song() {
