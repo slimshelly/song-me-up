@@ -42,10 +42,12 @@ public class JoinHandler implements TemplateViewRoute {
       try {
         Party p = state.addPartyPerson(u, party_id);
        
+        
+
         Map<String,
-            Object> variables = new ImmutableMap.Builder<String, Object>()
-                .put("hostname", p.getHostName()).put("user_id", u.getId())
-                .build();
+        Object> variables = new ImmutableMap.Builder<String, Object>()
+            .put("party_id", p.getId()).put("hostname", p.getHostName())
+            .put("user_id", u.getId()).build();
         return new ModelAndView(variables, "songmeup/join/join.ftl");
       } catch (IllegalArgumentException e) {
         err = SparkErrorEnum.INVALID_PARTY_ID;

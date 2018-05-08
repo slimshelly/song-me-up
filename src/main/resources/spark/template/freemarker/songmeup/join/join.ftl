@@ -11,6 +11,9 @@
 	</head>
 	<body>
 
+		
+		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
+
 		<input type="hidden" id="user_id" value="${user_id}">
 			<!-- The Modal -->
 			<div id="modal_query" class="modal">
