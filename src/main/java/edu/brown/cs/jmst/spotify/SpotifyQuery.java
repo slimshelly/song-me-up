@@ -58,7 +58,7 @@ public class SpotifyQuery {
       for (JsonElement artist : artists) {
         JsonObject ajo = artist.getAsJsonObject();
         artist_ids.add(ajo.get("id").getAsString());
-        artist_names.add(ajo.get("id").getAsString());
+        artist_names.add(ajo.get("name").getAsString());
       }
 
       String album_id =
@@ -430,7 +430,7 @@ public class SpotifyQuery {
           while (iterator2.hasNext()) {
             JsonObject ajo = iterator2.next().getAsJsonObject();
             artist_ids.add(ajo.get("id").getAsString());
-            artist_names.add(ajo.get("id").getAsString());
+            artist_names.add(ajo.get("name").getAsString());
           }
 
           String album_id =
