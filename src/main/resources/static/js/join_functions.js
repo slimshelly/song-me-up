@@ -49,10 +49,7 @@ $(document).ready(() => {
       // $dropdown.empty();
       // send input to backend to generate song suggestions
       $.post("./suggestions", postParameters, responseJSON => {
-        const responseObject = JSON.parse(responseJSON);
-        console.log(responseObject);
-        let output = responseObject;
-        console.log(output);
+        let output = JSON.parse(responseJSON);
         let temp_html = "";
         for(const sug of output){
           temp_html = temp_html
@@ -60,7 +57,6 @@ $(document).ready(() => {
               + "<div class='option'>" + sug.name + "</div>"
             + "</a>";
         }
-        console.log(temp_html);
         $dropdown.html(temp_html);
       });
     }
