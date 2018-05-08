@@ -49,29 +49,24 @@ public class Party extends Entity {
     System.out.println(partygoers.size());
     System.out.println(partyGoerIds.size());
   }
-  
+
   public void setOpen(boolean b) {
-	  this.open = b;
+    this.open = b;
   }
-  
+
   public boolean getOpen() {
-	  return this.open;
+    return this.open;
   }
-  
+
   public void removePartyGoer(User u) throws PartyException {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-<<<<<<< HEAD
 
     System.out.println("number of ids is " + this.getIds().size());
     System.out
         .println("number of party goers is " + this.getPartyGoerIds().size());
-    // after removing party goer
-    
 
-=======
->>>>>>> 125bf259d08e0ef8fc7c31a0c0fe473731409c3f
   }
 
   public String getHostName() {
@@ -79,13 +74,14 @@ public class Party extends Entity {
   }
 
   /**
-   * @param song A Track to add to the current pool of suggestions
-   * @param userId the ID string of the user submitting the suggestion
+   * @param song
+   *          A Track to add to the current pool of suggestions
+   * @param userId
+   *          the ID string of the user submitting the suggestion
    * @throws PartyException
    */
   public SuggestResult suggest(Track song, String userId,
-                               AudioFeaturesSimple features)
-      throws PartyException {
+      AudioFeaturesSimple features) throws PartyException {
     return songQueue.suggest(song, userId, features);
   }
 
@@ -110,7 +106,6 @@ public class Party extends Entity {
   // **??
   public void end() throws PartyException {
 
-    
     try {
       PartyWebSocket.signalLeaveParty(this);
     } catch (IOException e) {
@@ -124,7 +119,7 @@ public class Party extends Entity {
     for (String g : this.getIds()) {
       System.out.println(g);
     }
-    
+
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null
