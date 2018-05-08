@@ -12,7 +12,7 @@
 	<body>
 
 		
-		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
+		<!--<div id="hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>-->
 
 		<input type="hidden" id="user_id" value="${user_id}">
 			<!-- The Modal -->
@@ -43,10 +43,12 @@
 				<span></span>
 				<span></span>
 				<ul id="menu">
+					<li id="party_id">Party ID: ${party_id}</li>
 					<a href="main"><li>Home</li></a>
 					<a onclick="show_listeners()"><li>Listeners</li></a>
 					<a href="main?leave=true"><li>Leave Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
+					
 				</ul>
 			</div>
 		</nav>

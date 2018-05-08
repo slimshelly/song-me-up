@@ -126,7 +126,16 @@ a {
 	transform: none;
 }
 
+#party_id {
+	font-family: 'Raleway', sans-serif;
+	text-transform: capitalize;
+	padding: 10px 0px 30px 0px !important;
+	font-size: 30px !important;
+}
 
+#party_id:hover{
+	color: rgb(0,0,0) !important;
+}
 /* PARTY TITLE - in progress!-- Changed by Sam temporarily.
 .title {
 	clear: both;
@@ -247,6 +256,7 @@ input[type=text] {
 /* PLAYLIST APPEARANCE */
 .playingItem {
 	display: flex;
+	flex-grow: 5;
 	align-items: center;
 	justify-content: space-between;
 	background-color: lightblue; /*temporary, just to visually distinguish*/
