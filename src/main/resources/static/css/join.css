@@ -1,10 +1,4 @@
-/*
-.hello {
-	position:absolute;
-  	top:10;
-  	left:15
-}
-*/
+
 body {
 	background: white;
 	margin: 0;
@@ -376,7 +370,6 @@ input[type=text] {
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     padding-top: 100px; /* Location of the box */
