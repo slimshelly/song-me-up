@@ -142,7 +142,7 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
-
+    Set<User> temp_users = new HashSet<>(partygoers);
     try {
       System.out.println("signal end party");
       PartyWebSocket.signalLeaveParty(this);
@@ -151,7 +151,10 @@ public class Party extends Entity {
       e.printStackTrace();
     }
     // all users need to leave (be removed)
-    for (User u : partygoers) {
+    
+    ph.leaveParty();
+    
+    for (User u : temp_users) {
       // set the user's currParty ID to null
       removePartyGoer(u);
     }

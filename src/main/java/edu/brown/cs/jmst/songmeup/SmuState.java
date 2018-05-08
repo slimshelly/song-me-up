@@ -143,8 +143,6 @@ public class SmuState {
     parties.remove(id);
     System.out.println("just removed party id from list of parties");
     
-    this.instance.printActiveParties();
-    
   }
 
   /**

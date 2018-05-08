@@ -43,12 +43,6 @@ public class HostHandler implements TemplateViewRoute {
             return new ModelAndView(variables, "songmeup/host/host_join.ftl");
     	      } else {
     	    	  	res.redirect(u.getCurrentPartyUrl(p));
-//    	    	  err = SparkErrorEnum.INVALID_PARTY_ID;
-//    	            List<BasicNameValuePair> pair = new ArrayList<>();
-//    	            pair.add(new BasicNameValuePair("error", err.toString()));
-//    	            res.redirect(SpotifyAuthentication.getRootUri() + "/error?"
-//    	                + URLEncodedUtils.format(pair, "UTF-8"));
-//    	    	    res.redirect(u.getCurrentPartyUrl(p));
     	      }
     	  } else {
     		  err = SparkErrorEnum.NOT_IN_PARTY;
@@ -56,7 +50,6 @@ public class HostHandler implements TemplateViewRoute {
             pair.add(new BasicNameValuePair("error", err.toString()));
             res.redirect(SpotifyAuthentication.getRootUri() + "/error?"
                 + URLEncodedUtils.format(pair, "UTF-8"));
-    		  //res.redirect(SpotifyAuthentication.getRootUri() + "/main");
     	  }
     }
     return null;
