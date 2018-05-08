@@ -252,24 +252,28 @@ function refresh_voting_block(toVote) {
     upColorClass = "";
     downColorClass = "";
     if (voteSong.user_vote_status == 1) {
-      upColorClass = "upColor"; 
+      upColorClass = " upColor"; 
     } else if(voteSong.user_vote_status == -1) {
-      downColorClass = "downColor";
+      downColorClass = " downColor";
     }
     $votingBlock.append(
       "<li id='" + $userId + "'>"
+
       + "<div class='votingItem'>"
       + "<img class='albumCover' src='" + voteSong.album_cover + "'>"
+      
       + "<div class='track'>"
       + "<div class='song'>" + voteSong.song_name + "</div>"
       + "<div class='artist'>" + voteSong.artist_names[0] + "</div>"
-      + "<div class='score'>" + voteSong.score + "</div>"
       + "</div>"
+
       + "<div class='buttons'>"
+      + "<div class='score'>" + voteSong.score + "</div>"
       + "<a href='javascript:;' class='downbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ downColorClass + "' id='down'></i></a>"
-      + "<a href='javascript:;' class='upbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ upColorClass + "' id='up'></i></a>"
+      + "<a href='javascript:;' class='upbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up"+ upColorClass + "' id='up'></i></a>"
       + "</a>"
       + "</div>"
+
       + "</div>"
       + "</li>");
   });
