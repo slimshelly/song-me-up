@@ -38,7 +38,7 @@ public class PartyWebSocket {
 
   private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
-    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY
+    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY, USER_JOINED, USER_LEFT
   }
 
   @OnWebSocketConnect
@@ -98,6 +98,54 @@ public class PartyWebSocket {
       throw ioe;
     } catch (Exception e) {
       General.printErr(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  public void signalJoined(Party party, String userId) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.USER_JOINED.ordinal());
+      JsonObject payload = new JsonObject();
+      User user = SmuState.getInstance().getUser(userId);
+      payload.addProperty("name", user.getName());
+      payload.addProperty("image", user.getImage());
+      jo.add("payload", payload);
+      for (String partyer_id : party.getIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+      System.out.println("Sent USER_JOINED message");
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  public void signalLeft(Party party, String userId) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.USER_LEFT.ordinal());
+      User user = SmuState.getInstance().getUser(userId);
+      jo.addProperty("payload", user.getName());
+      for (String partyer_id : party.getIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+      System.out.println("Sent USER_LEFT message");
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -169,20 +217,28 @@ public class PartyWebSocket {
         && received.get("type").getAsInt() >= 0;
     System.out.print("before received");
     SmuState state = SmuState.getInstance();
-
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
+    User u = state.getUser(user_id);
+    String partyId = u.getCurrentParty();
+    Party party = null;
+    if (partyId != null) {
+      party = state.getParty(partyId);
+    }
     if (type == MESSAGE_TYPE.CONNECT) {
       System.out.println("Received CONNECT message");
       userSession.put(user_id, session);
+      if (party != null) {
+        signalJoined(party, user_id);
+      } else {
+        System.err.println("Party is null!");
+      }
       return;
     }
     String song_id = inputPayload.get("song_id").getAsString();
-    User u = state.getUser(user_id);
-    String partyId = u.getCurrentParty();
-    if (partyId != null) {
-      Party party = state.getParty(partyId);
+
+    if (party != null) {
       switch (type) {
         case CONNECT: { // unreachable
           break;
@@ -245,28 +301,8 @@ public class PartyWebSocket {
           // retrieve boolean of vote (up or down)
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
-            // record vote with party
-            // retrieve list of voting block songs from backend
             party.voteOnSong(user_id, song_id, vote);
             signalRefreshVote(party);
-            // Collection<Suggestion> votingBlock =
-            // party.voteOnSong(user_id, song_id, vote);
-            // JsonArray orderedSuggestions = new JsonArray();
-            // for (Suggestion s : votingBlock) {
-            // try {
-            // orderedSuggestions.add(s.toJson());
-            // } catch (Exception e) {
-            // General.printErr("Error accessing Track information. "
-            // + e.getMessage());
-            // }
-            // }
-            // JsonObject jo = new JsonObject();
-            // jo.addProperty("type", MESSAGE_TYPE.VOTESONG.ordinal());
-            // jo.add("payload", orderedSuggestions);
-            // for (String partyer_id : party.getPartyGoerIds()) {
-            // Session s = userSession.get(partyer_id);
-            // s.getRemote().sendString(GSON.toJson(jo));
-            // }
           } catch (PartyException e) {
             General.printErr("Failed to vote on song. " + e.getMessage());
           }
@@ -302,6 +338,7 @@ public class PartyWebSocket {
           break;
         }
         case LEAVE_PARTY:
+          signalLeft(party, user_id);
           break;
         case REFRESH_ALL:
           break;

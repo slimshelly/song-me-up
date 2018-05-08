@@ -29,6 +29,7 @@ public class User extends Entity {
   private String display_name = null;
   private boolean premium = false;
   private String curr_party = null;
+  private String image = null;
 
   public User() {
   }
@@ -44,6 +45,12 @@ public class User extends Entity {
     } else {
       display_name = jo.get("display_name").getAsString();
     }
+    if (jo.get("images").isJsonNull() || jo.get("images").getAsJsonArray().size() == 0 || jo.get("images").getAsJsonArray().get(0).isJsonNull()) {
+        image = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Antu_im-invisible-user.svg/2000px-Antu_im-invisible-user.svg.png";
+    } else {
+        image = jo.get("images").getAsJsonArray().get(0).getAsString();
+    }
+
     id = jo.get("id").getAsString();
     premium = jo.get("product").getAsString().equals("premium");
   }
@@ -71,16 +78,7 @@ public class User extends Entity {
         this.logIn(access_token, refresh_token);
       } else {
         throw new IllegalArgumentException("Invalid token.");
-        // pairs2.add(new BasicNameValuePair("error", "invalid_token"));
       }
-      // } catch (Exception e) {
-      // throw
-      //// List<BasicNameValuePair> pairs2 = new ArrayList<>();
-      //// pairs2.add(new BasicNameValuePair("error", "client_error"));
-    } catch (IllegalArgumentException e) {
-      throw e;
-    } catch (Exception e) {
-      throw e;
     }
   }
 
@@ -140,6 +138,10 @@ public class User extends Entity {
 
   public String getName() {
     return display_name;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public boolean inParty() {

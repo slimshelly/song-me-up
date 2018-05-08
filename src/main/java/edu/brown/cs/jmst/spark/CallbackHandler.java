@@ -39,10 +39,13 @@ public class CallbackHandler implements TemplateViewRoute {
         req.session().attribute("user", u.getId());
         General.printInfo(u.getId());
       } catch (IllegalArgumentException e) {
+        e.printStackTrace();
         err = SparkErrorEnum.INVALID_TOKEN;
       } catch (UserException e) {
+        e.printStackTrace();
         err = SparkErrorEnum.USER_ERROR;
       } catch (Exception e) {
+        e.printStackTrace();
         err = SparkErrorEnum.CLIENT_ERROR;
       }
     }
