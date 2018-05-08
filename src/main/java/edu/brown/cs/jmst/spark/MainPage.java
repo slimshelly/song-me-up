@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.jmst.general.General;
+import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -28,11 +29,22 @@ public class MainPage implements TemplateViewRoute {
     }
     QueryParamsMap qm = req.queryMap();
     if (qm.hasKey("leave")) {
-      try {
-        state.leaveParty(u, u.getCurrentParty());
-      } catch (PartyException e) {
-        General.printErr("Could not leave party.");
+      
+      String user_partyid = u.getCurrentParty();
+      Party p = state.getParty(user_partyid);
+      // if user is host, end the party.
+      if (p.getHostId().equals(userid)) {
+        System.out.println("host tried to leave party");
+        p.end();
+        
+      } else {
+        try {
+          state.leaveParty(u, u.getCurrentParty());
+        } catch (PartyException e) {
+          General.printErr("Could not leave party.");
+        }
       }
+      
     }
     String name = u.getName() == null ? u.getId() : u.getName();
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()

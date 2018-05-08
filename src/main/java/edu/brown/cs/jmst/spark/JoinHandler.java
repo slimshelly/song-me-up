@@ -41,6 +41,7 @@ public class JoinHandler implements TemplateViewRoute {
       SparkErrorEnum err = null;
       try {
         Party p = state.addPartyPerson(u, party_id);
+       
         Map<String,
             Object> variables = new ImmutableMap.Builder<String, Object>()
                 .put("hostname", p.getHostName()).put("user_id", u.getId())

@@ -33,7 +33,7 @@ public class PlaylistHandler implements Route {
     JsonArray votingBlock = currParty.refreshVoteBlock(userId);
     JsonArray playingBlock = currParty.refreshPlayBlock();
     JsonObject nowPlaying = new JsonObject();
-    System.out.println(currParty.getNowPlaying());
+
     if (currParty.getNowPlaying() != null) {
     	  nowPlaying = currParty.getNowPlaying().toJson();
     }

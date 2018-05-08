@@ -76,7 +76,8 @@ const MESSAGE_TYPE = {
   REFRESH_VOTE: 4,
   NEXT_SONG: 5,
   REFRESH_PLAY: 6,
-  REFRESH_ALL: 7
+  REFRESH_ALL: 7,
+  LEAVE_PARTY: 8
 };
 
 function isEmpty( el ){
@@ -90,10 +91,11 @@ const setup_live_playlist = () => {
   let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
   let type = "ws";
-  if(window.location.host==="cs.hiram.edu"){
+  if(window.location.host==="smuapp.com"){
     type = type + "s";
   }
-  conn = new WebSocket(type + "://"+ partpath + "/songupdates");
+  let name = type + "://"+ partpath + "/songupdates"
+  conn = new WebSocket(name);
   conn.onerror = err => {
     console.log('Connection error:', err);
   };
@@ -138,9 +140,18 @@ const setup_live_playlist = () => {
         console.log("[HOST] Recieved REFRESH_ALL message");
         refresh_all(data.payload);
         break;
+      case MESSAGE_TYPE.LEAVE_PARTY:
+        console.log("[HOST] Recieved LEAVE_PARTY message");
+        leave_party();
+        break;
+        
     }
   };
 };
+
+function leave_party() {
+   
+}
 
 
 function request_next_song() {

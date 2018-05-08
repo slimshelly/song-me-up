@@ -38,7 +38,7 @@ public class PartyWebSocket {
 
   private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
-    REFRESH_PLAY, REFRESH_ALL
+    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY
   }
 
   @OnWebSocketConnect
@@ -122,6 +122,25 @@ public class PartyWebSocket {
     }
   }
 
+  public void signalLeaveParty(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.LEAVE_PARTY.ordinal());
+      for (String partyer_id : party.getIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+      System.out.println("Sent LEAVE_PARTY message");
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
+
   public void signalRefreshSugg(Party party) throws IOException {
     if (party == null) {
       return;
@@ -148,9 +167,9 @@ public class PartyWebSocket {
     JsonObject received = parser.parse(message).getAsJsonObject();
     assert received.get("type").getAsInt() < 8
         && received.get("type").getAsInt() >= 0;
-        System.out.print("before received");
-    SmuState state = SmuState.getInstance(); 
-    
+    System.out.print("before received");
+    SmuState state = SmuState.getInstance();
+
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
@@ -274,6 +293,18 @@ public class PartyWebSocket {
           } catch (Exception e) {
             General.printErr("Error getting next song. " + e.getMessage());
           }
+          break;
+        case REFRESH_SUGG: {
+          break;
+        }
+        case REFRESH_PLAY: {
+          break;
+        }
+        case LEAVE_PARTY:
+          break;
+        case REFRESH_ALL:
+          break;
+        default:
           break;
       }
     }

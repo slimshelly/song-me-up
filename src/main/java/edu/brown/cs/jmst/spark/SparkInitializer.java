@@ -3,7 +3,6 @@ package edu.brown.cs.jmst.spark;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.google.gson.Gson;
@@ -59,8 +58,8 @@ public class SparkInitializer {
     List<BasicNameValuePair> pair = new ArrayList<>();
     pair.add(new BasicNameValuePair("error",
         SparkErrorEnum.PAGE_NOT_FOUND.toString()));
-    Spark.redirect.get("/*", SpotifyAuthentication.getRootUri() + "/error?"
-        + URLEncodedUtils.format(pair, "UTF-8"));
+    // Spark.redirect.get("/*", SpotifyAuthentication.getRootUri() + "/error?"
+    // + URLEncodedUtils.format(pair, "UTF-8"));
   }
 
 }

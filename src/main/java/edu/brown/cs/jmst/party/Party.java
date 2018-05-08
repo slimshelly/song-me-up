@@ -16,17 +16,17 @@ import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
-
+	
+  private boolean open;
   private User ph;
   private Set<User> partygoers;
-  private Set<String> userIds; // Just user ID strings (excluding host!)
+  private Set<String> partyGoerIds; // Just user ID strings (excluding host!)
   private SongQueue songQueue; // Contains the algorithm's block system
-  private SongMeUpPlaylist partyPlaylist; // Holds current playlist state
   public static final int ID_LENGTH = 6;
 
   private Suggestion nowPlaying = null;
 
-  public Party(User host, String id, SongMeUpPlaylist partyPlaylist)
+  public Party(User host, String id)
       throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
@@ -36,28 +36,34 @@ public class Party extends Entity {
     host.joinParty(this.id);
     ph = host;
     partygoers = Collections.synchronizedSet(new HashSet<>());
-    userIds = Collections.synchronizedSet(new HashSet<>());
+    partyGoerIds = Collections.synchronizedSet(new HashSet<>());
     // total_votes = Collections.synchronizedMap(new HashMap<>());
     songQueue = new SongQueue();
-    this.partyPlaylist = partyPlaylist;
+    open = false;
   }
-
-  public SongMeUpPlaylist getPlaylist() {
-    return this.partyPlaylist;
-  }
-
+  
   public void addPartyGoer(User pg) throws PartyException {
+    System.out.println("-------adding partiy goer " + pg);
     pg.joinParty(this.id);
     partygoers.add(pg);
-    userIds.add(pg.getId());
+    partyGoerIds.add(pg.getId());
+    System.out.println(partygoers.size());
+    System.out.println(partyGoerIds.size());
   }
 
   public void removePartyGoer(User u) throws PartyException {
+
     u.leaveParty();
-    System.out.println("removing user from partigoers");
+    System.out.println("removing " + u.getName()+" from partigoers");
     partygoers.remove(u);
-    System.out.println("removing user ID from userIds");
-    userIds.remove(u.getId());
+    System.out.println("removing " + u.getName()+"  from partyGoerIds");
+    partyGoerIds.remove(u.getId());
+    
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
+    // after removing party goer
+    
   }
 
   public String getHostName() {
@@ -86,7 +92,7 @@ public class Party extends Entity {
 
   public Collection<Suggestion> voteOnSong(String userId, String songId,
       boolean isUpVote) throws PartyException {
-    if (!userIds.contains(userId) && !userId.equals(getHostId())) {
+    if (!partyGoerIds.contains(userId) && !userId.equals(getHostId())) {
       throw new PartyException("User not found in party.");
     }
     Suggestion voteOn = songQueue.getSuggestionInVoteBlockById(songId);
@@ -95,11 +101,34 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out.println("number of party goers is " + this.getIds().size());
+    System.out.println("before ending party");
+    for (String g : this.getIds()) {
+      System.out.println(g);
+    }
+    
+    System.out.println("******** number of party goers is " );
+    for (String g : this.getPartyGoerIds()) {
+      System.out.println(g);
+    }
+    
     // all users need to leave (be removed) 
     for (User u : partygoers) {
       // set the user's currParty ID to null
       removePartyGoer(u);
       
+    }
+    
+    System.out.println("after ending party");
+    System.out.println("number of ids is " + this.getIds().size());
+    for (String g : this.getIds()) {
+      System.out.println(g);
+    }
+    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
+    for (String g : this.getPartyGoerIds()) {
+      System.out.println(g);
     }
   }
 
@@ -114,12 +143,12 @@ public class Party extends Entity {
 
   // Excludes the host's ID
   public Set<String> getPartyGoerIds() {
-    return Collections.unmodifiableSet(userIds);
+    return Collections.unmodifiableSet(partyGoerIds);
   }
 
   // Includes the host's ID
   public Set<String> getIds() {
-    Set<String> idSet = new HashSet<>(userIds);
+    Set<String> idSet = new HashSet<>(partyGoerIds);
     idSet.add(ph.getId());
     return Collections.unmodifiableSet(idSet);
   }
