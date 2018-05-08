@@ -206,7 +206,7 @@ a {
 }
 
 button {
-	padding: 6px 10px;
+	padding: 10px 10px;
 	background: #ddd;
 	font-size: 17px;
 	border: none;
@@ -214,12 +214,11 @@ button {
 }
 
 input[type=text] {
-	width: 75%;
+	width: inherit;
 	background: #ddd;
-	font-size: 25px;
+	font-size: 20px;
 	border: none;
 	outline: none;
-	transform: translateY(-3px);
 }
 
 #dropdown {

@@ -77,7 +77,7 @@
 			<div class="playlist" id="playlist">
 				<!-- SEARCH BAR -->
 				<div class="search">
-					<button type="submit"><i class="fas fa-search fa-2x"></i></button>
+					<button type="submit"><i class="fas fa-search fa-lg"></i></button>
 					<input type="text" placeholder="Add Songs" name="search" id="songName">
 				</div>
 				<!-- SUGGESTIONS -->
