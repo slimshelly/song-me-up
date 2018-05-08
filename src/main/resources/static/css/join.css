@@ -437,10 +437,15 @@ p {
 .score {
 	float: right;
 }
-
-@media only screen and (max-width:600px) { 
+a i{
+	font-size:24px;
+}
+@media only screen and (max-width:768px) { 
 	.btn{
 		font-size: 28px;
 		width: 50%;
+	}
+	a i{
+		font-size:36px;
 	}
 }
