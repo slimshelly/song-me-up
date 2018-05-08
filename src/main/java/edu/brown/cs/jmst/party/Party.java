@@ -1,10 +1,7 @@
 package edu.brown.cs.jmst.party;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import com.google.gson.JsonArray;
@@ -26,6 +23,7 @@ public class Party extends Entity {
   public static final int ID_LENGTH = 6;
 
   private Suggestion nowPlaying = null;
+  private List<Suggestion> topVoted = new ArrayList<>();
 
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
@@ -49,15 +47,15 @@ public class Party extends Entity {
     System.out.println(partygoers.size());
     System.out.println(partyGoerIds.size());
   }
-  
+
   public void setOpen(boolean b) {
-	  this.open = b;
+    this.open = b;
   }
-  
+
   public boolean getOpen() {
-	  return this.open;
+    return this.open;
   }
-  
+
   public void removePartyGoer(User u) throws PartyException {
     u.leaveParty();
     partygoers.remove(u);
@@ -69,19 +67,37 @@ public class Party extends Entity {
   }
 
   /**
-   * @param song A Track to add to the current pool of suggestions
-   * @param userId the ID string of the user submitting the suggestion
+   * @param song
+   *          A Track to add to the current pool of suggestions
+   * @param userId
+   *          the ID string of the user submitting the suggestion
    * @throws PartyException
    */
   public SuggestResult suggest(Track song, String userId,
-                               AudioFeaturesSimple features)
-      throws PartyException {
+      AudioFeaturesSimple features) throws PartyException {
     return songQueue.suggest(song, userId, features);
   }
 
   public Suggestion getNextSongToPlay() throws Exception {
     this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    if (this.topVoted.size() < 5) {
+      this.topVoted.add(nowPlaying);
+    } else {
+      Collections.sort(topVoted);
+      if (topVoted.get(topVoted.size() - 1).compareToScoreOnly(nowPlaying) > 0) {
+        topVoted.remove(topVoted.size() - 1);
+        topVoted.add(nowPlaying);
+      }
+    }
     return nowPlaying;
+  }
+
+  public List<String> getTopVotedIds() {
+    List<String> ids = new ArrayList<>();
+    for (Suggestion s: this.topVoted) {
+      ids.add(s.getSong().getId());
+    }
+    return ids;
   }
 
   public Suggestion getNowPlaying() {
@@ -100,7 +116,6 @@ public class Party extends Entity {
   // **??
   public void end() throws PartyException {
 
-    
     try {
       PartyWebSocket.signalLeaveParty(this);
     } catch (IOException e) {
@@ -114,7 +129,7 @@ public class Party extends Entity {
     for (String g : this.getIds()) {
       System.out.println(g);
     }
-    
+
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null
