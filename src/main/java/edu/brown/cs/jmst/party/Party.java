@@ -16,6 +16,7 @@ import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.sockets.PartyWebSocket;
+import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
@@ -34,12 +35,12 @@ public class Party extends Entity {
   private int songsPlayedPosition = -1;
 
   public Set<User> getEveryOne() {
-    
+
     Set<User> all = new HashSet<>(partygoers);
     all.add(ph);
     return all;
   }
-  
+
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
@@ -177,9 +178,11 @@ public class Party extends Entity {
       e.printStackTrace();
     }
     // all users need to leave (be removed)
-    
-    ph.leaveParty();
-    
+
+    // ph.leaveParty();
+    SmuState state = SmuState.getInstance();
+    User host = state.getUser(ph.getId());
+    host.leaveParty();
     for (User u : temp_users) {
       // set the user's currParty ID to null
       removePartyGoer(u);
