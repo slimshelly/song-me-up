@@ -27,7 +27,7 @@
 					<a href="main"><li>Home</li></a>
 					<a onclick="show_listeners()"><li>Listeners</li></a>
 					<a href="main?leave=true"><li>End Party</li></a>
-					<a href="logout"><li>Log Out</li></a>
+					<a href="main?leave=true&logout=true"><li>Log Out</li></a>
 				</ul>
 			</div>
 		</nav>

@@ -46,10 +46,16 @@ public class MainPage implements TemplateViewRoute {
       }
 
     }
-    String name = u.getName() == null ? u.getId() : u.getName();
-    Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-        .put("premium", u.isPremium()).put("name", name).build();
-    return new ModelAndView(variables, "songmeup/main_page/index.ftl");
+    if (qm.hasKey("logout")) {
+      res.redirect(SpotifyAuthentication.getRootUri() + "/logout");
+      return null;
+    } else {
+      String name = u.getName() == null ? u.getId() : u.getName();
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("premium", u.isPremium()).put("name", name).build();
+      return new ModelAndView(variables, "songmeup/main_page/index.ftl");
+    }
+
   }
 
 }
