@@ -92,7 +92,7 @@ const MESSAGE_TYPE = {
   REFRESH_ALL: 7,
   LEAVE_PARTY: 8,
   USER_JOINED: 9,
-  PREV_SONG: 11
+  PREV_SONG: 10
 
 };
 
@@ -147,7 +147,7 @@ const setup_live_playlist = () => {
         console.log("Recieved NEXT_SONG message");
         playNextSong(data.payload.uri);
         refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
-        togglePlay(); // toggle the play button
+        
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
         console.log("Recieved REFRESH_PLAY message");
@@ -171,7 +171,7 @@ const setup_live_playlist = () => {
         console.log("Recieved PREV_SONG message");
         playNextSong(data.payload.uri);
         refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
-        togglePlay(); // toggle the play button
+        
         break;
     }
   };
