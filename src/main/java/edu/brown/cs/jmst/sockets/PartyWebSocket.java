@@ -72,7 +72,9 @@ public class PartyWebSocket {
       for (String partyer_id : party.getIds()) {
         jo.add("payload", party.refreshAllBlocks(partyer_id));
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
         jo.remove("payload");
       }
       System.out.println("Sent REFRESH_ALL message");
@@ -93,7 +95,9 @@ public class PartyWebSocket {
       jo.add("payload", party.refreshPlayBlock());
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
       }
       System.out.println("Sent REFRESH_PLAY message");
     } catch (IOException ioe) {
@@ -111,26 +115,28 @@ public class PartyWebSocket {
     try {
 
       Set<User> everyone = party.getEveryOne();
-      
+
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.UPDATE_USERS.ordinal());
-      //JsonObject payload = new JsonObject();
+      // JsonObject payload = new JsonObject();
       JsonArray userArray = new JsonArray();
-      
+
       for (User u : everyone) {
         JsonObject user = new JsonObject();
         user.addProperty("name", u.getName());
         user.addProperty("image", u.getImage());
         userArray.add(user);
       }
-      
-      //payload.add("userArray", userArray);
-      jo.add("payload", userArray );
+
+      // payload.add("userArray", userArray);
+      jo.add("payload", userArray);
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
       }
-      
+
       System.out.println("Sent UPDATE_USERS message");
     } catch (IOException ioe) {
       throw ioe;
@@ -139,7 +145,6 @@ public class PartyWebSocket {
       e.printStackTrace();
     }
   }
-
 
   public void signalRefreshVote(Party party) throws IOException {
     if (party == null) {
@@ -151,7 +156,9 @@ public class PartyWebSocket {
       for (String partyer_id : party.getIds()) {
         jo.add("payload", party.refreshVoteBlock(partyer_id));
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
         jo.remove("payload");
       }
       System.out.println("Sent REFRESH_VOTE message");
@@ -171,7 +178,9 @@ public class PartyWebSocket {
       jo.addProperty("type", MESSAGE_TYPE.LEAVE_PARTY.ordinal());
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
       }
       System.out.println("Sent LEAVE_PARTY message");
     } catch (IOException ioe) {
@@ -191,7 +200,9 @@ public class PartyWebSocket {
       jo.add("payload", party.refreshSuggBlock());
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
+        if (s != null) {
+          s.getRemote().sendString(GSON.toJson(jo));
+        }
       }
       System.out.println("Sent REFRESH_SUGG message");
     } catch (IOException ioe) {
@@ -274,7 +285,9 @@ public class PartyWebSocket {
                   jo.add("payload", suggestion);
                   for (String partyer_id : party.getIds()) {
                     Session s = userSession.get(partyer_id);
-                    s.getRemote().sendString(GSON.toJson(jo));
+                    if (s != null) {
+                      s.getRemote().sendString(GSON.toJson(jo));
+                    }
                   }
                   System.out.println("Sent SUGGEST message");
                 } catch (Exception e) {
@@ -315,7 +328,9 @@ public class PartyWebSocket {
             jo.add("payload", nextSong.toJson());
             for (String partyer_id : party.getIds()) {
               Session s = userSession.get(partyer_id);
-              s.getRemote().sendString(GSON.toJson(jo));
+              if (s != null) {
+                s.getRemote().sendString(GSON.toJson(jo));
+              }
             }
             System.out.println("Sent NEXT_SONG message");
           } catch (Exception e) {
@@ -330,7 +345,7 @@ public class PartyWebSocket {
           break;
         }
         case LEAVE_PARTY:
-          
+
           break;
         case REFRESH_ALL:
           break;
@@ -344,7 +359,9 @@ public class PartyWebSocket {
             jo.add("payload", prevSong.toJson());
             for (String partyer_id : party.getIds()) {
               Session s = userSession.get(partyer_id);
-              s.getRemote().sendString(GSON.toJson(jo));
+              if (s != null) {
+                s.getRemote().sendString(GSON.toJson(jo));
+              }
             }
             System.out.println("Sent PREV_SONG message");
           } catch (Exception e) {
