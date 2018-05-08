@@ -78,13 +78,6 @@
             }
          </script>
 
-
-
-         <div class="more" id="down">
-            <a class="arrow" href="#">
-            <span class="bottom"></span>
-            </a>
-         </div>
       </div>
       <div class="info1" id="info">
          <div class="section">

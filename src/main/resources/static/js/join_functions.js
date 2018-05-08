@@ -25,6 +25,7 @@ $(document).ready(() => {
   $modal_users = $("#modal_users");
   $modal_users.css("display","none");
   $close = $("#close_modal");
+
   //two things close the modal, clicking the x, clicking outside it.
   $close.click(function(){
     $modal_users.css("display","none");

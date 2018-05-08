@@ -15,27 +15,30 @@
 		<!--<div id="hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>-->
 
 		<input type="hidden" id="user_id" value="${user_id}">
-			<!-- The Modal -->
-			<div id="modal_query" class="modal">
+		
+		<!-- The Modal for Error Messages-->
+		<div id="modal_query" class="modal" style="display:none;">
 
-			  <!-- Modal content -->
-			  <div class="modal-content">
-				<p id="leave_reason" align="center"></p>
-				<a class="btn" id="proceed" href="main">HOME</a>
-			  </div>
+		  <!-- Modal content -->
+		  <div class="modal-content">
+			<p id="leave_reason" align="center"></p>
+			<a class="btn" id="proceed" href="main">HOME</a>
+		  </div>
 
-			</div>
-			<!-- The Modal -->
-			<div id="modal_users" class="modal">
+		</div>
 
-			  <!-- Modal content -->
-			  <div class="modal-content2">
-			     <span class="close" id="close_modal">&times;</span>
-				 <div id="user_data">
-				 </div>
-			  </div>
+		<!-- The Modal for Listeners -->
+		<div id="modal_users" class="modal">
 
-			</div>
+		  <!-- Modal content -->
+		  <div class="modal-content2">
+		     <span class="close" id="close_modal">&times;</span>
+			 <div id="user_data">
+			 </div>
+		  </div>
+
+		</div>
+
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
