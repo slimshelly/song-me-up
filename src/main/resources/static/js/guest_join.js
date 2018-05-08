@@ -5,7 +5,7 @@ $(document).ready(() => {
     console.log(responseObject);
     let output = responseObject;
     refresh_all(output);
-    if (!jQuery.isEmptyObject(output.nowPlaying)) {
+    if (!jQuery.isEmptyObject(output.now_playing)) {
       refresh_now_playing(output.now_playing.album_cover,
         output.now_playing.song_name,
         output.now_playing.artist_names);

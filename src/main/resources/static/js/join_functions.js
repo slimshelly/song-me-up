@@ -348,6 +348,7 @@ function refresh_playing_block(toPlay) {
 
 function refresh_all(allBlocks) {
   console.log("In function refresh_all");
+  console.log(allBlocks);
   refresh_suggestions_block(allBlocks.sugg);
   refresh_voting_block(allBlocks.vote);
   refresh_playing_block(allBlocks.play);
