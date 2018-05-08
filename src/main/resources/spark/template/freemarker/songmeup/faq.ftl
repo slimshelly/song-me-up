@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!DOCTYdivE html>
 <html>
    <head>
-      <script src="js/jquery-3.1.1.js"></script>
-      <script src="js/main_jscript.js"></script>
-      <link rel="stylesheet" type="text/css" href="css/main_style.css">
-      <link href="https://fonts.googleapis.com/css?family=Raleway:800,500" rel="stylesheet">
+      <scridivt src="js/jquery-3.1.1.js"></scridivt>
+      <scridivt src="js/main_jscridivt.js"></scridivt>
+      <link rel="stylesheet" tydive="text/css" href="css/main_style.css">
+      <link rel="stylesheet" tydive="text/css" href="css/faq_style.css">
+      <link href="httdivs://fonts.googleadivis.com/css?family=Raleway:800,500" rel="stylesheet">
    </head>
    <body>
       <div class="nav-bar">
@@ -12,86 +13,54 @@
          <a id="faqs" href="faq">FAQS</a>
          <a id="home" href="main">HOME</a>
       </div>
-      <div class="topSection">
-         <div class="title">FAQ</div>
 
-         <button class="accordion">Who can host parties? </button>
+      <div class="FAQ">FAQ</div>
 
-         <div class="panel">
-            <ab>Only Spotify Premium users.</ab>
-         </div>
-         <button class="accordion">Who can join parties?</button>
-         <div class="panel">
-            <ab>Anyone! If you have a Spotify account.</ab>
-         </div>
-         <button class="accordion">How many parties can I be in at once? </button>
-         <div class="panel">
-            <ab>One. </ab>
-         </div>
+      <div class="content">
+         <ul class="questions">
 
-         <button class="accordion">Who can add songs? </button>
-         <div class="panel">
-            <ab>Anyone in the party. </ab>
-         </div>
-         <button class="accordion">Who can PLAY, PAUSE, and SKIP? </button>
-         <div class="panel">
-            <ab>Only the host. </ab>
-         </div>
+            <li>
+               <div class="q">Who can host parties?</div>
+               <div class="w">Only Spotify premium users.</div>
+            </li>
 
+            <li>
+               <div class="q">Who can join parties?</div>
+               <div class="w">Anyone with a Spotify account. Your account does not have to be premium.</div>
+            </li>
 
-         <button class="accordion">How many times can I vote/downvote a song?</button>
-         <div class="panel">
-            <ab>Only once. </ab>
-         </div>
-         <button class="accordion">How many parties can I be in at once? </button>
-         <div class="panel">
-            <ab>One. </ab>
-         </div>
+            <li>
+               <div class="q">How many parties can I be in at once?</div>
+               <div class="w">Just one.</div>
+            </li>
 
-         <button class="accordion">How many songs can I request? </button>
-         <div class="panel">
-            <ab>As many as you’d like!</ab>
-         </div>
-         <button class="accordion">How are songs prioritised?</button>
-         <div class="panel">
-            <ab>It's a secret. </ab>
-                     <ab> <br>
-               Kidding, songs are sorted according to both their votes, as well as similarities between their their audio features. <br>
-            </ab>
-         </div>
+            <li>
+               <div class="q">Who can add songs?</div>
+               <div class="w">Anyone in the party. This means both the host and the users.</div>
+            </li>
 
+            <li>
+               <div class="q">Who can play, pause, and skip through songs in the playlist?</div> 
+               <div class="w">Anyone in the party.</div>
+            </li>
 
-         <script>
-            var acc = document.getElementsByClassName("accordion");
-            var i;
-            
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function() {
-                    this.classList.toggle("active");
-                    var panel = this.nextElementSibling;
-                    if (panel.style.display === "block") {
-                        panel.style.display = "none";
-                    } else {
-                        panel.style.display = "block";
-                    }
-                });
-            }
-         </script>
+            <li>
+               <div class="q">How many times can I vote/downvote a song?</div>
+               <div class="w">Only once.</div>
+            </li>
 
+            <li>
+               <div class="q">How many parties can I be in at once?</div>
+               <div class="w">One.</div>
+            </li>
+
+            <li>
+               <div class="q">How are songs prioritised?</div>
+               <div class="w">It's a secret! Kidding, songs are sorted according to both their votes, as well as similarities between their their audio features.</div>
+            </li>
+         </ul>
       </div>
-      <div class="info1" id="info">
-         <div class="section">
-            <h1>SongMeUp</h1>
-            <p>is a playlist generating tool that allows partygoers to determine their own music</p>
-            <h2>How it works</h2>
-            <p>Join a party by entering a party code</p>
-            <p>Host a party by logging into Spotify</p>
-            <h2>Features</h2>
-            <p>Users decide the playlist</p>
-            <p>Suggested playlists to get you started</p>
-            <p>Save your party to use again</p>
-         </div>
-      </div>
+
    </body>
 </html>
-<!--When user clicks, "Host a party", app asks if they've been there before?-->
+
