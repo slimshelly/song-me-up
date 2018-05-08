@@ -35,7 +35,7 @@ class SongBlock {
   private static final int PLAYING = 3;
 
   // Unsure which method is better. Numbers subject to change
-  private static final int BLOCK_LENGTH_SONGS = 6;
+  private static final int BLOCK_LENGTH_SONGS = 5;
 
   SongBlock(int state) {
     this.suggestions = new PriorityBlockingQueue<>();
@@ -200,10 +200,12 @@ class SongBlock {
 
   private void updateSongsToPlay(Suggestion prevPlayed) {
     List<Suggestion> top = topSuggestions();
+    List<Suggestion> prefix = new ArrayList<>();
     if (prevPlayed == null) {
       prevPlayed = top.remove(0);
+      prefix.add(prevPlayed);
     }
-    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(), top);
+    this.songsToPlay = getAllPermutations(prevPlayed, prefix, top);
   }
 
   private List<Suggestion> getAllPermutations(Suggestion start,
