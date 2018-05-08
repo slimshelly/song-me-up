@@ -213,7 +213,7 @@ public class PartyWebSocket {
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    assert received.get("type").getAsInt() < 8
+    assert received.get("type").getAsInt() < 12
         && received.get("type").getAsInt() >= 0;
     System.out.print("before received");
     SmuState state = SmuState.getInstance();
