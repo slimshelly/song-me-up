@@ -1,3 +1,4 @@
+
 body {
 	text-align: center;
 	padding: 0;
@@ -39,7 +40,7 @@ p {
 	margin: 15px 15px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	font-size: 18px;
+	font-size: 15px;
 }
 
 .nav-bar p {
@@ -50,7 +51,7 @@ p {
 	padding-bottom: 10px;
 	
 	font-family: 'Raleway', sans-serif;
-	font-size: 18px;
+	font-size: 15px;
     line-height: 1;
     letter-spacing: 2px;
 	text-decoration: none;
@@ -139,7 +140,7 @@ textarea:focus, input:focus{
 }
 
 .arrow:hover .bottom {
-	border: 0.3em solid black;
+	border: 0.1em solid black;
 }
 
 /*.arrow:hover .bottom:after {
@@ -149,9 +150,9 @@ textarea:focus, input:focus{
 
 .bottom {
 	display: inline-block;
-	width: 2.5em;
-	height: 2.5em;
-	border: 0.3em solid #333;
+	width: 1.5em;
+	height: 1.5em;
+	border: 0.1em solid #333;
 	border-radius: 50%;
 	/*background color transition*/
 	transition-property: background-color;
@@ -165,11 +166,11 @@ textarea:focus, input:focus{
 .bottom:after {
 	content: '';
 	display: inline-block;
-	margin-top: 0.5em;
-	width: 0.8em;
-	height: 0.8em;
-	border-top: 0.3em solid #333;
-	border-right: 0.3em solid #333;
+	margin-top: 0.2em;
+	width: 0.6em;
+	height: 0.6em;
+	border-top: 0.1em solid #333;
+	border-right: 0.1em solid #333;
 	transform: rotate(135deg);
 }
 
@@ -183,7 +184,7 @@ INFO ON BOTTOM SECTION OF MAIN PAGE
 */
 .section {
 	font-family: 'Raleway', sans-serif;
-	transform: translateY(20%);
+	transform: translateY(30%);
 }
 
 .smu, .moreInfo {
@@ -264,5 +265,54 @@ INFO ON BOTTOM SECTION OF MAIN PAGE
 		font-size: 36px;
 		width: 50%;
 	}
+}
+
+.section h1 span {
+	font-size: 35px;
+}
+
+.instructions {
+	display: flex;
+	justify-content: space-around;
+}
+
+.frameWrapper {
+	display: inline-block;
+	position: relative;
+	margin: 15px 15px 15px 15px;
+	width: 250px;
+	height: 250px;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.frame1 {
+	width: auto;
+	height: 100%;
+	margin-left: -47px;
+	margin-top: -3px;
+}
+
+.frame2 {
+	width: auto;
+	height: 100%;
+	margin-left: -27px;
+	margin-top: 0px;
+}
+
+.frame3 {
+	width: auto;
+	height: 100%;
+	margin-left: -40px;
+	margin-top: 0px;
+}
+
+.words {
+	font-size: 18px;
+	/*font-family: 'Lato', sans-serif;*/
+}
+
+h1 {
+	border-bottom-width: 3px;
 }
 

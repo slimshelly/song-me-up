@@ -44,15 +44,31 @@
     	</div>
   		<div class="info1" id="info">
   			<div class="section">
-	  			<h1 class="smu">SongMeUp</h1>
-		  			<p>is a playlist generating tool that allows partygoers to determine their own music</p>
-	  			<h2 class="moreInfo">How it works</h2>
-	  				<p>Join a party by entering a party code</p>
-	  				<p>Host a party by logging into Spotify</p>
-	  			<h2 class="moreInfo">Features</h2>
-		  			<p>Users decide the playlist</p>
-		  			<p>Suggested playlists to get you started</p>
-		  			<p>Save your party to use again</p>
+	  			<h1>SongMeUp</h1>is a playlist generating tool that allows partygoers to determine their own music
+	  			<h2>How it works</h2>
+		  			
+		  			<div class="instructions">
+			  			<div class="instruction">
+			  				<div class="frameWrapper">
+			  					<img class="frame1" src="photos/host.png">
+			  				</div>
+			  				<div class="words">Host a party with Spotify Premium</div>
+			  			</div>
+
+			  			<div class="instruction">
+			  				<div class="frameWrapper">
+			  					<img class="frame2" src="photos/code.png">
+			  				</div>
+			  				<div class="words">Receive a party code and share it with users</div>
+		  				</div>
+
+		  				<div class="instruction">
+			  				<div class="frameWrapper">
+			  					<img class="frame3" src="photos/party.png">
+			  				</div>
+			  				<div class="words">Crowdsource your playlist!</div>
+		  				</div>
+	  				</div>
 	  		</div>
   		</div>
 	</body>
