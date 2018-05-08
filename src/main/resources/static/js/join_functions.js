@@ -89,7 +89,7 @@ const MESSAGE_TYPE = {
   REFRESH_PLAY: 6,
   REFRESH_ALL: 7,
   LEAVE_PARTY: 8,
-  USER_JOINED: 9,
+  UPDATE_USERS: 9,
   PREV_SONG: 10
 };
 
@@ -160,6 +160,8 @@ const setup_live_playlist = () => {
         break;     
       case MESSAGE_TYPE.UPDATE_USERS:
         console.log("Recieved UPDATE_USERS message");
+
+    console.log(data.payload);
 		update_users(data.payload);
         break;
       case MESSAGE_TYPE.PREV_SONG:
@@ -180,8 +182,9 @@ function show_listeners(){
 function update_users(userlist){
 	let userdata = "";
 	$users.empty();
-	for(const single_user_data in userlist){
-		userdata = userdata + "<p>"+single_user_data.name+"</p>";
+	for(const i in userlist){
+    console.log(userlist[i].name)
+    console.log(userlist[i].image)
 	}
 	/* userlist.forEach(function(single_user_data) {
         
