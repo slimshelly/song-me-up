@@ -22,12 +22,8 @@ public class Suggestion implements Comparable<Suggestion> {
   private Integer upVotes;
   private Integer downVotes;
   private Integer score;
-
   private Integer order;
-
-
   private int popularity;
-
   private Float valence;
   private Float danceability;
   private Float energy;
@@ -36,7 +32,6 @@ public class Suggestion implements Comparable<Suggestion> {
 
   private Map<String, Integer> userVoteMap;
   private Set<String> userSubmittedSet;
-
 
   private static final int UP_VOTE_WEIGHT = 1;
   private static final int DOWN_VOTE_WEIGHT = UP_VOTE_WEIGHT;
@@ -49,7 +44,6 @@ public class Suggestion implements Comparable<Suggestion> {
     this.score = UP_VOTE_WEIGHT;
     this.upVotes = 1;
     this.downVotes = 0;
-
     this.userVoteMap = new ConcurrentHashMap<>();
     this.userVoteMap.put(userId, 1);
     this.userSubmittedSet = Collections.synchronizedSet(new HashSet<>()); //TODO: make a Suggestion inherently thread-safe, and simply synchronize on that
@@ -63,11 +57,9 @@ public class Suggestion implements Comparable<Suggestion> {
       this.popularity = 0;
     }
 
-
     this.valence = features.getValence();
     this.danceability = features.getDanceability();
     this.energy = features.getEnergy();
-
     this.order = order;
   }
 
@@ -299,15 +291,16 @@ public class Suggestion implements Comparable<Suggestion> {
    * @return the 'distance' between this Suggestion object and the given
    *         Suggestion, as a Double.
    */
-  Double distanceToInversePopularity(Suggestion that) {
+  public Double distanceToInversePopularity(Suggestion that) {
     Float vDif = this.valence - that.valence; //positive means THIS > that
     Float dDif = this.danceability - that.danceability; //positive means THIS > that
     Float eDif = this.energy - that.energy; //positive means THIS > that
     Float pDif = ((Double) (1.0 / this.popularity)).floatValue()
-            - ((Double) (1.0 / that.popularity)).floatValue();
-    if (pDif < 0.0) {
+            - ((Double) (1.0 / this.popularity)).floatValue();
+    if (pDif < 0) {
       pDif *= -1;
     }
+    pDif = ((Double) (1.0 - pDif)).floatValue();
     //TODO: consider weighting the different things! (like multiply vDif squared by 2)
     Float sum = (vDif * vDif) + (dDif * dDif) + (eDif * eDif) + (pDif * pDif);
     return Math.sqrt(sum);

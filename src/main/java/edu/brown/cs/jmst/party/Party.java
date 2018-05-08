@@ -89,7 +89,7 @@ public class Party extends Entity {
   }
 
   public Suggestion getNextSongToPlay() throws Exception {
-    this.nowPlaying = songQueue.getNextSongToPlay();
+    this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
     return nowPlaying;
   }
 
