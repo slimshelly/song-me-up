@@ -127,7 +127,7 @@ public class PartyWebSocket {
     }
   }
 
-  public void signalLeft(Party party, String userId) throws IOException {
+  public static void signalLeft(Party party, String userId) throws IOException {
     if (party == null) {
       return;
     }

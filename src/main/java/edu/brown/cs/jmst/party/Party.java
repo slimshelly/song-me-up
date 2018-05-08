@@ -67,7 +67,12 @@ public class Party extends Entity {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-
+    try {
+      PartyWebSocket.signalLeft(this, u.getId());
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public String getHostName() {
@@ -145,10 +150,6 @@ public class Party extends Entity {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null

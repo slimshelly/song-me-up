@@ -12,6 +12,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+
+		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<input type="hidden" id="user_id" value="${user_id}">
 		<nav role="navigation" id="navvy">
@@ -22,8 +24,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="#"><li>Listeners</li></a>
-					<a href="#"><li>Info</li></a>
+					<a href="#" onclick="get_everyone()"><li>Listeners</li></a>
 					<a href="main?leave=true"><li>End Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
 				</ul>
