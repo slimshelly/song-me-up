@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.party;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
@@ -61,6 +63,7 @@ public class Party extends Entity {
     System.out
         .println("number of party goers is " + this.getPartyGoerIds().size());
     // after removing party goer
+    
 
   }
 
@@ -100,6 +103,13 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
+    
+    try {
+      PartyWebSocket.signalLeaveParty(this);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     System.out.println("number of ids is " + this.getIds().size());
     System.out.println("number of party goers is " + this.getIds().size());
