@@ -49,15 +49,16 @@
 		</div>
 		
 		<!-- The Modal -->
-			<div id="modal_users" class="modal">
+		<div id="modal_users" class="modal">
 
-			  <!-- Modal content -->
-			  <div class="modal-content2">
-			     <span class="close" id="close_modal">&times;</span>
-				 <div id="user_data"></div>
-			  </div>
+		  <!-- Modal content -->
+		  <div class="modal-content2">
+		     <span class="close" id="close_modal">&times;</span>
+			 <div id="user_data">
+			 </div>
+		  </div>
 
-			</div>
+		</div>
 
 
 		<div class="nowPlaying">
@@ -75,7 +76,7 @@
 			<div class="playlist" id="playlist">
 				<!-- SEARCH BAR -->
 				<div class="search">
-					<button type="submit"><i class="fas fa-plus"></i></button>
+					<button type="submit"><i class="fas fa-search fa-2x"></i></button>
 					<input type="text" placeholder="Add Songs" name="search" id="songName">
 				</div>
 				<!-- SUGGESTIONS -->

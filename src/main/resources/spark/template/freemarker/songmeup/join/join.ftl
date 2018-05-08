@@ -31,7 +31,8 @@
 			  <!-- Modal content -->
 			  <div class="modal-content2">
 			     <span class="close" id="close_modal">&times;</span>
-				 <div id="user_data"></div>
+				 <div id="user_data">
+				 </div>
 			  </div>
 
 			</div>

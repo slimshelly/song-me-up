@@ -183,12 +183,12 @@ function update_users(userlist){
 	let userdata = "";
 	$users.empty();
 	for(const i in userlist){
-    console.log(userlist[i].name)
-    console.log(userlist[i].image)
+    console.log(userlist[i].name);
+    console.log(userlist[i].image);
+    userdata = userdata + "<div class='image-cropper'><img class='userImage' src='" + userlist[i].image + "'>"
+                        + "<div class='userName'>" + userlist[i].name + "</div>"
+                        + "</div>"
 	}
-	/* userlist.forEach(function(single_user_data) {
-        
-    }); */
 	$users.append(userdata);
 }
 
