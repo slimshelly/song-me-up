@@ -36,7 +36,7 @@ class SongBlock {
   private static final int PLAYING = 3;
 
   // Unsure which method is better. Numbers subject to change
-  private static final int BLOCK_LENGTH_SONGS = 3;
+  private static final int BLOCK_LENGTH_SONGS = 6;
   private static final int BLOCK_LENGTH_MS = 900000; // 15 minutes
 
   private static final int VOTES_ONLY = 0;
@@ -280,48 +280,49 @@ class SongBlock {
   }
 
   private void updateSongsToPlay(Suggestion prevPlayed) {
-    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(),
-            topSuggestionsQuantity());
+    this.songsToPlay = topSuggestionsQuantity();
+//    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(),
+//            topSuggestionsQuantity());
   }
 
-  private List<Suggestion> getAllPermutations(Suggestion start,
-                                              List<Suggestion> prefix,
-                                              List<Suggestion> suggs) {
-    int n = suggs.size();
-    if (n == 0) { //Base case
-      return prefix;
-    } else {
-      List<Suggestion> newPrefix = new ArrayList<>(prefix);
-      List<Suggestion> newSugs = new ArrayList<>(suggs);
-      Suggestion s = newSugs.remove(0);
-      newPrefix.add(s);
-      List<Suggestion> min_list = getAllPermutations(start, newPrefix, newSugs);
-      for (int i = 1; i < n; i++) {
-        List<Suggestion> newPrefix2 = new ArrayList<>(prefix);
-        List<Suggestion> newSugs2 = new ArrayList<>(suggs);
-        Suggestion s2 = newSugs2.remove(i);
-        newPrefix2.add(s2);
-        List<Suggestion> newList = getAllPermutations(start, newPrefix2,
-                newSugs2);
-        if(getTotalDistance(start, newList) < getTotalDistance(start, min_list)){
-          min_list = newList;
-        }
-      }
-      return min_list;
-    }
-  }
-
-  private double getTotalDistance(Suggestion start, List<Suggestion> suggs){
-    List<Suggestion> copy = new ArrayList<>(suggs);
-    double distance = 0.0;
-    Suggestion prev = start;
-    while (!copy.isEmpty()) {
-      Suggestion next = copy.remove(0);
-      distance += prev.distanceToInversePopularity(next);
-      prev = next;
-    }
-    return distance;
-  }
+//  private List<Suggestion> getAllPermutations(Suggestion start,
+//                                              List<Suggestion> prefix,
+//                                              List<Suggestion> suggs) {
+//    int n = suggs.size();
+//    if (n == 0) { //Base case
+//      return prefix;
+//    } else {
+//      List<Suggestion> newPrefix = new ArrayList<>(prefix);
+//      List<Suggestion> newSugs = new ArrayList<>(suggs);
+//      Suggestion s = newSugs.remove(0);
+//      newPrefix.add(s);
+//      List<Suggestion> min_list = getAllPermutations(start, newPrefix, newSugs);
+//      for (int i = 1; i < n; i++) {
+//        List<Suggestion> newPrefix2 = new ArrayList<>(prefix);
+//        List<Suggestion> newSugs2 = new ArrayList<>(suggs);
+//        Suggestion s2 = newSugs2.remove(i);
+//        newPrefix2.add(s2);
+//        List<Suggestion> newList = getAllPermutations(start, newPrefix2,
+//                newSugs2);
+//        if(getTotalDistance(start, newList) < getTotalDistance(start, min_list)){
+//          min_list = newList;
+//        }
+//      }
+//      return min_list;
+//    }
+//  }
+//
+//  private double getTotalDistance(Suggestion start, List<Suggestion> suggs){
+//    List<Suggestion> copy = new ArrayList<>(suggs);
+//    double distance = 0.0;
+//    Suggestion prev = start;
+//    while (!copy.isEmpty()) {
+//      Suggestion next = copy.remove(0);
+//      distance += prev.distanceToInversePopularity(next);
+//      prev = next;
+//    }
+//    return distance;
+//  }
 
   // Add Vote Play
   // A

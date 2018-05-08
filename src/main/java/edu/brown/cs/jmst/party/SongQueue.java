@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;
@@ -26,7 +25,7 @@ public class SongQueue {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  private static final int MIN_VOTE_BLOCK_SIZE = 4;
+  private static final int MIN_VOTE_BLOCK_SIZE = 6;
 
   private static int order = 0;
 
