@@ -38,7 +38,7 @@ public class PartyWebSocket {
 
   private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
-    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY, USER_JOINED, USER_LEFT
+    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY, USER_JOINED, USER_LEFT, PREV_SONG
   }
 
   @OnWebSocketConnect
@@ -213,7 +213,7 @@ public class PartyWebSocket {
   public void message(Session session, String message) throws IOException {
     JsonParser parser = new JsonParser();
     JsonObject received = parser.parse(message).getAsJsonObject();
-    assert received.get("type").getAsInt() < 8
+    assert received.get("type").getAsInt() < 12
         && received.get("type").getAsInt() >= 0;
     System.out.print("before received");
     SmuState state = SmuState.getInstance();
@@ -342,6 +342,23 @@ public class PartyWebSocket {
           break;
         case REFRESH_ALL:
           break;
+        case PREV_SONG:
+          System.out.println("Received PREV_SONG message");
+          try {
+            Suggestion prevSong = party.getPrevSongToPlay();
+            signalRefreshAll(party); // TODO: only refresh play if possible
+            JsonObject jo = new JsonObject();
+            jo.addProperty("type", MESSAGE_TYPE.PREV_SONG.ordinal());
+            jo.add("payload", prevSong.toJson());
+            for (String partyer_id : party.getIds()) {
+              Session s = userSession.get(partyer_id);
+              s.getRemote().sendString(GSON.toJson(jo));
+            }
+            System.out.println("Sent PREV_SONG message");
+          } catch (Exception e) {
+            General.printErr("Error getting prev song. " + e.getMessage());
+            e.printStackTrace();
+          }
         default:
           break;
       }

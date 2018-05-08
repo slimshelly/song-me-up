@@ -92,7 +92,13 @@ const MESSAGE_TYPE = {
   REFRESH_ALL: 7,
   LEAVE_PARTY: 8,
   USER_JOINED: 9,
+<<<<<<< HEAD
   USER_LEFT: 10
+=======
+  USER_LEFT: 10,
+  PREV_SONG: 11
+
+>>>>>>> a8d71f8dbb2607e8da00afb6af4bdcc5c46eab57
 };
 
 function isEmpty( el ){
@@ -153,11 +159,11 @@ const setup_live_playlist = () => {
         refresh_playing_block(data.payload);
         break;
       case MESSAGE_TYPE.REFRESH_ALL:
-        console.log("[HOST] Recieved REFRESH_ALL message");
+        console.log("Recieved REFRESH_ALL message");
         refresh_all(data.payload);
         break;
       case MESSAGE_TYPE.LEAVE_PARTY:
-        console.log("[HOST] Recieved LEAVE_PARTY message");
+        console.log("Recieved LEAVE_PARTY message");
         leave_party("The party has ended. Click below to go back to main or join a new party!");
         break;     
       case MESSAGE_TYPE.USER_JOINED:
@@ -165,7 +171,13 @@ const setup_live_playlist = () => {
         break;
       case MESSAGE_TYPE.USER_LEFT:
         console.log("Recieved USER_LEFT message");
-        break;    
+        break;
+      case MESSAGE_TYPE.PREV_SONG:
+        console.log("Recieved PREV_SONG message");
+        playNextSong(data.payload.uri);
+        refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
+        togglePlay(); // toggle the play button
+        break;
     }
   };
 };
@@ -175,6 +187,16 @@ function leave_party(info) {
    $modal.css("display","block");
 }
 
+function request_prev_song() {
+  console.log("In function request_prev_song");
+  let request = {
+    "type":MESSAGE_TYPE.PREV_SONG,
+    "payload": { "id": $userId , "song_id": ""}
+  };
+  conn.send(JSON.stringify(request));
+  console.log("Sent PREV_SONG message");
+}
+
 function request_next_song() {
   console.log("In function request_next_song");
   let request = {
@@ -182,7 +204,7 @@ function request_next_song() {
     "payload": { "id": $userId , "song_id": ""}
   };
   conn.send(JSON.stringify(request));
-  console.log("[HOST] Sent NEXT_SONG message");
+  console.log("Sent NEXT_SONG message");
 }
 
 function new_connect(){
