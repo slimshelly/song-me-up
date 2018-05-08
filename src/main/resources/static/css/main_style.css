@@ -29,6 +29,10 @@ a {
 	text-decoration: none;
 	background-color: transparent;
 }
+p {
+	font-family: 'Raleway', sans-serif;
+	font-size: 24px;
+}
 
 .nav-bar a {
 	color: white;

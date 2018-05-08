@@ -17,7 +17,7 @@ public class SpotifyPlaylist extends Entity {
 	
 	public SpotifyPlaylist(String owner_id, String id, String uri, int num_of_tracks, List<String> track_ids, String name, String type, List<String> playlist_images) {
 		this.owner_id = owner_id;
-	  this.id = id;
+		this.id = id;
 		this.uri = uri;
 		this.num_of_tracks = num_of_tracks;
 		this.track_ids = track_ids;

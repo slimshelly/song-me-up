@@ -140,6 +140,7 @@ public class PartyWebSocket {
       General.printErr(e.getMessage());
     }
   }
+
   public void signalRefreshSugg(Party party) throws IOException {
     if (party == null) {
       return;
@@ -166,9 +167,9 @@ public class PartyWebSocket {
     JsonObject received = parser.parse(message).getAsJsonObject();
     assert received.get("type").getAsInt() < 8
         && received.get("type").getAsInt() >= 0;
-        System.out.print("before received");
-    SmuState state = SmuState.getInstance(); 
-    
+    System.out.print("before received");
+    SmuState state = SmuState.getInstance();
+
     MESSAGE_TYPE type = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
     JsonObject inputPayload = received.get("payload").getAsJsonObject();
     String user_id = inputPayload.get("id").getAsString();
@@ -292,6 +293,18 @@ public class PartyWebSocket {
           } catch (Exception e) {
             General.printErr("Error getting next song. " + e.getMessage());
           }
+          break;
+        case REFRESH_SUGG: {
+          break;
+        }
+        case REFRESH_PLAY: {
+          break;
+        }
+        case LEAVE_PARTY:
+          break;
+        case REFRESH_ALL:
+          break;
+        default:
           break;
       }
     }
