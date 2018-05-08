@@ -90,10 +90,10 @@ public class Party extends Entity {
     if (songsPlayed.isEmpty()) {
       throw new PartyException("No previous song to play!");
     }
-    if (songsPlayed.size() < songsPlayedPosition) {
+    if (songsPlayed.size() < songsPlayedPosition - 1) {
       throw new PartyException("Invalid position in list of played songs!");
     }
-    this.nowPlaying = songsPlayed.remove(songsPlayedPosition);
+    this.nowPlaying = songsPlayed.remove(songsPlayedPosition - 1);
     this.songsPlayedPosition -= 1;
     return nowPlaying;
   }
