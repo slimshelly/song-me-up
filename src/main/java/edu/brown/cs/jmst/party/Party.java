@@ -63,10 +63,6 @@ public class Party extends Entity {
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
 
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out
-        .println("number of party goers is " + this.getPartyGoerIds().size());
-
   }
 
   public String getHostName() {
@@ -107,15 +103,12 @@ public class Party extends Entity {
   public void end() throws PartyException {
 
     try {
+      System.out.println("signal end party");
       PartyWebSocket.signalLeaveParty(this);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out.println("number of party goers is " + this.getIds().size());
-    System.out.println("before ending party");
     for (String g : this.getIds()) {
       System.out.println(g);
     }
