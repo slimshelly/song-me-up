@@ -90,6 +90,7 @@ function playNextSong(songUri) {
   console.log("the started state is" + started);
   // reset conditions
   started = false;
+  paused = false;
   playSong(songUri);
 }
 

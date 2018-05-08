@@ -131,6 +131,7 @@ const setup_live_playlist = () => {
         console.log("Recieved NEXT_SONG message");
         playNextSong(data.payload.uri);
         refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
+        togglePlay(); // toggle the play button
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
         console.log("Recieved REFRESH_PLAY message");
@@ -143,8 +144,7 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.LEAVE_PARTY:
         console.log("[HOST] Recieved LEAVE_PARTY message");
         leave_party();
-        break;
-        
+        break;      
     }
   };
 };
@@ -152,7 +152,6 @@ const setup_live_playlist = () => {
 function leave_party() {
    
 }
-
 
 function request_next_song() {
   console.log("In function request_next_song");
@@ -246,6 +245,13 @@ function refresh_voting_block(toVote) {
   console.log("In function refresh_voting_block");
   $votingBlock.empty();
   toVote.forEach(function(voteSong) {
+    upColorClass = "";
+    downColorClass = "";
+    if (voteSong.user_vote_status == 1) {
+      upColorClass = "upColor"; 
+    } else if(voteSong.user_vote_status == -1) {
+      downColorClass = "downColor";
+    }
     $votingBlock.append(
       "<li id='" + $userId + "'>"
       + "<div class='votingItem'>"
@@ -256,11 +262,8 @@ function refresh_voting_block(toVote) {
       + "<div class='score'>" + voteSong.score + "</div>"
       + "</div>"
       + "<div class='buttons'>"
-      + "<a href='javascript:;' onclick='new_vote(false, \"" + voteSong.song_id + "\")'>"
-      + "<i class='fa fa-chevron-circle-down' id='down'></i>"
-      + "</a>"
-      + "<a href='javascript:;' onclick='new_vote(true, \"" + voteSong.song_id + "\")'>"
-      + "<i class='fa fa-chevron-circle-up' id='up'></i>"
+      + "<a href='javascript:;' class='downbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ downColorClass + "' id='down'></i></a>"
+      + "<a href='javascript:;' class='upbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ upColorClass + "' id='up'></i></a>"
       + "</a>"
       + "</div>"
       + "</div>"

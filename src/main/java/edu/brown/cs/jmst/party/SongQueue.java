@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.party.SuggestResult.STATUS_TYPE;

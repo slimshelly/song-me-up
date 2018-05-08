@@ -11,12 +11,11 @@ import com.google.gson.JsonObject;
 
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
-import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
-	
+
   private boolean open;
   private User ph;
   private Set<User> partygoers;
@@ -26,8 +25,7 @@ public class Party extends Entity {
 
   private Suggestion nowPlaying = null;
 
-  public Party(User host, String id)
-      throws PartyException, SpotifyException {
+  public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
     if (!host.isPremium()) {
@@ -41,7 +39,7 @@ public class Party extends Entity {
     songQueue = new SongQueue();
     open = false;
   }
-  
+
   public void addPartyGoer(User pg) throws PartyException {
     pg.joinParty(this.id);
     partygoers.add(pg);
@@ -95,7 +93,7 @@ public class Party extends Entity {
       System.out.println(g);
     }
     
-    // all users need to leave (be removed) 
+    // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null
       removePartyGoer(u);
