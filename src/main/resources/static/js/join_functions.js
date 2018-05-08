@@ -90,7 +90,9 @@ const MESSAGE_TYPE = {
   NEXT_SONG: 5,
   REFRESH_PLAY: 6,
   REFRESH_ALL: 7,
-  LEAVE_PARTY: 8
+  LEAVE_PARTY: 8,
+  USER_JOINED: 9,
+  USER_LEFT: 10
 };
 
 function isEmpty( el ){
@@ -157,7 +159,13 @@ const setup_live_playlist = () => {
       case MESSAGE_TYPE.LEAVE_PARTY:
         console.log("[HOST] Recieved LEAVE_PARTY message");
         leave_party("The party has ended. Click below to go back to main or join a new party!");
-        break;      
+        break;     
+      case MESSAGE_TYPE.USER_JOINED:
+        console.log("Recieved USER_JOINED message");
+        break;
+      case MESSAGE_TYPE.USER_LEFT:
+        console.log("Recieved USER_LEFT message");
+        break;    
     }
   };
 };
@@ -317,6 +325,10 @@ function refresh_all(allBlocks) {
   refresh_suggestions_block(allBlocks.sugg);
   refresh_voting_block(allBlocks.vote);
   refresh_playing_block(allBlocks.play);
+}
+
+function get_everyone() {
+  console.log("getting everyone!")
 }
 
 
