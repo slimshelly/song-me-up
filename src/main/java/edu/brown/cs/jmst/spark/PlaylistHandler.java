@@ -4,9 +4,9 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import edu.brown.cs.jmst.party.Party;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
@@ -25,14 +25,14 @@ public class PlaylistHandler implements Route {
     String userId = request.session().attribute("user");
     User u = state.getUser(userId);
     String partyId = u.getCurrentParty(); // retrieve party id from user
+  
+    
     Party currParty = state.getParty(partyId); // retrieve party from id
-    //TODO: call refreshAll() ??
+
     JsonArray suggestingBlock = currParty.refreshSuggBlock();
     JsonArray votingBlock = currParty.refreshVoteBlock(userId);
     JsonArray playingBlock = currParty.refreshPlayBlock();
-    System.out.println("About to get now playing");
     JsonObject nowPlaying = new JsonObject();
-    System.out.println("Here's now playing");
     System.out.println(currParty.getNowPlaying());
     if (currParty.getNowPlaying() != null) {
     	  nowPlaying = currParty.getNowPlaying().toJson();

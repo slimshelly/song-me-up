@@ -4,7 +4,8 @@ public enum SparkErrorEnum {
   ALREADY_IN_PARTY("already_in_party"), NOT_IN_PARTY("not_in_party"),
   INVALID_PARTY_ID("invalid_party_id"), NEEDS_PREMIUM("needs_premium"),
   INVALID_TOKEN("invalid_token"), STATE_MISMATCH("state_mismatch"),
-  CLIENT_ERROR("client_error"), USER_ERROR("user_error");
+  CLIENT_ERROR("client_error"), USER_ERROR("user_error"),
+  PAGE_NOT_FOUND("404");
 
   private String errstring;
 
@@ -41,6 +42,9 @@ public enum SparkErrorEnum {
         break;
       case "user_error":
         retval = "It appears you are logged in somewhere else.";
+        break;
+      case "404":
+        retval = "We don't have a page by that name. Here is a login link :)";
         break;
       default:
         retval = "We really aren't sure what went wrong... Try again?";

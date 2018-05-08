@@ -36,8 +36,6 @@ public class PlaylistSuggestor implements Route {
       JsonObject currPlaylist = new JsonObject();
       currPlaylist.addProperty("owner_id", playlist.getOwnerId());
       
-      System.out.println("in playlist suggester. owner id is " + playlist.getOwnerId());
-      
       currPlaylist.addProperty("name", playlist.getName());
       currPlaylist.addProperty("id", playlist.getId());
       currPlaylist.addProperty("numberOfTracks", playlist.getSongs().size());
