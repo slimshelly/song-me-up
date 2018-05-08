@@ -92,13 +92,8 @@ const MESSAGE_TYPE = {
   REFRESH_ALL: 7,
   LEAVE_PARTY: 8,
   USER_JOINED: 9,
-<<<<<<< HEAD
-  USER_LEFT: 10
-=======
-  USER_LEFT: 10,
   PREV_SONG: 11
 
->>>>>>> a8d71f8dbb2607e8da00afb6af4bdcc5c46eab57
 };
 
 function isEmpty( el ){
