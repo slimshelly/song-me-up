@@ -16,3 +16,8 @@ $(document).ready(() => {
 function playNextSong(songUri) {
   console.log("doing nothing!");
 }
+
+function leave_party(info) {
+   $leavereason.html(info);
+   $modal.css("display","block");
+}

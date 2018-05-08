@@ -6,6 +6,9 @@ let $userId;
 let $votingBlock;
 let $modal;
 let $leavereason;
+let $users;
+let $modal_users;
+let $close;
 
 $(document).ready(() => {
 
@@ -17,7 +20,21 @@ $(document).ready(() => {
   $votingBlock = $("#voting");
   $modal = $("#modal_query");
   $leavereason = $("#leave_reason");
-
+  $users = $("#user_data");
+  $modal_users = $("#modal_users");
+  $modal_users.css("display","none");
+  $close = $("#close_modal");
+  //two things close the modal, clicking the x, clicking outside it.
+  $close.click(function(){
+    $modal_users.css("display","none");
+  });
+  let other_modal = document.getElementById("modal_users");
+	window.onclick = function(event) {
+		if (event.target == other_modal) {
+			console.log("haha");
+			$modal_users.css("display","none");
+		}
+	}
   /*
   SLIDE UP PLAYLIST AND MUSIC CONTROLS IF NOTHING INSIDE
   */
@@ -25,25 +42,6 @@ $(document).ready(() => {
   //     $(".musicControls").animate({bottom: '180px'});
   //     $(".content").animate({bottom: '190px'});
   // }
-
-  /*
-  Toggle color for up and down buttons
-  */
-  $("#down").click(function () {
-    console.log("down clicked");
-    if (document.getElementById("up").classList.contains("upColor")) {
-      $("#up").toggleClass("upColor");
-    }
-    $("#down").toggleClass("downColor");
-  });
-
-  $("#up").click(function () {
-    console.log("up clicked");
-    if (document.getElementById("down").classList.contains("downColor")) {
-      $("#down").toggleClass("downColor");
-    }
-    $("#up").toggleClass("upColor");
-  });
 
   /*
   Generate song suggestions based on user input. Send POST request on each key press inside search bar.
@@ -90,7 +88,9 @@ const MESSAGE_TYPE = {
   NEXT_SONG: 5,
   REFRESH_PLAY: 6,
   REFRESH_ALL: 7,
-  LEAVE_PARTY: 8
+  LEAVE_PARTY: 8,
+  UPDATE_USERS: 9,
+  PREV_SONG: 10
 };
 
 function isEmpty( el ){
@@ -144,27 +144,62 @@ const setup_live_playlist = () => {
         console.log("Recieved NEXT_SONG message");
         playNextSong(data.payload.uri);
         refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
-        togglePlay(); // toggle the play button
+        
         break;
       case MESSAGE_TYPE.REFRESH_PLAY:
         console.log("Recieved REFRESH_PLAY message");
         refresh_playing_block(data.payload);
         break;
       case MESSAGE_TYPE.REFRESH_ALL:
-        console.log("[HOST] Recieved REFRESH_ALL message");
+        console.log("Recieved REFRESH_ALL message");
         refresh_all(data.payload);
         break;
       case MESSAGE_TYPE.LEAVE_PARTY:
-        console.log("[HOST] Recieved LEAVE_PARTY message");
+        console.log("Recieved LEAVE_PARTY message");
         leave_party("The party has ended. Click below to go back to main or join a new party!");
-        break;      
+        break;     
+      case MESSAGE_TYPE.UPDATE_USERS:
+        console.log("Recieved UPDATE_USERS message");
+
+    console.log(data.payload);
+		update_users(data.payload);
+        break;
+      case MESSAGE_TYPE.PREV_SONG:
+        console.log("Recieved PREV_SONG message");
+        playNextSong(data.payload.uri);
+        refresh_now_playing(data.payload.album_cover, data.payload.song_name, data.payload.artist_names);
+        
+        break;
     }
   };
 };
 
-function leave_party(info) {
-   $leavereason.html(info);
-   $modal.css("display","block");
+function show_listeners(){
+	console.log("Showing");
+	$modal_users.css("display","block");
+}
+
+function update_users(userlist){
+	let userdata = "";
+	$users.empty();
+	for(const i in userlist){
+    console.log(userlist[i].name)
+    console.log(userlist[i].image)
+	}
+	/* userlist.forEach(function(single_user_data) {
+        
+    }); */
+	$users.append(userdata);
+}
+
+function request_prev_song() {
+  console.log("In function request_prev_song");
+  let request = {
+    "type":MESSAGE_TYPE.PREV_SONG,
+    "payload": { "id": $userId , "song_id": ""}
+  };
+  conn.send(JSON.stringify(request));
+  console.log("Sent PREV_SONG message");
 }
 
 function request_next_song() {
@@ -174,7 +209,7 @@ function request_next_song() {
     "payload": { "id": $userId , "song_id": ""}
   };
   conn.send(JSON.stringify(request));
-  console.log("[HOST] Sent NEXT_SONG message");
+  console.log("Sent NEXT_SONG message");
 }
 
 function new_connect(){

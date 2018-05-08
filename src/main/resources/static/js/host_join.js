@@ -24,16 +24,18 @@ $(document).ready(() => {
 
 });
 
+
 function togglePlay() {
   console.log("In function togglePlay");
   // do nothing if no song playing
-  if (isEmpty($nowPlaying) ) {
-    return;
-  }
+  // if (isEmpty($nowPlaying) ) {
+  //   return;
+  // }
   // otherwise, toggle
   let element = document.getElementById("playPause");
+    element.classList.toggle("fa-pause");
   element.classList.toggle("fa-play");
-  element.classList.toggle("fa-pause");
+
   // also SHIFT
 }
 
@@ -62,4 +64,7 @@ function remove(element) {
 function move_code() {
   let element = document.getElementById('party_code');
   // element.animate({height: "300px"});
+}
+
+function leave_party(info) {
 }

@@ -16,7 +16,7 @@
 			<h1>Something went wrong!</h1>
 				<p>${errmsg}</p>
 			<#if redirect??><p>Maybe you meant to go here?</p>
-			<a class="redirect" href=${redirect}>${link_name}</a></#if>
+			<a class="btn" href=${redirect}>${link_name}</a></#if>
 		</div>
 	</body>
 </html>

@@ -25,6 +25,16 @@
 			  </div>
 
 			</div>
+			<!-- The Modal -->
+			<div id="modal_users" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content2">
+			     <span class="close" id="close_modal">&times;</span>
+				 <div id="user_data"></div>
+			  </div>
+
+			</div>
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />
@@ -33,8 +43,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="#"><li>Listeners</li></a>
-					<a href="#"><li>Info</li></a>
+					<a onclick="show_listeners()"><li>Listeners</li></a>
 					<a href="main?leave=true"><li>Leave Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
 				</ul>

@@ -181,12 +181,13 @@ class SongBlock {
     assert this.songsToPlay.isEmpty();
     updateSongsToPlay(prevPlayed);
     // this.songsToPlay.addAll(topSuggestions());
+    this. decayEnabled = !this.getNextBlock().getSuggestions().isEmpty();
     if (this.decayEnabled) {
       for (Suggestion s : this.suggestions) {
         s.decayScore();
       }
+      this.suggestions.removeIf((Suggestion s) -> s.getScore() < 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     }
-    this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
     this.state = PLAYING;
     assert this.suggestions.isEmpty(); // TODO: temporary!

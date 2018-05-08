@@ -17,6 +17,7 @@ import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyException;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
 public class Party extends Entity {
 
@@ -29,7 +30,16 @@ public class Party extends Entity {
 
   private Suggestion nowPlaying = null;
   private List<Suggestion> topVoted = new ArrayList<>();
+  private List<Suggestion> songsPlayed = new ArrayList<>();
+  private int songsPlayedPosition = -1;
 
+  public Set<User> getEveryOne() {
+    
+    Set<User> all = new HashSet<>(partygoers);
+    all.add(ph);
+    return all;
+  }
+  
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
@@ -65,7 +75,12 @@ public class Party extends Entity {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-
+    try {
+      PartyWebSocket.updateUsers(this);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public String getHostName() {
@@ -84,23 +99,55 @@ public class Party extends Entity {
     return songQueue.suggest(song, userId, features);
   }
 
+  public Suggestion getPrevSongToPlay() throws Exception {
+    if (songsPlayed.isEmpty()) {
+      throw new PartyException("No previous song to play!");
+    }
+    if (songsPlayed.size() < songsPlayedPosition - 1) {
+      throw new PartyException("Invalid position in list of played songs!");
+    }
+    this.nowPlaying = songsPlayed.remove(songsPlayedPosition - 1);
+    this.songsPlayedPosition -= 1;
+    return nowPlaying;
+  }
+
   public Suggestion getNextSongToPlay() throws Exception {
-    this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    try {
+      this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    } catch (PartyException pe) {
+      List<Track> songs =
+          SpotifyQuery.getTracksFromSeed(getTopVotedIds(), ph.getAuth());
+      System.out.println(songs.size());
+      System.out.println("got playlist tracks");
+      for (Track song : songs) {
+        AudioFeaturesSimple audio =
+            SpotifyQuery.getSimpleFeatures(song.getId(), ph.getAuth());
+        System.out.println(song.getId());
+        System.out.println("audio features retrieved");
+        suggest(song, ph.getId(), audio);
+      }
+      System.out.println("added playlist tracks to party");
+      this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    }
+    this.songsPlayed.add(nowPlaying);
+    this.songsPlayedPosition += 1;
     if (this.topVoted.size() < 5) {
       this.topVoted.add(nowPlaying);
     } else {
       Collections.sort(topVoted);
-      if (topVoted.get(topVoted.size() - 1).compareToScoreOnly(nowPlaying) > 0) {
+      if (topVoted.get(topVoted.size() - 1)
+          .compareToScoreOnly(nowPlaying) > 0) {
         topVoted.remove(topVoted.size() - 1);
         topVoted.add(nowPlaying);
       }
     }
+    PartyWebSocket.signalRefreshAll(this);
     return nowPlaying;
   }
 
   public List<String> getTopVotedIds() {
     List<String> ids = new ArrayList<>();
-    for (Suggestion s: this.topVoted) {
+    for (Suggestion s : this.topVoted) {
       ids.add(s.getSong().getId());
     }
     return ids;
@@ -121,7 +168,7 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
-
+    Set<User> temp_users = new HashSet<>(partygoers);
     try {
       System.out.println("signal end party");
       PartyWebSocket.signalLeaveParty(this);
@@ -129,12 +176,11 @@ public class Party extends Entity {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-
     // all users need to leave (be removed)
-    for (User u : partygoers) {
+    
+    ph.leaveParty();
+    
+    for (User u : temp_users) {
       // set the user's currParty ID to null
       removePartyGoer(u);
     }

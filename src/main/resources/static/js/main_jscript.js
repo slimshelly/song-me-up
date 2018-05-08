@@ -58,8 +58,6 @@ $(document).ready(() => {
 	// Get the <span> element that closes the modal
 	//let span = document.getElementById("close_modal");
 	$close.click(function(){
-		//modal.style.display = "none";
-		//$modal.style.display = "none";
 		$modal.css("display","none");
 	});
 	let other_modal = document.getElementById("modal_query");

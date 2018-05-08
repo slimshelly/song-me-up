@@ -68,9 +68,8 @@ body {
 }
 
 a {
-	
 	font-family: 'Raleway', sans-serif;
-	font-size: 14px;
+	font-size: 24px;
     line-height: 1;
     letter-spacing: 2px;
 	color: black;
@@ -98,7 +97,7 @@ p {
 	padding-bottom: 10px;
 	
 	font-family: 'Raleway', sans-serif;
-	font-size: 14px;
+	font-size: 24px;
     line-height: 1;
     letter-spacing: 2px;
 	text-decoration: none;
@@ -288,5 +287,19 @@ textarea:focus, input:focus{
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+@media only screen and (max-width:768px) { 
+	.btn{
+		font-size: 28px;
+		width: 50%;
+	}
+	.close {
+		font-size: 36px;
+	}
+	.textfield{
+		font-size: 36px;
+		width: 50%;
+	}
 }
 

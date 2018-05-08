@@ -12,6 +12,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+
+		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<input type="hidden" id="user_id" value="${user_id}">
 		<nav role="navigation" id="navvy">
@@ -22,8 +24,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="#"><li>Listeners</li></a>
-					<a href="#"><li>Info</li></a>
+					<a onclick="show_listeners()"><li>Listeners</li></a>
 					<a href="main?leave=true"><li>End Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
 				</ul>
@@ -46,6 +47,17 @@
 		  </div>
 
 		</div>
+		
+		<!-- The Modal -->
+			<div id="modal_users" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content2">
+			     <span class="close" id="close_modal">&times;</span>
+				 <div id="user_data"></div>
+			  </div>
+
+			</div>
 
 
 		<div class="nowPlaying">
@@ -54,7 +66,7 @@
 		</div>
 
 		<div class="musicControls">
-			<i class="fas fa-backward fa-4x" onclick="seek()"></i>
+			<i class="fas fa-backward fa-4x" onclick="request_prev_song()"></i>
 			<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
 			<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
 		</div>
