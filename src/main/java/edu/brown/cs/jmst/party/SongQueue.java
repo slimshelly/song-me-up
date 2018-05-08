@@ -26,7 +26,7 @@ public class SongQueue {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  private static final int MIN_VOTE_BLOCK_SIZE = 4;
+  private static final int MIN_VOTE_BLOCK_SIZE = 6;
 
   private static int order = 0;
 
@@ -144,34 +144,12 @@ public class SongQueue {
     }
   }
 
-  /**
-   * This method should be called whenever the front end needs to get all the
-   * information at once. If a block is about to end, DO NOT USE THIS METHOD:
-   * instead use requestNewBlock(), which contains a call to this.
-   *
-   * @return a length-3 List: the first element is the list of songs to play,
-   *         the second element is the list of songs to vote on, and the third
-   *         element is the collection of suggestions
-   */
-  public List<Collection<Suggestion>> requestAllBlocks() {
-    List<Collection<Suggestion>> toReturn = new ArrayList<>();
-    toReturn.add(playingBlock.getSongsToPlay());
-    toReturn.add(votingBlock.getSuggestions());
-    toReturn.add(suggestingBlock.getSuggestions());
-    return toReturn;
-  }
-
-//  public void Play() {
-//    this.playingBlock.passSuggestions();
-//    //TODO: play songs from playingBlock
-//    //TODO: while a song is playing, if there are enough vetoes then stop the
-//    //todo~  current song and move on to the next.
-//    cycle();
-//  }
-
   private void cycle(Suggestion prevPlayed) {
     // TODO: while cycling, some blocks will temporarily have two roles. Need to
     // make sure that this does not cause problems
+    System.out.println("b sugg: " + suggestingBlock.state);
+    System.out.println("b vote: " + votingBlock.state);
+    System.out.println("b play: " + playingBlock.state);
     this.playingBlock.becomeSuggBlock();
     this.suggestingBlock.becomeVoteBlock();
     this.votingBlock.becomePlayBlock(prevPlayed);
@@ -179,6 +157,9 @@ public class SongQueue {
     this.suggestingBlock = suggestingBlock.getNextBlock();
     this.votingBlock = votingBlock.getNextBlock();
     this.playingBlock = playingBlock.getNextBlock();
+    System.out.println("a sugg: " + suggestingBlock.state);
+    System.out.println("a vote: " + votingBlock.state);
+    System.out.println("a play: " + playingBlock.state);
   }
 
   //  //TODO: ordered collection of Suggestions (most basic version, ordered only on number of votes)

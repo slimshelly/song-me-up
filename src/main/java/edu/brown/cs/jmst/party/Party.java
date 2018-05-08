@@ -43,7 +43,6 @@ public class Party extends Entity {
   }
   
   public void addPartyGoer(User pg) throws PartyException {
-    System.out.println("-------adding partiy goer " + pg);
     pg.joinParty(this.id);
     partygoers.add(pg);
     partyGoerIds.add(pg.getId());
@@ -52,18 +51,9 @@ public class Party extends Entity {
   }
 
   public void removePartyGoer(User u) throws PartyException {
-
     u.leaveParty();
-    System.out.println("removing " + u.getName()+" from partigoers");
     partygoers.remove(u);
-    System.out.println("removing " + u.getName()+"  from partyGoerIds");
     partyGoerIds.remove(u.getId());
-    
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
-    // after removing party goer
-    
   }
 
   public String getHostName() {
@@ -101,16 +91,7 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out.println("number of party goers is " + this.getIds().size());
-    System.out.println("before ending party");
     for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-    
-    System.out.println("******** number of party goers is " );
-    for (String g : this.getPartyGoerIds()) {
       System.out.println(g);
     }
     
@@ -118,17 +99,6 @@ public class Party extends Entity {
     for (User u : partygoers) {
       // set the user's currParty ID to null
       removePartyGoer(u);
-      
-    }
-    
-    System.out.println("after ending party");
-    System.out.println("number of ids is " + this.getIds().size());
-    for (String g : this.getIds()) {
-      System.out.println(g);
-    }
-    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
-    for (String g : this.getPartyGoerIds()) {
-      System.out.println(g);
     }
   }
 

@@ -292,6 +292,7 @@ public class PartyWebSocket {
             System.out.println("Sent NEXT_SONG message");
           } catch (Exception e) {
             General.printErr("Error getting next song. " + e.getMessage());
+            e.printStackTrace();
           }
           break;
         case REFRESH_SUGG: {
