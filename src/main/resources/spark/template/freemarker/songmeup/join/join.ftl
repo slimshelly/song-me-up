@@ -10,7 +10,19 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+		<div class = "hello"> HELLO </div>
+
 		<input type="hidden" id="user_id" value="${user_id}">
+			<!-- The Modal -->
+			<div id="modal_query" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+				<p id="leave_reason" align="center"></p>
+				<a class="btn" id="proceed" href="main">HOME</a>
+			  </div>
+
+			</div>
 		<nav role="navigation" id="navvy">
 			<div id="menuToggle">
 				<input type="checkbox" />

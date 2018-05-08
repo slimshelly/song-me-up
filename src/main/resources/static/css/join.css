@@ -1,4 +1,10 @@
-
+/*
+.hello {
+	position:absolute;
+  	top:10;
+  	left:15
+}
+*/
 body {
 	background: white;
 	margin: 0;
@@ -354,6 +360,79 @@ input[type=text] {
 
 .musicControls i {
 	margin: 15px 15px 15px 15px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0);/*  Fallback color */
+    background-color: rgba(255, 192, 203,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+	border-radius: 25px;
+	border: 1px solid black;
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn {
+	font-family: 'Raleway', sans-serif;
+	margin: auto;
+
+	margin-top: 28px;
+	font-size: 14px;
+    line-height: 1;
+    border-radius: 500px;
+    padding: 18px 48px 18px;
+    /* transition */
+    transition-property: background-color, border-color, color;
+    transition-duration: .4s;
+    border-width: 0;
+    letter-spacing: 2px;
+    width: 150px;
+    text-transform: uppercase;
+    white-space: normal;
+
+    display: block;
+    margin-bottom: 0;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: middle;
+
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid black;
+
+    user-select: none;
+}
+
+.btn:hover {
+	background-color: black;
+	border-color: black;
+	color: pink;
+}
+
+p {
+	font-family: 'Raleway', sans-serif;
+	font-size: 24px;
 }
 
 .score {
