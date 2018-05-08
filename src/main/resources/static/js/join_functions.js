@@ -9,6 +9,7 @@ let $leavereason;
 let $users;
 let $modal_users;
 let $close;
+const string_limit = 65;
 
 $(document).ready(() => {
 
@@ -63,9 +64,22 @@ $(document).ready(() => {
         let output = JSON.parse(responseJSON);
         let temp_html = "";
         for(const sug of output){
+			//console.log(sug);
+			let artiststring = "";
+			//console.log(sug.artists);
+			for(const artist of sug.artists){
+				artiststring = artiststring + artist.name + ", ";
+			}
+			if(artiststring.length > 0){
+				let sub = artiststring.substring(0,artiststring.length-2);
+				artiststring = ", by " + sub;
+			}
+			let infostring = sug.name + artiststring;
+			if(infostring.length > string_limit){
+				infostring = infostring.substring(0,string_limit-2) + "...";
+			}
           temp_html = temp_html
-            + "<a href='javascript:;' onclick='new_suggest(\"" + sug.id.toString() + "\");'>"
-              + "<div class='option'>" + sug.name + "</div>"
+            + "<a href='javascript:;' onclick='new_suggest(\"" + sug.id.toString() + "\");'>" + "<div class='option'>" + infostring + "</div>"
             + "</a>";
         }
         $dropdown.html(temp_html);
