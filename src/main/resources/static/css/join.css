@@ -197,7 +197,8 @@ a {
 }
 
 .score {
-	transform: translateY(7px);
+	font-size: 20px;
+	transform: translateY(4px);
 }
 
 /* SEARCH BAR */
@@ -258,7 +259,13 @@ input[type=text] {
 	flex-grow: 5;
 	align-items: center;
 	justify-content: space-between;
-	background-color: lightblue; /*temporary, just to visually distinguish*/
+	background-color: lightblue;
+	transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+.playingItem:hover {
+	background-color: rgb(140, 192, 219);
 }
 
 .votingItem {
@@ -266,7 +273,13 @@ input[type=text] {
 	flex-grow: 5;
 	align-items: center;
 	justify-content: space-between;
-	background-color: lightgreen; /*temporary, just to visually distinguish*/
+	background-color: lightgreen;
+	transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+.votingItem:hover {
+	background-color: rgb(106, 209, 113);
 }
 
 .suggestingItem {
@@ -315,6 +328,7 @@ input[type=text] {
 	display: flex;
 	justify-content: center;
 	position: absolute;
+
 }
 
 .imgContainer {

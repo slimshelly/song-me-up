@@ -299,6 +299,10 @@ function refresh_voting_block(toVote) {
   console.log("In function refresh_voting_block");
   $votingBlock.empty();
   toVote.forEach(function(voteSong) {
+    let sign = "";
+    if (voteSong.score > 0) {
+      sign = "+";
+    }
     upColorClass = "";
     downColorClass = "";
     if (voteSong.user_vote_status == 1) {
@@ -318,7 +322,7 @@ function refresh_voting_block(toVote) {
       + "</div>"
 
       + "<div class='buttons'>"
-      + "<div class='score'>" + voteSong.score + "</div>"
+      + "<div class='score'>" + sign + voteSong.score + "</div>"
       + "<a href='javascript:;' class='downbtn' onclick='new_vote(false, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-down"+ downColorClass + "' id='down'></i></a>"
       + "<a href='javascript:;' class='upbtn' onclick='new_vote(true, \"" + voteSong.song_id + "\")'><i class='fa fa-chevron-circle-up"+ upColorClass + "' id='up'></i></a>"
       + "</a>"
