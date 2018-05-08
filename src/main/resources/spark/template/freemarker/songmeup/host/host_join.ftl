@@ -52,9 +52,9 @@
 		</div>
 
 		<div class="musicControls">
-			<i class="fas fa-backward fa-4x" onclick="request_prev_song()"></i>
+			<i class="fas fa-backward fa-4x" onclick="request_prev_song();setPause()"></i>
 			<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
-			<i class="fas fa-forward fa-4x" onclick="request_next_song()"></i>
+			<i class="fas fa-forward fa-4x" onclick="request_next_song();setPause()"></i>
 		</div>
 
 		<div class="content">

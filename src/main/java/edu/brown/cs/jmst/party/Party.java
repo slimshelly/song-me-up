@@ -32,6 +32,13 @@ public class Party extends Entity {
   private List<Suggestion> songsPlayed = new ArrayList<>();
   private int songsPlayedPosition = -1;
 
+  public Set<User> getEveryOne() {
+    
+    Set<User> all = new HashSet<>(partygoers);
+    all.add(ph);
+    return all;
+  }
+  
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
     this.id = id;
@@ -68,7 +75,7 @@ public class Party extends Entity {
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
     try {
-      PartyWebSocket.signalLeft(this, u.getId());
+      PartyWebSocket.updateUsers(this);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

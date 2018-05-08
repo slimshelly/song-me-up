@@ -1,6 +1,7 @@
 package edu.brown.cs.jmst.sockets;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -11,6 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -38,7 +40,7 @@ public class PartyWebSocket {
 
   private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
-    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY, USER_JOINED, USER_LEFT, PREV_SONG
+    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY, UPDATE_USERS, PREV_SONG
   }
 
   @OnWebSocketConnect
@@ -102,23 +104,34 @@ public class PartyWebSocket {
     }
   }
 
-  public void signalJoined(Party party, String userId) throws IOException {
+  public static void updateUsers(Party party) throws IOException {
     if (party == null) {
       return;
     }
     try {
+
+      Set<User> everyone = party.getEveryOne();
+      
       JsonObject jo = new JsonObject();
-      jo.addProperty("type", MESSAGE_TYPE.USER_JOINED.ordinal());
-      JsonObject payload = new JsonObject();
-      User user = SmuState.getInstance().getUser(userId);
-      payload.addProperty("name", user.getName());
-      payload.addProperty("image", user.getImage());
-      jo.add("payload", payload);
+      jo.addProperty("type", MESSAGE_TYPE.UPDATE_USERS.ordinal());
+      //JsonObject payload = new JsonObject();
+      JsonArray userArray = new JsonArray();
+      
+      for (User u : everyone) {
+        JsonObject user = new JsonObject();
+        user.addProperty("name", u.getName());
+        user.addProperty("image", u.getImage());
+        userArray.add(user);
+      }
+      
+      //payload.add("userArray", userArray);
+      jo.add("payload", userArray );
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
         s.getRemote().sendString(GSON.toJson(jo));
       }
-      System.out.println("Sent USER_JOINED message");
+      
+      System.out.println("Sent UPDATE_USERS message");
     } catch (IOException ioe) {
       throw ioe;
     } catch (Exception e) {
@@ -127,27 +140,6 @@ public class PartyWebSocket {
     }
   }
 
-  public static void signalLeft(Party party, String userId) throws IOException {
-    if (party == null) {
-      return;
-    }
-    try {
-      JsonObject jo = new JsonObject();
-      jo.addProperty("type", MESSAGE_TYPE.USER_LEFT.ordinal());
-      User user = SmuState.getInstance().getUser(userId);
-      jo.addProperty("payload", user.getName());
-      for (String partyer_id : party.getIds()) {
-        Session s = userSession.get(partyer_id);
-        s.getRemote().sendString(GSON.toJson(jo));
-      }
-      System.out.println("Sent USER_LEFT message");
-    } catch (IOException ioe) {
-      throw ioe;
-    } catch (Exception e) {
-      General.printErr(e.getMessage());
-      e.printStackTrace();
-    }
-  }
 
   public void signalRefreshVote(Party party) throws IOException {
     if (party == null) {
@@ -230,7 +222,7 @@ public class PartyWebSocket {
       System.out.println("Received CONNECT message");
       userSession.put(user_id, session);
       if (party != null) {
-        signalJoined(party, user_id);
+        updateUsers(party);
       } else {
         System.err.println("Party is null!");
       }
@@ -338,7 +330,7 @@ public class PartyWebSocket {
           break;
         }
         case LEAVE_PARTY:
-          signalLeft(party, user_id);
+          
           break;
         case REFRESH_ALL:
           break;
