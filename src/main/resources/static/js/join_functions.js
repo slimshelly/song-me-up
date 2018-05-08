@@ -4,6 +4,8 @@ let $playingBlock;
 let $suggestionBlock;
 let $userId;
 let $votingBlock;
+let $modal;
+let $leavereason;
 
 $(document).ready(() => {
   $dropdown = $("#dropdown");
@@ -12,7 +14,8 @@ $(document).ready(() => {
   $suggestionBlock = $("#suggestions");
   $userId = $("#user_id").val();
   $votingBlock = $("#voting");
-
+  $modal = $("#modal_query");
+  $leavereason = $("#leave_reason");
   /*
   Toggle color for up and down buttons
   */
@@ -147,14 +150,15 @@ const setup_live_playlist = () => {
         break;
       case MESSAGE_TYPE.LEAVE_PARTY:
         console.log("[HOST] Recieved LEAVE_PARTY message");
-        leave_party();
+        leave_party("The party has ended. Click below to go back to main or join a new party!");
         break;      
     }
   };
 };
 
-function leave_party() {
-   
+function leave_party(info) {
+   $leavereason.html(info);
+   $modal.css("display","block");
 }
 
 function request_next_song() {
