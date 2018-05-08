@@ -59,3 +59,6 @@ function move_code() {
   let element = document.getElementById('party_code');
   // element.animate({height: "300px"});
 }
+
+function leave_party(info) {
+}

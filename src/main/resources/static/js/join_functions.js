@@ -189,11 +189,6 @@ function update_users(userlist){
 	$users.append(userdata);
 }
 
-function leave_party(info) {
-   $leavereason.html(info);
-   $modal.css("display","block");
-}
-
 function request_prev_song() {
   console.log("In function request_prev_song");
   let request = {
