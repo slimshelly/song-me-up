@@ -25,7 +25,7 @@ public class SongQueue {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  private static final int MIN_VOTE_BLOCK_SIZE = 6;
+  private static final int MIN_VOTE_BLOCK_SIZE = 15;
 
   private static int order = 0;
 
