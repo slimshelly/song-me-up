@@ -110,7 +110,7 @@ const setup_live_playlist = () => {
   let completepath = window.location.host + window.location.pathname;
   let partpath = completepath.substring(0,completepath.lastIndexOf("/"));
   let type = "ws"
-  if(window.location.host==="smuapp.com"){
+  if (window.location.host==="smuapp.com") {
 	 type = type + "s";
   }
 
