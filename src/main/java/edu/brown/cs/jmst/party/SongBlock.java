@@ -1,7 +1,6 @@
 package edu.brown.cs.jmst.party;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -37,13 +36,6 @@ class SongBlock {
 
   // Unsure which method is better. Numbers subject to change
   private static final int BLOCK_LENGTH_SONGS = 6;
-  private static final int BLOCK_LENGTH_MS = 900000; // 15 minutes
-
-  private static final int VOTES_ONLY = 0;
-  private static final int BALANCED = 1;
-  private static final int SMOOTHED = 2;
-  private static final int NO_VOTES = 3;
-  private static final int ORDER = 4;
 
   SongBlock(int state) {
     this.suggestions = new PriorityBlockingQueue<>();
@@ -96,13 +88,8 @@ class SongBlock {
     // + "].");
   }
 
-  /*
-   * TODO: after making a suggestion, maybe tell a user
-   * "Other users can vote on your suggestion in XX:XX minutes!"
-   */
   /**
    * Method for adding a duplicate song suggestion to this block.
-   *
    * @param existingSuggestion the Suggestion that already existed
    * @param userId the id String of the user making the suggestion
    * @throws PartyException if the user has suggested this song already
@@ -163,29 +150,8 @@ class SongBlock {
     return this.songsToPlay;
   }
 
-  protected Collection<Suggestion> topSuggestionsDuration() throws Exception {
-    PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
-    int totalLengthMs = 0;
-    while (totalLengthMs < BLOCK_LENGTH_MS) {
-      Suggestion next = suggestions.poll();
-      if (next != null) {
-        int duration = next.getSong().getDuration_ms();
-        if ((totalLengthMs + duration) - BLOCK_LENGTH_MS > BLOCK_LENGTH_MS
-            - totalLengthMs) {
-          break; // don't add another song, because that gets us further from
-                 // target
-        }
-        toPlay.add(next);
-        totalLengthMs += duration;
-      } else {
-        break;
-      }
-    }
-    return toPlay;
-  }
-
   // returns the top X songs in order of votes (increasing or decreasing?)
-  private List<Suggestion> topSuggestionsQuantity() {
+  private List<Suggestion> topSuggestions() {
     List<Suggestion> toPlay = new ArrayList<>();
     while (toPlay.size() < BLOCK_LENGTH_SONGS) {
       Suggestion next = suggestions.poll();
@@ -207,58 +173,11 @@ class SongBlock {
     return this.songsToPlay.remove(0);
   }
 
-  protected List<Suggestion> updateSongsToPlay2(int sortMode, Suggestion prev) {
-    List<Suggestion> topSongs = new ArrayList<>(topSuggestionsQuantity());
-    assert !topSongs.isEmpty();
-    switch (sortMode) {
-      case VOTES_ONLY: {
-        this.songsToPlay = topSongs;
-        return this.songsToPlay;
-      }
-      case BALANCED: {
-
-        // TODO: find shortest ordering of top, using the first element as the starting point
-      }
-      case SMOOTHED: {
-        // TODO: find shortest ordering of top, using the previously played song as the starting point
-      }
-      case NO_VOTES: {
-        // TODO: find shortest ordering of suggestions, and take the top from there
-        // NOTE: this option probably won't be implemented
-      }
-      case ORDER: {
-        // TODO: just play things in the order they were submitted
-        // NOTE: this option probably won't be implemented
-      }
-      default: {
-        // TODO:
-      }
-    }
-    // First song: most popular suggestion
-    // Next song: (does greedy nearest neighbor work here? Probably not really,
-    // but actually no one will notice)
-    //
-    return null;
-  }
-
-  // Smoothest: ignore voting; from each set of suggestions take the 5 that will
-  // make shortest path
-  // Smooth: order the top 5 voted from suggestions to minimize path, starting
-  // from previous song played
-  // Balanced: order the top 5 voted from suggestions to minimize path, starting
-  // from top voted suggestion
-  // Voting only: order the top 5 voted songs by number of votes
-
-  // maybe find a path between songs that minimizes the total distance traveled
-
-  // Method that decays the votes on the not-selected suggestions, then adds the
-  // suggestions to the next block's collection of suggestions.
-
   protected void becomePlayBlock(Suggestion prevPlayed) {
     assert this.state == VOTING;
     assert this.songsToPlay.isEmpty();
     updateSongsToPlay(prevPlayed);
-    // this.songsToPlay.addAll(topSuggestionsQuantity());
+    // this.songsToPlay.addAll(topSuggestions());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
     }
@@ -280,49 +199,51 @@ class SongBlock {
   }
 
   private void updateSongsToPlay(Suggestion prevPlayed) {
-    this.songsToPlay = topSuggestionsQuantity();
-//    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(),
-//            topSuggestionsQuantity());
+    List<Suggestion> top = topSuggestions();
+    if (prevPlayed == null) {
+      prevPlayed = top.remove(0);
+    }
+    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(), top);
   }
 
-//  private List<Suggestion> getAllPermutations(Suggestion start,
-//                                              List<Suggestion> prefix,
-//                                              List<Suggestion> suggs) {
-//    int n = suggs.size();
-//    if (n == 0) { //Base case
-//      return prefix;
-//    } else {
-//      List<Suggestion> newPrefix = new ArrayList<>(prefix);
-//      List<Suggestion> newSugs = new ArrayList<>(suggs);
-//      Suggestion s = newSugs.remove(0);
-//      newPrefix.add(s);
-//      List<Suggestion> min_list = getAllPermutations(start, newPrefix, newSugs);
-//      for (int i = 1; i < n; i++) {
-//        List<Suggestion> newPrefix2 = new ArrayList<>(prefix);
-//        List<Suggestion> newSugs2 = new ArrayList<>(suggs);
-//        Suggestion s2 = newSugs2.remove(i);
-//        newPrefix2.add(s2);
-//        List<Suggestion> newList = getAllPermutations(start, newPrefix2,
-//                newSugs2);
-//        if(getTotalDistance(start, newList) < getTotalDistance(start, min_list)){
-//          min_list = newList;
-//        }
-//      }
-//      return min_list;
-//    }
-//  }
-//
-//  private double getTotalDistance(Suggestion start, List<Suggestion> suggs){
-//    List<Suggestion> copy = new ArrayList<>(suggs);
-//    double distance = 0.0;
-//    Suggestion prev = start;
-//    while (!copy.isEmpty()) {
-//      Suggestion next = copy.remove(0);
-//      distance += prev.distanceToInversePopularity(next);
-//      prev = next;
-//    }
-//    return distance;
-//  }
+  private List<Suggestion> getAllPermutations(Suggestion start,
+                                              List<Suggestion> prefix,
+                                              List<Suggestion> suggs) {
+    int n = suggs.size();
+    if (n == 0) { //Base case
+      return prefix;
+    } else {
+      List<Suggestion> newPrefix = new ArrayList<>(prefix);
+      List<Suggestion> newSugs = new ArrayList<>(suggs);
+      Suggestion s = newSugs.remove(0);
+      newPrefix.add(s);
+      List<Suggestion> min_list = getAllPermutations(start, newPrefix, newSugs);
+      for (int i = 1; i < n; i++) {
+        List<Suggestion> newPrefix2 = new ArrayList<>(prefix);
+        List<Suggestion> newSugs2 = new ArrayList<>(suggs);
+        Suggestion s2 = newSugs2.remove(i);
+        newPrefix2.add(s2);
+        List<Suggestion> newList = getAllPermutations(start, newPrefix2,
+                newSugs2);
+        if(getTotalDistance(start, newList) < getTotalDistance(start, min_list)){
+          min_list = newList;
+        }
+      }
+      return min_list;
+    }
+  }
+
+  private double getTotalDistance(Suggestion start, List<Suggestion> suggs){
+    List<Suggestion> copy = new ArrayList<>(suggs);
+    double distance = 0.0;
+    Suggestion prev = start;
+    while (!copy.isEmpty()) {
+      Suggestion next = copy.remove(0);
+      distance += prev.distanceToInversePopularity(next);
+      prev = next;
+    }
+    return distance;
+  }
 
   // Add Vote Play
   // A
