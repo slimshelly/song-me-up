@@ -91,12 +91,9 @@ public class SpotifyQueryRaw {
               + URLEncodedUtils.format(pairs, "UTF-8"));
           get.setHeader("Authorization", "Bearer " + access_token);
       
-      System.out.println("About to get raw tracks");
       HttpResponse response = client.execute(get);
       
       if (response.getStatusLine().getStatusCode() == 200) {
-    	  	System.out.println("GOT PLAYLIST RAW TRACKS");
-
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 

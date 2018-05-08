@@ -2,10 +2,7 @@ package edu.brown.cs.jmst.party;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -13,7 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.jmst.beans.Entity;
-import edu.brown.cs.jmst.music.AudioFeatures;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.SongMeUpPlaylist;
 import edu.brown.cs.jmst.music.Track;
@@ -24,7 +20,7 @@ public class Party extends Entity {
   private boolean open;
   private User ph;
   private Set<User> partygoers;
-  private Set<String> userIds; // Just user ID strings (excluding host!)
+  private Set<String> partyGoerIds; // Just user ID strings (excluding host!)
   private SongQueue songQueue; // Contains the algorithm's block system
   public static final int ID_LENGTH = 6;
 
@@ -40,22 +36,34 @@ public class Party extends Entity {
     host.joinParty(this.id);
     ph = host;
     partygoers = Collections.synchronizedSet(new HashSet<>());
-    userIds = Collections.synchronizedSet(new HashSet<>());
+    partyGoerIds = Collections.synchronizedSet(new HashSet<>());
     // total_votes = Collections.synchronizedMap(new HashMap<>());
     songQueue = new SongQueue();
     open = false;
   }
   
   public void addPartyGoer(User pg) throws PartyException {
+    System.out.println("-------adding partiy goer " + pg);
     pg.joinParty(this.id);
     partygoers.add(pg);
-    userIds.add(pg.getId());
+    partyGoerIds.add(pg.getId());
+    System.out.println(partygoers.size());
+    System.out.println(partyGoerIds.size());
   }
 
   public void removePartyGoer(User u) throws PartyException {
+
     u.leaveParty();
+    System.out.println("removing " + u.getName()+" from partigoers");
     partygoers.remove(u);
-    userIds.remove(u.getId());
+    System.out.println("removing " + u.getName()+"  from partyGoerIds");
+    partyGoerIds.remove(u.getId());
+    
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
+    // after removing party goer
+    
   }
 
   public String getHostName() {
@@ -84,16 +92,43 @@ public class Party extends Entity {
 
   public Collection<Suggestion> voteOnSong(String userId, String songId,
       boolean isUpVote) throws PartyException {
-    if (!userIds.contains(userId) && !userId.equals(getHostId())) {
+    if (!partyGoerIds.contains(userId) && !userId.equals(getHostId())) {
       throw new PartyException("User not found in party.");
     }
     Suggestion voteOn = songQueue.getSuggestionInVoteBlockById(songId);
     return songQueue.vote(voteOn, userId, isUpVote);
   }
 
+  // **??
   public void end() throws PartyException {
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out.println("number of party goers is " + this.getIds().size());
+    System.out.println("before ending party");
+    for (String g : this.getIds()) {
+      System.out.println(g);
+    }
+    
+    System.out.println("******** number of party goers is " );
+    for (String g : this.getPartyGoerIds()) {
+      System.out.println(g);
+    }
+    
+    // all users need to leave (be removed) 
     for (User u : partygoers) {
-      u.leaveParty();
+      // set the user's currParty ID to null
+      removePartyGoer(u);
+      
+    }
+    
+    System.out.println("after ending party");
+    System.out.println("number of ids is " + this.getIds().size());
+    for (String g : this.getIds()) {
+      System.out.println(g);
+    }
+    System.out.println("number of party goers is " + this.getPartyGoerIds().size());
+    for (String g : this.getPartyGoerIds()) {
+      System.out.println(g);
     }
   }
 
@@ -108,12 +143,12 @@ public class Party extends Entity {
 
   // Excludes the host's ID
   public Set<String> getPartyGoerIds() {
-    return Collections.unmodifiableSet(userIds);
+    return Collections.unmodifiableSet(partyGoerIds);
   }
 
   // Includes the host's ID
   public Set<String> getIds() {
-    Set<String> idSet = new HashSet<>(userIds);
+    Set<String> idSet = new HashSet<>(partyGoerIds);
     idSet.add(ph.getId());
     return Collections.unmodifiableSet(idSet);
   }
@@ -131,15 +166,14 @@ public class Party extends Entity {
     return suggBlock;
   }
 
-  public JsonArray refreshVoteBlock() throws Exception {
+  public JsonArray refreshVoteBlock(String userId) throws Exception {
     JsonArray voteBlock = new JsonArray();
     PriorityBlockingQueue<Suggestion> voteSongs = songQueue.getSongsToVoteOn();
     Suggestion s;
     while ((s = voteSongs.poll()) != null) {
-      voteBlock.add(s.toJson());
+      voteBlock.add(s.toJson(userId));
     }
     return voteBlock;
-    //fixed bug with 3 songs with different scores being put in wrong order
   }
 
   public JsonArray refreshPlayBlock() throws Exception {
@@ -150,10 +184,10 @@ public class Party extends Entity {
     return playBlock;
   }
 
-  public JsonObject refreshAllBlocks() throws Exception {
+  public JsonObject refreshAllBlocks(String userId) throws Exception {
     JsonObject allBlocks = new JsonObject();
     allBlocks.add("sugg", refreshSuggBlock());
-    allBlocks.add("vote", refreshVoteBlock());
+    allBlocks.add("vote", refreshVoteBlock(userId));
     allBlocks.add("play", refreshPlayBlock());
     return allBlocks;
   }

@@ -31,6 +31,15 @@ public class SmuState {
       Collections.synchronizedMap(new HashMap<>());
 
   private SmuState() {
+
+  }
+  
+  private void printActiveParties() {
+    
+    for (String key : parties.keySet()) {
+      System.out.println(key);
+    }
+    
   }
 
   public static SmuState getInstance() {
@@ -88,6 +97,7 @@ public class SmuState {
     }
     Party p = parties.get(partyId);
     if (!partyId.equals(u.getCurrentParty())) {
+      System.out.println("party " + partyId + " added " + u.getId());
       p.addPartyGoer(u);
     }
     return p;
@@ -118,11 +128,23 @@ public class SmuState {
    * @throws PartyException
    */
   public void endParty(String id) throws PartyException {
+    
+    System.out.println("ending party now."); 
     if (!parties.containsKey(id)) {
       throw new IllegalArgumentException("Invalid party id.");
     }
-    Party p = parties.remove(id);
+    // get the party
+    Party p = parties.get(id);
+    
+    // end the party 
     p.end();
+    
+    // remove party from list of active parties
+    parties.remove(id);
+    System.out.println("just removed party id from list of parties");
+    
+    this.instance.printActiveParties();
+    
   }
 
   /**
@@ -138,8 +160,12 @@ public class SmuState {
   }
 
   public User addUser(String code) throws Exception, UserException {
+    
     User u = new User();
     u.logIn(code);
+    
+    System.out.println("adding a player with ID: " + u.getId());
+    
     if (users.containsKey(u.getId())) {
       throw new UserException("User already exists.");
     }

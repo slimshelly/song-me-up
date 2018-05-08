@@ -21,7 +21,6 @@ $(document).ready(() => {
   $.post("./playlist", responseJSON => {
     const responseObject = JSON.parse(responseJSON);
     console.log("./playlist post request");
-    console.log(responseObject);
     let output = responseObject;
     refresh_suggestions_block(output.suggest); //output.suggest are all Suggestion objects
     refresh_voting_block(output.vote);
@@ -66,8 +65,7 @@ $(document).ready(() => {
         $("#dropdown").show();
         const postParameters = {word: song};
         console.log(postParameters);
-        // $results.empty();
-        // send input to backend to generate song suggestions
+        
         $.post("./suggestions", postParameters, responseJSON => {
 
 			const responseObject = JSON.parse(responseJSON);

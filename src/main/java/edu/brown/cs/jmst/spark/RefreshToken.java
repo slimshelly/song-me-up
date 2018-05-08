@@ -20,12 +20,6 @@ public class RefreshToken implements Route {
     User u = SmuState.getInstance().getUser(userid);
     u.refresh();
     String newAuth = u.getAuth();
-    System.out.println(userid);
-    System.out.println(newAuth);
-    
-    if (u.isPremium()) {
-      System.out.println("host token!!");
-    }
     
     Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
         .put("access_token", newAuth).build();

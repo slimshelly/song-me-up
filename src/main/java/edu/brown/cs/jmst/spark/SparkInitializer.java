@@ -1,5 +1,11 @@
 package edu.brown.cs.jmst.spark;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+
 import com.google.gson.Gson;
 
 import edu.brown.cs.jmst.sockets.PartyWebSocket;
@@ -19,7 +25,6 @@ public class SparkInitializer {
 
   public static void setHandlers(FreeMarkerEngine freeMarker, boolean web) {
     Spark.webSocket("/songupdates", PartyWebSocket.class);
-
     Spark.get("/main", new MainPage(), freeMarker);
     Spark.get("/songmeup", new PreMainPage(), freeMarker);
     Spark.redirect.get("/", "/songmeup");
@@ -37,8 +42,6 @@ public class SparkInitializer {
     Spark.get("/host", new HostHandler(), freeMarker);
 
     // PLAYLIST PAGES (2)
-    // Spark.get(prefix + "/admin", new AdminPageHandler(), freeMarker);
-    // below leads to user's playlist page
     Spark.get("/join", new JoinHandler(), freeMarker);
 
     // INSERT SEED PLAYLIST INTO PLAYLIST PAGE
@@ -53,9 +56,11 @@ public class SparkInitializer {
     Spark.get("/player", new PlayerPage(), freeMarker);
     Spark.get("/error", new ErrorHandler(), freeMarker);
     Spark.get("/faq", new FAQPage(), freeMarker);
-
-    // NOT RELEVANT, will delete later
-    Spark.get("/playlists", new MockPlaylist(), freeMarker);
+    List<BasicNameValuePair> pair = new ArrayList<>();
+    pair.add(new BasicNameValuePair("error",
+        SparkErrorEnum.PAGE_NOT_FOUND.toString()));
+    Spark.redirect.get("/*", SpotifyAuthentication.getRootUri() + "/error?"
+        + URLEncodedUtils.format(pair, "UTF-8"));
   }
 
 }

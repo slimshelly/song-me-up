@@ -10,11 +10,9 @@ import org.apache.http.message.BasicNameValuePair;
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.jmst.party.Party;
-import edu.brown.cs.jmst.party.PartyException;
 import edu.brown.cs.jmst.party.User;
 import edu.brown.cs.jmst.songmeup.SmuState;
 import edu.brown.cs.jmst.spotify.SpotifyAuthentication;
-import edu.brown.cs.jmst.spotify.SpotifyException;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -31,7 +29,7 @@ public class HostHandler implements TemplateViewRoute {
     if (u == null || !u.loggedIn()) {
       res.redirect(SpotifyAuthentication.getRootUri() + "/");
     } else {
-    	SparkErrorEnum err = null;  
+    	  SparkErrorEnum err = null;  
     	  if(u.inParty()) {
     		  
     	      QueryParamsMap qm = req.queryMap();
@@ -51,7 +49,7 @@ public class HostHandler implements TemplateViewRoute {
 //    	                + URLEncodedUtils.format(pair, "UTF-8"));
 //    	    	    res.redirect(u.getCurrentPartyUrl(p));
     	      }
-    	  }else {
+    	  } else {
     		  err = SparkErrorEnum.NOT_IN_PARTY;
             List<BasicNameValuePair> pair = new ArrayList<>();
             pair.add(new BasicNameValuePair("error", err.toString()));
@@ -59,12 +57,7 @@ public class HostHandler implements TemplateViewRoute {
                 + URLEncodedUtils.format(pair, "UTF-8"));
     		  //res.redirect(SpotifyAuthentication.getRootUri() + "/main");
     	  }
-    	  
-
-//      if (err != null) {
-
-//      }
-  }
+    }
     return null;
   }
 }
