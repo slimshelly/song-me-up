@@ -153,7 +153,7 @@ a {
 .content {
 	display: flex;
 	justify-content: center;
-	transform: translateY(-50px);
+	position: relative;
 }
 
 .playlist {
@@ -185,10 +185,6 @@ a {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-}
-
-.track {
-	/*display: inline-block;*/
 }
 
 .score {
@@ -249,7 +245,6 @@ input[type=text] {
 }
 
 /* PLAYLIST APPEARANCE */
-
 .playingItem {
 	display: flex;
 	align-items: center;
@@ -296,15 +291,6 @@ input[type=text] {
 	width: 8%;
 }
 
-/*#down:hover {
-	color: red;
-}
-
-#up:hover {
-	color: green;
-}*/
-
-
 .downColor {
 	color: red;
 }
@@ -315,9 +301,11 @@ input[type=text] {
 
 /* CURRENTLY PLAYING */
 .nowPlaying {
+	width: 100%;
 	clear: both;
 	display: flex;
 	justify-content: center;
+	position: absolute;
 }
 
 .imgContainer {
@@ -355,7 +343,7 @@ input[type=text] {
 .musicControls {
 	display: flex;
 	justify-content: center;
-	transform: translateY(-140px);
+	position: relative;
 }
 
 .musicControls i {

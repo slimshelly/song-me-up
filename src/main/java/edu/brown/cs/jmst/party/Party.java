@@ -62,16 +62,6 @@ public class Party extends Entity {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
-<<<<<<< HEAD
-
-    System.out.println("number of ids is " + this.getIds().size());
-    System.out
-        .println("number of party goers is " + this.getPartyGoerIds().size());
-    // after removing party goer
-    
-
-=======
->>>>>>> 125bf259d08e0ef8fc7c31a0c0fe473731409c3f
   }
 
   public String getHostName() {
