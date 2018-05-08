@@ -1,5 +1,6 @@
 package edu.brown.cs.jmst.party;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.beans.Entity;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
+import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyException;
 
 public class Party extends Entity {
@@ -47,19 +49,24 @@ public class Party extends Entity {
     System.out.println(partygoers.size());
     System.out.println(partyGoerIds.size());
   }
-  
+
   public void setOpen(boolean b) {
-	  this.open = b;
+    this.open = b;
   }
-  
+
   public boolean getOpen() {
-	  return this.open;
+    return this.open;
   }
-  
+
   public void removePartyGoer(User u) throws PartyException {
     u.leaveParty();
     partygoers.remove(u);
     partyGoerIds.remove(u.getId());
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out
+        .println("number of party goers is " + this.getPartyGoerIds().size());
+
   }
 
   public String getHostName() {
@@ -67,13 +74,14 @@ public class Party extends Entity {
   }
 
   /**
-   * @param song A Track to add to the current pool of suggestions
-   * @param userId the ID string of the user submitting the suggestion
+   * @param song
+   *          A Track to add to the current pool of suggestions
+   * @param userId
+   *          the ID string of the user submitting the suggestion
    * @throws PartyException
    */
   public SuggestResult suggest(Track song, String userId,
-                               AudioFeaturesSimple features)
-      throws PartyException {
+      AudioFeaturesSimple features) throws PartyException {
     return songQueue.suggest(song, userId, features);
   }
 
@@ -97,10 +105,21 @@ public class Party extends Entity {
 
   // **??
   public void end() throws PartyException {
+
+    try {
+      PartyWebSocket.signalLeaveParty(this);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    System.out.println("number of ids is " + this.getIds().size());
+    System.out.println("number of party goers is " + this.getIds().size());
+    System.out.println("before ending party");
     for (String g : this.getIds()) {
       System.out.println(g);
     }
-    
+
     // all users need to leave (be removed)
     for (User u : partygoers) {
       // set the user's currParty ID to null

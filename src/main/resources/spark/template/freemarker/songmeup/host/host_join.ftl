@@ -12,6 +12,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
+
+		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<input type="hidden" id="user_id" value="${user_id}">
 		<nav role="navigation" id="navvy">
@@ -22,7 +24,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="#"><li>Listeners</li></a>
+					<a href="listeners" onclick="getEveryone()"><li>Listeners</li></a>
 					<a href="#"><li>Info</li></a>
 					<a href="main?leave=true"><li>End Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
@@ -32,17 +34,17 @@
 		<div class="title">${hostname}'s Party</div>
 
 		<!-- The Modal -->
-		<div id="modal_query" class="modal">
+<!-- 		<div id="modal_query" class="modal"> -->
 
 		  <!-- Modal content -->
-		  <div id="modal_cont" class="modal-content">
+<!-- 		  <div id="modal_cont" class="modal-content">
 			<p style="text-align: center;">Here's the code for your party:</p>
 			<p id="party_code" style="text-align: center; font-weight: bold; font-size: 24px;">${party_id}</p>
 			<p style="text-align: center;">Share this code at any time so that people can suggest and vote on songs!</p>
 			<a class="btn" href="#" onclick="remove(document.getElementById('modal_query'));move_code();">GOT IT</a>
 		  </div>
 
-		</div>
+		</div> -->
 
 
 		<div class="nowPlaying">

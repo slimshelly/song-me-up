@@ -170,7 +170,7 @@ public class PartyWebSocket {
     }
   }
 
-  public void signalLeaveParty(Party party) throws IOException {
+  public static void signalLeaveParty(Party party) throws IOException {
     if (party == null) {
       return;
     }
