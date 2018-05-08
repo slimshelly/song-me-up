@@ -21,27 +21,30 @@ import com.google.gson.JsonParser;
 import edu.brown.cs.jmst.general.General;
 
 /**
- * A class for raw JSON queries from Spotify. Not yet turning them into backend objects.
+ * A class for raw JSON queries from Spotify. Not yet turning them into backend
+ * objects.
+ *
  * @author maddiebecker
  *
  */
 public class SpotifyQueryRaw {
-	
-  public static JsonObject getRawTrack(String song_id, String access_token) throws IOException {
-	try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-	  HttpGet get = new HttpGet("https://api.spotify.com/v1/tracks/" + song_id);
-	  get.setHeader("Authorization", "Bearer " + access_token);
-	
-	  HttpResponse response = client.execute(get);
-	  if (response.getStatusLine().getStatusCode() == 200) {
-	    String json_string = EntityUtils.toString(response.getEntity());
-	    return new JsonParser().parse(json_string).getAsJsonObject();
-	  } else {
-	    throw new ClientProtocolException(
-	        "Failed to get track: " + response.getStatusLine().getStatusCode()
-	            + " " + response.toString());
-	  }
-	}
+
+  public static JsonObject getRawTrack(String song_id, String access_token)
+      throws IOException {
+    try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+      HttpGet get = new HttpGet("https://api.spotify.com/v1/tracks/" + song_id);
+      get.setHeader("Authorization", "Bearer " + access_token);
+
+      HttpResponse response = client.execute(get);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        String json_string = EntityUtils.toString(response.getEntity());
+        return new JsonParser().parse(json_string).getAsJsonObject();
+      } else {
+        throw new ClientProtocolException(
+            "Failed to get track: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
+      }
+    }
   }
 
   public static JsonArray searchSongRaw(String keywords, String access_token)
@@ -63,8 +66,6 @@ public class SpotifyQueryRaw {
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
-        
-        
 
         return jo.get("tracks").getAsJsonObject().get("items").getAsJsonArray();
       } else {
@@ -74,39 +75,79 @@ public class SpotifyQueryRaw {
       }
     }
   }
-  
-  public static JsonArray getPlaylistTracksRaw(String user_id, String playlist_id, String access_token)
-	      throws Exception {
-	  General.printInfo(access_token);
+
+  public static JsonArray getPlaylistTracksRaw(String user_id,
+      String playlist_id, String access_token) throws Exception {
+    General.printInfo(access_token);
     try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-    	
+
       List<BasicNameValuePair> pairs = new ArrayList<>();
       pairs.add(new BasicNameValuePair("limit", "10"));
-      
+
       System.out.println(user_id);
       System.out.println(playlist_id);
-      
+
       HttpGet get = new HttpGet("https://api.spotify.com/v1/users/" + user_id
-              + "/playlists/" + playlist_id + "/tracks?"
-              + URLEncodedUtils.format(pairs, "UTF-8"));
-          get.setHeader("Authorization", "Bearer " + access_token);
-      
+          + "/playlists/" + playlist_id + "/tracks?"
+          + URLEncodedUtils.format(pairs, "UTF-8"));
+      get.setHeader("Authorization", "Bearer " + access_token);
+
       HttpResponse response = client.execute(get);
-      
+
       if (response.getStatusLine().getStatusCode() == 200) {
         String json_string = EntityUtils.toString(response.getEntity());
         JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
 
-        JsonArray tracks =
-            jo.get("items").getAsJsonArray();
-        
+        JsonArray tracks = jo.get("items").getAsJsonArray();
+
         return tracks;
       } else {
-          throw new ClientProtocolException(
-                  "Failed to get tracks: " + response.getStatusLine().getStatusCode()
-                      + " " + response.toString());
+        throw new ClientProtocolException(
+            "Failed to get tracks: " + response.getStatusLine().getStatusCode()
+                + " " + response.toString());
       }
     }
+  }
+
+  public static JsonArray getSuggestionsFromSeed(List<String> seeds,
+      String access_token) throws Exception {
+    JsonArray ja = new JsonArray();
+    if (seeds.size() > 0) {
+      try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(seeds.get(0));
+        int size = Math.min(seeds.size(), 5);
+        for (int i = 1; i < size; i++) {
+          sb.append("," + seeds.get(i));
+        }
+
+        List<BasicNameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("limit", "10"));
+        pairs.add(new BasicNameValuePair("seed_tracks", sb.toString()));
+
+        HttpGet get = new HttpGet("https://api.spotify.com/v1/recommendations?"
+            + URLEncodedUtils.format(pairs, "UTF-8"));
+        get.setHeader("Authorization", "Bearer " + access_token);
+
+        HttpResponse response = client.execute(get);
+
+        if (response.getStatusLine().getStatusCode() == 200) {
+          String json_string = EntityUtils.toString(response.getEntity());
+          JsonObject jo = new JsonParser().parse(json_string).getAsJsonObject();
+
+          JsonArray tracks = jo.get("tracks").getAsJsonArray();
+
+          return tracks;
+        } else {
+          throw new ClientProtocolException("Failed to get tracks: "
+              + response.getStatusLine().getStatusCode() + " "
+              + response.toString());
+        }
+      }
+    } else {
+      return ja;
+    }
+
   }
 
 }

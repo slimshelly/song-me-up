@@ -12,8 +12,6 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	</head>
 	<body>
-
-		<div id = "hello" style="font-size: 30px; font-family: 'Raleway', sans-serif; position:absolute;top:30px;left:35px " > Party ID: ${party_id} </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<input type="hidden" id="user_id" value="${user_id}">
 		<nav role="navigation" id="navvy">
@@ -24,7 +22,7 @@
 				<span></span>
 				<ul id="menu">
 					<a href="main"><li>Home</li></a>
-					<a href="listeners" onclick="getEveryone()"><li>Listeners</li></a>
+					<a href="#"><li>Listeners</li></a>
 					<a href="#"><li>Info</li></a>
 					<a href="main?leave=true"><li>End Party</li></a>
 					<a href="logout"><li>Log Out</li></a>
@@ -51,6 +49,7 @@
 			<div class="imgContainer">
 			</div>
 		</div>
+
 		<div class="musicControls">
 			<i class="fas fa-backward fa-4x" onclick="seek()"></i>
 			<i id="playPause" class="fas fa-play fa-3x" onclick="playSomething();togglePlay();" style="font-size: 70px;"></i>
@@ -78,6 +77,7 @@
 				</ul>
 			</div>
 		</div>
+		
 	</body>
 </html>
 

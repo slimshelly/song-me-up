@@ -7,6 +7,7 @@ window.onload = function () {
 };
 
 $(document).ready(() => {
+
   $.post("./playlist", responseJSON => {
     const responseObject = JSON.parse(responseJSON);
     console.log(responseObject);
@@ -18,6 +19,7 @@ $(document).ready(() => {
       playNextSong(output.now_playing.uri);
     }
   });
+
 });
 
 function togglePlay() {
@@ -30,6 +32,7 @@ function togglePlay() {
   let element = document.getElementById("playPause");
   element.classList.toggle("fa-play");
   element.classList.toggle("fa-pause");
+  // also SHIFT
 }
 
 /*
