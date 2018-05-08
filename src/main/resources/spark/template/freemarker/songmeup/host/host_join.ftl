@@ -33,6 +33,9 @@
 
 		<!-- The Modal -->
 		<div id="modal_query" class="modal">
+		  
+		  <div class="modal_background">
+		  </div>
 
 		  <!-- Modal content -->
 		  <div id="modal_cont" class="modal-content">
@@ -77,7 +80,7 @@
 				</ul>
 			</div>
 		</div>
-		
+
 	</body>
 </html>
 

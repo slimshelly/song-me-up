@@ -235,9 +235,8 @@ function refresh_now_playing(song_cover, song_name, song_artists) {
   /*
   SLIDE DOWN PLAYLIST AND MUSIC CONTROLS WHEN PLAY IS CLICKED
   */
-  $(".musicControls").animate({top: '160px'});
+  $(".musicControls").animate({top: '150px'});
   $(".content").animate({top: '200px'});
-
 }
 
 function refresh_suggestions_block(toSuggest) {

@@ -20,6 +20,8 @@ $(document).ready(() => {
     }
   });
 
+  // BLUR BACKGROUND OF PARTY CODE
+
 });
 
 function togglePlay() {
@@ -51,6 +53,10 @@ function remove(element) {
     element.style.filter = 'alpha(opacity=' + op * 100 + ")";
     op -= op * 0.1;
   }, 10);
+
+  // $("#party_code").css("opacity", 1);
+  // $("#party_code").animate({bottom: '50px', top: '50px'});
+
 }
 
 function move_code() {
