@@ -15,6 +15,21 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   setUp();
 };
 
+function isPaused() {
+  if (paused=== true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function hasStarted() {
+  if (started === true) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function showCurrentState() {
   player.getCurrentState().then(state => {
@@ -88,9 +103,15 @@ function playSong(song_uri) {
 function playNextSong(songUri) {
   console.log("the paused state is: " + paused);
   console.log("the started state is" + started);
+
+  if (paused === true) {
+    console.log("-------------------------- previous song was paused");
+    togglePlay();
+  }
   // reset conditions
   started = false;
   paused = false;
+
   playSong(songUri);
 }
 
@@ -149,6 +170,7 @@ function setUp() {
     });
   });
 }
+
 
 // create a new player
 function create_new_player() {
