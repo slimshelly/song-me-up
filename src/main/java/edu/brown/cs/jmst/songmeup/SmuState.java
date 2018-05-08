@@ -46,10 +46,8 @@ public class SmuState {
   public static SmuState getInstance() {
     if (instance == null) {
       instance = new SmuState();
-      System.out.println("instance is null");
       return instance;
     } else {
-      System.out.println("instance is NOT null");
       return instance;
     }
   }
@@ -101,6 +99,7 @@ public class SmuState {
     }
     Party p = parties.get(partyId);
     if (!partyId.equals(u.getCurrentParty())) {
+      System.out.println("party " + partyId + " added " + u.getId());
       p.addPartyGoer(u);
     }
     return p;

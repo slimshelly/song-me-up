@@ -38,7 +38,7 @@ public class PartyWebSocket {
 
   private enum MESSAGE_TYPE {
     CONNECT, SUGGEST, REFRESH_SUGG, VOTESONG, REFRESH_VOTE, NEXT_SONG,
-    REFRESH_PLAY, REFRESH_ALL
+    REFRESH_PLAY, REFRESH_ALL, LEAVE_PARTY
   }
 
   @OnWebSocketConnect
@@ -122,6 +122,24 @@ public class PartyWebSocket {
     }
   }
 
+  public void signalLeaveParty(Party party) throws IOException {
+    if (party == null) {
+      return;
+    }
+    try {
+      JsonObject jo = new JsonObject();
+      jo.addProperty("type", MESSAGE_TYPE.LEAVE_PARTY.ordinal());
+      for (String partyer_id : party.getIds()) {
+        Session s = userSession.get(partyer_id);
+        s.getRemote().sendString(GSON.toJson(jo));
+      }
+      System.out.println("Sent LEAVE_PARTY message");
+    } catch (IOException ioe) {
+      throw ioe;
+    } catch (Exception e) {
+      General.printErr(e.getMessage());
+    }
+  }
   public void signalRefreshSugg(Party party) throws IOException {
     if (party == null) {
       return;
