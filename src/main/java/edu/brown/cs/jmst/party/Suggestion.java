@@ -248,12 +248,16 @@ public class Suggestion implements Comparable<Suggestion> {
     return scoreComp;
   }
 
-  public int compareToJustScore(Suggestion o) {
+  public int compareToScoreAndOrder(Suggestion o) {
     int scoreComp = o.score - this.score;
     if (scoreComp == 0) {
       return this.order - o.order;
     }
     return scoreComp;
+  }
+
+  public int compareToScoreOnly(Suggestion o) {
+    return o.score - this.score;
   }
 
   public int compareToOrderOnly(Suggestion o) {

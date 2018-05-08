@@ -1,10 +1,7 @@
 package edu.brown.cs.jmst.party;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import com.google.gson.JsonArray;
@@ -26,6 +23,7 @@ public class Party extends Entity {
   public static final int ID_LENGTH = 6;
 
   private Suggestion nowPlaying = null;
+  private List<Suggestion> topVoted = new ArrayList<>();
 
   public Party(User host, String id) throws PartyException, SpotifyException {
     assert id.length() == ID_LENGTH;
@@ -87,7 +85,24 @@ public class Party extends Entity {
 
   public Suggestion getNextSongToPlay() throws Exception {
     this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    if (this.topVoted.size() < 5) {
+      this.topVoted.add(nowPlaying);
+    } else {
+      Collections.sort(topVoted);
+      if (topVoted.get(topVoted.size() - 1).compareToScoreOnly(nowPlaying) > 0) {
+        topVoted.remove(topVoted.size() - 1);
+        topVoted.add(nowPlaying);
+      }
+    }
     return nowPlaying;
+  }
+
+  public List<String> getTopVotedIds() {
+    List<String> ids = new ArrayList<>();
+    for (Suggestion s: this.topVoted) {
+      ids.add(s.getSong().getId());
+    }
+    return ids;
   }
 
   public Suggestion getNowPlaying() {

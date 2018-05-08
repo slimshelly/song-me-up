@@ -28,6 +28,8 @@ class SongBlock {
   private SongBlock nextBlock;
   private SongBlock prevBlock;
 
+  private boolean decayEnabled;
+
   protected int state;
 
   private static final int SUGGESTING = 1;
@@ -40,6 +42,7 @@ class SongBlock {
   SongBlock(int state) {
     this.suggestions = new PriorityBlockingQueue<>();
     this.songsToPlay = new ArrayList<>();
+    this.decayEnabled = true;
     this.state = state;
   }
 
@@ -178,8 +181,10 @@ class SongBlock {
     assert this.songsToPlay.isEmpty();
     updateSongsToPlay(prevPlayed);
     // this.songsToPlay.addAll(topSuggestions());
-    for (Suggestion s : this.suggestions) {
-      s.decayScore();
+    if (this.decayEnabled) {
+      for (Suggestion s : this.suggestions) {
+        s.decayScore();
+      }
     }
     this.suggestions.removeIf((Suggestion s) -> s.getScore() <= 0);  //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
     this.suggestions.drainTo(nextBlock.suggestions);
