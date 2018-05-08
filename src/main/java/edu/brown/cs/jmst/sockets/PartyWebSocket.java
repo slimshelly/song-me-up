@@ -62,7 +62,7 @@ public class PartyWebSocket {
     userSession.removeValue(session);
   }
 
-  public void signalRefreshAll(Party party) throws IOException {
+  public static void signalRefreshAll(Party party) throws IOException {
     if (party == null) {
       return;
     }

@@ -17,6 +17,7 @@ import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 import edu.brown.cs.jmst.sockets.PartyWebSocket;
 import edu.brown.cs.jmst.spotify.SpotifyException;
+import edu.brown.cs.jmst.spotify.SpotifyQuery;
 
 public class Party extends Entity {
 
@@ -111,24 +112,42 @@ public class Party extends Entity {
   }
 
   public Suggestion getNextSongToPlay() throws Exception {
-    this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    try {
+      this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    } catch (PartyException pe) {
+      List<Track> songs =
+          SpotifyQuery.getTracksFromSeed(getTopVotedIds(), ph.getAuth());
+      System.out.println(songs.size());
+      System.out.println("got playlist tracks");
+      for (Track song : songs) {
+        AudioFeaturesSimple audio =
+            SpotifyQuery.getSimpleFeatures(song.getId(), ph.getAuth());
+        System.out.println(song.getId());
+        System.out.println("audio features retrieved");
+        suggest(song, ph.getId(), audio);
+      }
+      System.out.println("added playlist tracks to party");
+      this.nowPlaying = songQueue.getNextSongToPlay(nowPlaying);
+    }
     this.songsPlayed.add(nowPlaying);
     this.songsPlayedPosition += 1;
     if (this.topVoted.size() < 5) {
       this.topVoted.add(nowPlaying);
     } else {
       Collections.sort(topVoted);
-      if (topVoted.get(topVoted.size() - 1).compareToScoreOnly(nowPlaying) > 0) {
+      if (topVoted.get(topVoted.size() - 1)
+          .compareToScoreOnly(nowPlaying) > 0) {
         topVoted.remove(topVoted.size() - 1);
         topVoted.add(nowPlaying);
       }
     }
+    PartyWebSocket.signalRefreshAll(this);
     return nowPlaying;
   }
 
   public List<String> getTopVotedIds() {
     List<String> ids = new ArrayList<>();
-    for (Suggestion s: this.topVoted) {
+    for (Suggestion s : this.topVoted) {
       ids.add(s.getSong().getId());
     }
     return ids;
