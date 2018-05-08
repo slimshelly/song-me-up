@@ -131,32 +131,17 @@ public class SongQueue {
    * @throws PartyException when the voting block is empty and there are no
    *                        songs left to play
    */
-  public Suggestion getNextSongToPlay() throws PartyException {
+  public Suggestion getNextSongToPlay(Suggestion prevPlayed) throws PartyException {
     if (playingBlock.getSongsToPlay().size() != 0) {
       return playingBlock.getNextSongToPlay();
     }
-    cycle(); //TODO: need to tell front end to update everything!
+    cycle(prevPlayed); //TODO: need to tell front end to update everything!
     if (playingBlock.getSongsToPlay().size() != 0) {
       return playingBlock.getNextSongToPlay();
     } else {
       throw new PartyException(
               "Voting queue was empty; could not select song to play next.");
     }
-  }
-
-  /**
-   * This method should be called EVERY time the current block of songs is
-   * ending and the next block is needed, including the case when the host skips
-   * the last song in the block.
-   *
-   * @return a length-3 List: the first element is the list of songs to play,
-   *         the second element is the list of songs to vote on, and the third
-   *         element is the collection of suggestions (probably empty)
-   */
-  public List<Collection<Suggestion>> requestNewBlock() {
-    this.playingBlock.passSuggestions(); //decays scores, adds to suggestion queue
-    cycle(); //Switch the blocks
-    return this.requestAllBlocks();
   }
 
   /**
@@ -184,12 +169,12 @@ public class SongQueue {
 //    cycle();
 //  }
 
-  private void cycle() {
+  private void cycle(Suggestion prevPlayed) {
     // TODO: while cycling, some blocks will temporarily have two roles. Need to
     // make sure that this does not cause problems
     this.playingBlock.becomeSuggBlock();
     this.suggestingBlock.becomeVoteBlock();
-    this.votingBlock.becomePlayBlock();
+    this.votingBlock.becomePlayBlock(prevPlayed);
 
     this.suggestingBlock = suggestingBlock.getNextBlock();
     this.votingBlock = votingBlock.getNextBlock();

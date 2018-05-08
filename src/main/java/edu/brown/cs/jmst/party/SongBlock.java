@@ -185,8 +185,8 @@ class SongBlock {
   }
 
   // returns the top X songs in order of votes (increasing or decreasing?)
-  protected Collection<Suggestion> topSuggestionsQuantity() {
-    PriorityBlockingQueue<Suggestion> toPlay = new PriorityBlockingQueue<>();
+  private List<Suggestion> topSuggestionsQuantity() {
+    List<Suggestion> toPlay = new ArrayList<>();
     while (toPlay.size() < BLOCK_LENGTH_SONGS) {
       Suggestion next = suggestions.poll();
       if (next != null) {
@@ -207,68 +207,6 @@ class SongBlock {
     return this.songsToPlay.remove(0);
   }
 
-  List<Suggestion> orderSmoothly(Suggestion start, List<Suggestion> topSongs) {
-    int numSongs = topSongs.size();
-    List<List<Suggestion>> possibleOrders = new ArrayList<>();
-    for (Suggestion s : topSongs) {
-      List<Suggestion> order = new ArrayList<>();
-      order.add(start);
-      order.add(s);
-      possibleOrders.add(order);
-    }
-    numSongs -= 1;
-    while (numSongs > 0) {
-      int numCopies = numSongs;
-      while (numCopies > 0) {
-        for (List<Suggestion> order : possibleOrders) {
-          possibleOrders.add(new ArrayList<>(order));
-        }
-        numCopies -= 1;
-      }
-      for (List<Suggestion> order : possibleOrders) {
-        for (Suggestion s : topSongs) {
-          if (!order.contains(s)) {
-            order.add(s);
-          }
-        }
-      }
-      numSongs -= 1;
-    }
-
-
-
-
-    // This is the greediest ordering method possible!
-    Suggestion prev = start;
-    List<Suggestion> greedyOrder = new ArrayList<>();
-    greedyOrder.add(start);
-    while (!topSongs.isEmpty()) {
-      Suggestion closest = topSongs.remove(0);
-      Double bestDistance = prev.distanceTo(closest);
-      for (Suggestion s : topSongs) {
-        Double dist = closest.distanceTo(s);
-        if (dist < bestDistance) {
-          closest = s;
-        }
-      }
-      prev = closest;
-      greedyOrder.add(prev);
-    }
-
-
-
-    return null;
-  }
-  //THOUGHTS: find greedy path, then start constructing other paths and abandon
-  // them if they start to be longer than the greedy one. Problem: redoing some of the work if I do it this way
-  /*
-    0123
-    0132
-    0213
-    0231
-    0312
-    0321
- */
   protected List<Suggestion> updateSongsToPlay2(int sortMode, Suggestion prev) {
     List<Suggestion> topSongs = new ArrayList<>(topSuggestionsQuantity());
     assert !topSongs.isEmpty();
@@ -316,14 +254,10 @@ class SongBlock {
   // Method that decays the votes on the not-selected suggestions, then adds the
   // suggestions to the next block's collection of suggestions.
 
-  void updateSongsToPlay() {
-    this.songsToPlay = new ArrayList<>(topSuggestionsQuantity());
-  }
-
-  protected void becomePlayBlock() {
+  protected void becomePlayBlock(Suggestion prevPlayed) {
     assert this.state == VOTING;
     assert this.songsToPlay.isEmpty();
-    updateSongsToPlay();
+    updateSongsToPlay(prevPlayed);
     // this.songsToPlay.addAll(topSuggestionsQuantity());
     for (Suggestion s : this.suggestions) {
       s.decayScore();
@@ -345,26 +279,49 @@ class SongBlock {
     this.state = VOTING;
   }
 
-  /**
-   * Decays the score of the unplayed Suggestions from the current playing block
-   * and removes Suggestions with a sufficiently low score. The remaining
-   * Suggestions are then added to the next SongBlock's suggestions queue.
-   */
-  protected void passSuggestions() {
-    assert songsToPlay.isEmpty();
-
-    songsToPlay = new ArrayList<>(topSuggestionsQuantity());
-    for (Suggestion s : this.suggestions) {
-      s.decayScore();
-    }
-    suggestions.removeIf((Suggestion s) -> s.getScore() <= 0); //FIXME: < 0 or <= 0? Ensure consistency with intent from the decayScore() method
-    suggestions.drainTo(nextBlock.suggestions);
-    assert (suggestions.isEmpty()); // TODO: temporary!
+  private void updateSongsToPlay(Suggestion prevPlayed) {
+    this.songsToPlay = getAllPermutations(prevPlayed, new ArrayList<>(),
+            topSuggestionsQuantity());
   }
-  // TODO: make the above thread-safe by ensuring new suggestions go to the
-  // correct block
-  // TODO: maybe have a single suggestion receiver that passes suggestions to
-  // block currently in suggestion phase, so there is no apparent downtime
+
+  private List<Suggestion> getAllPermutations(Suggestion start,
+                                              List<Suggestion> prefix,
+                                              List<Suggestion> suggs) {
+    int n = suggs.size();
+    if (n == 0) { //Base case
+      return prefix;
+    } else {
+      List<Suggestion> newPrefix = new ArrayList<>(prefix);
+      List<Suggestion> newSugs = new ArrayList<>(suggs);
+      Suggestion s = newSugs.remove(0);
+      newPrefix.add(s);
+      List<Suggestion> min_list = getAllPermutations(start, newPrefix, newSugs);
+      for (int i = 1; i < n; i++) {
+        List<Suggestion> newPrefix2 = new ArrayList<>(prefix);
+        List<Suggestion> newSugs2 = new ArrayList<>(suggs);
+        Suggestion s2 = newSugs2.remove(i);
+        newPrefix2.add(s2);
+        List<Suggestion> newList = getAllPermutations(start, newPrefix2,
+                newSugs2);
+        if(getTotalDistance(start, newList) < getTotalDistance(start, min_list)){
+          min_list = newList;
+        }
+      }
+      return min_list;
+    }
+  }
+
+  private double getTotalDistance(Suggestion start, List<Suggestion> suggs){
+    List<Suggestion> copy = new ArrayList<>(suggs);
+    double distance = 0.0;
+    Suggestion prev = start;
+    while (!copy.isEmpty()) {
+      Suggestion next = copy.remove(0);
+      distance += prev.distanceToInversePopularity(next);
+      prev = next;
+    }
+    return distance;
+  }
 
   // Add Vote Play
   // A

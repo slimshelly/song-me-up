@@ -8,8 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 
-import edu.brown.cs.jmst.party.Suggestion;
-
 /**
  * General handles small logical methods that do not pertain to any specific
  * class.
@@ -39,29 +37,6 @@ public final class General {
   public static String getNewUrl(String old, String newEnding) {
     String base = old.substring(0, old.lastIndexOf("/"));
     return base + newEnding;
-  }
-
-  public List<List<Suggestion>> getAllPermutations(List<Suggestion> prefix,
-      List<Suggestion> sugs) {
-    if (sugs.size() > 8) {
-      throw new IllegalArgumentException();
-    }
-    List<List<Suggestion>> permutations = new ArrayList<>();
-    int n = sugs.size();
-    if (n == 0) {
-
-      permutations.add(prefix);
-      return permutations;
-    } else {
-      for (int i = 0; i < n; i++) {
-        List<Suggestion> newPrefix = new ArrayList<>(prefix);
-        List<Suggestion> newSugs = new ArrayList<>(sugs);
-        Suggestion s = sugs.remove(i);
-        newPrefix.add(s);
-        permutations.addAll(getAllPermutations(newPrefix, newSugs));
-      }
-    }
-    return permutations;
   }
 
   /**
