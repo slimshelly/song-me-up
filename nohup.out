@@ -1,0 +1,82 @@
+May 08, 2018 11:40:41 AM spark.staticfiles.StaticFilesConfiguration configureExternal
+INFO: External StaticResourceHandler configured with folder = src/main/resources/static
+May 08, 2018 11:40:41 AM spark.staticfiles.StaticFilesFolder externalConfiguredTo
+WARNING: Registering external static files folder [src/main/resources/static] as [/home/ubuntu/web/s18-jyang80-mbecker9-soliphan-tvanderm/src/main/resources/static].
+java.io.IOException: Bad file descriptor
+	at java.io.FileInputStream.readBytes(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:255)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at edu.brown.cs.jmst.io.Repl.run(Repl.java:39)
+	at edu.brown.cs.jmst.general.Main.runRepl(Main.java:97)
+	at edu.brown.cs.jmst.general.Main.run(Main.java:82)
+	at edu.brown.cs.jmst.general.Main.main(Main.java:53)
+Stopping server...
+May 08, 2018 11:40:41 AM org.eclipse.jetty.util.log.Log initialized
+INFO: Logging initialized @569ms to org.eclipse.jetty.util.log.Slf4jLog
+May 08, 2018 11:40:42 AM spark.embeddedserver.jetty.EmbeddedJettyServer ignite
+INFO: == Spark has ignited ...
+May 08, 2018 11:40:42 AM spark.embeddedserver.jetty.EmbeddedJettyServer ignite
+INFO: >> Listening on 0.0.0.0:4567
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.4.4.v20170414
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.session.DefaultSessionIdManager doStart
+INFO: DefaultSessionIdManager workerName=node0
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.session.DefaultSessionIdManager doStart
+INFO: No SessionScavenger set, using defaults
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.session.HouseKeeper startScavenging
+INFO: Scavenging every 660000ms
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.handler.ContextHandler doStart
+INFO: Started o.e.j.s.ServletContextHandler@57887206{/,null,AVAILABLE}
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@322e4fba{HTTP/1.1,[http/1.1]}{0.0.0.0:4567}
+May 08, 2018 11:40:42 AM org.eclipse.jetty.server.Server doStart
+INFO: Started @828ms
+Oct 28, 2018 7:30:07 PM spark.staticfiles.StaticFilesConfiguration configureExternal
+INFO: External StaticResourceHandler configured with folder = src/main/resources/static
+Oct 28, 2018 7:30:07 PM spark.staticfiles.StaticFilesFolder externalConfiguredTo
+WARNING: Registering external static files folder [src/main/resources/static] as [/home/ubuntu/web/s18-jyang80-mbecker9-soliphan-tvanderm/src/main/resources/static].
+java.io.IOException: Bad file descriptor
+	at java.io.FileInputStream.readBytes(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:255)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at edu.brown.cs.jmst.io.Repl.run(Repl.java:39)
+	at edu.brown.cs.jmst.general.Main.runRepl(Main.java:97)
+	at edu.brown.cs.jmst.general.Main.run(Main.java:82)
+	at edu.brown.cs.jmst.general.Main.main(Main.java:53)
+Stopping server...
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.util.log.Log initialized
+INFO: Logging initialized @587ms to org.eclipse.jetty.util.log.Slf4jLog
+Oct 28, 2018 7:30:07 PM spark.embeddedserver.jetty.EmbeddedJettyServer ignite
+INFO: == Spark has ignited ...
+Oct 28, 2018 7:30:07 PM spark.embeddedserver.jetty.EmbeddedJettyServer ignite
+INFO: >> Listening on 0.0.0.0:4567
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.Server doStart
+INFO: jetty-9.4.4.v20170414
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.session.DefaultSessionIdManager doStart
+INFO: DefaultSessionIdManager workerName=node0
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.session.DefaultSessionIdManager doStart
+INFO: No SessionScavenger set, using defaults
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.session.HouseKeeper startScavenging
+INFO: Scavenging every 660000ms
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.handler.ContextHandler doStart
+INFO: Started o.e.j.s.ServletContextHandler@2209cdf0{/,null,AVAILABLE}
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.AbstractConnector doStart
+INFO: Started ServerConnector@32ff9d1{HTTP/1.1,[http/1.1]}{0.0.0.0:4567}
+Oct 28, 2018 7:30:07 PM org.eclipse.jetty.server.Server doStart
+INFO: Started @848ms
