@@ -16,6 +16,15 @@ The rough division of labor for legacy code is as follows, although the team wor
 * mbecker09 - front end, web design
 * soliphant - bridging front end and back end, authorization token
 
+## Building/Running
+1) Clone the repository.
+2) Navigate to the `/song-me-up` directory.
+3) To build, run `mvn package`.
+4) To run, run `./run --gui` to host the application on `localhost:4567`. You can host 2 instances of this application congruently by opening one tab in `incognito mode` and another tab in `non-incognito mode`. 
+
+## Using the Interface
+Please follow the guidance provided in the UI. There's an FAQs tab in the top right hand corner that may answer your questions.
+
 Below is an archive of the project spec. 
 ```
 # cs0320 Term Project 2018
