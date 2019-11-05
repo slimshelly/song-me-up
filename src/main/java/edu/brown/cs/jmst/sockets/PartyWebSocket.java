@@ -33,8 +33,6 @@ import edu.brown.cs.jmst.spotify.SpotifyQueryRaw;
 @WebSocket
 public class PartyWebSocket {
   private static final Gson GSON = new Gson();
-  // private static final Queue<Session> sessions = new
-  // ConcurrentLinkedQueue<>();
   private static final BidiMap<String, Session> userSession =
       new DualHashBidiMap<>();
 
@@ -45,20 +43,15 @@ public class PartyWebSocket {
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
-    // Add the session to the queue
-    // sessions.add(session);
-    // // Build the CONNECT message
     JsonObject jo = new JsonObject();
     System.out.println("Sent CONNECT message");
     jo.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
-    // Send the CONNECT message
+
     session.getRemote().sendString(GSON.toJson(jo));
   }
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
-    // Remove the session from the queue
-    // sessions.remove(session);
     userSession.removeValue(session);
   }
 
@@ -118,7 +111,7 @@ public class PartyWebSocket {
 
       JsonObject jo = new JsonObject();
       jo.addProperty("type", MESSAGE_TYPE.UPDATE_USERS.ordinal());
-      // JsonObject payload = new JsonObject();
+
       JsonArray userArray = new JsonArray();
 
       for (User u : everyone) {
@@ -128,7 +121,6 @@ public class PartyWebSocket {
         userArray.add(user);
       }
 
-      // payload.add("userArray", userArray);
       jo.add("payload", userArray);
       for (String partyer_id : party.getIds()) {
         Session s = userSession.get(partyer_id);
@@ -303,7 +295,7 @@ public class PartyWebSocket {
         }
         case VOTESONG: {
           System.out.println("Received VOTESONG message");
-          // retrieve boolean of vote (up or down)
+
           boolean vote = inputPayload.get("vote").getAsBoolean();
           try {
             party.voteOnSong(user_id, song_id, vote);

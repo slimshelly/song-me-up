@@ -16,10 +16,7 @@ import edu.brown.cs.jmst.spotify.SpotifyQuery;
 import edu.brown.cs.jmst.spotify.SpotifyQueryRaw;
 
 /**
- * Handles REPL input
- *
- * @author Samuel Oliphant
- *
+ * Stores the user facing & backend feature commands available to the project, including Song search, Album Search, Playlist search, etc
  */
 public class SmuInputHandler implements Commander {
 
@@ -62,7 +59,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-      // TODO Auto-generated method stub
+
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }
@@ -91,7 +88,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-      // TODO Auto-generated method stub
+
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }
@@ -120,7 +117,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-      // TODO Auto-generated method stub
+
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }
@@ -148,7 +145,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-      // TODO Auto-generated method stub
+
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }
@@ -264,7 +261,7 @@ public class SmuInputHandler implements Commander {
 
     @Override
     public void print() {
-      // TODO Auto-generated method stub
+
       for (String s : state.getListMessage()) {
         General.printInfo(s);
       }

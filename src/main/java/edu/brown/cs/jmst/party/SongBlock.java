@@ -36,7 +36,6 @@ class SongBlock {
   private static final int VOTING = 2;
   private static final int PLAYING = 3;
 
-  // Unsure which method is better. Numbers subject to change
   private static final int BLOCK_LENGTH_SONGS = 5;
 
   SongBlock(int state) {
@@ -87,8 +86,6 @@ class SongBlock {
       }
     }
     return null;
-    // throw new PartyException("No song found in this block with ID [" + songId
-    // + "].");
   }
 
   /**
@@ -253,14 +250,4 @@ class SongBlock {
     return distance;
   }
 
-  // Add Vote Play
-  // A
-  // B - A
-  // C - B <- A
-  // A - C <- B
-  // B - A <- C
-  // C - B <- A
-  // A - C <- B
-  // B - A <- C
-  // C - B <- A
 }

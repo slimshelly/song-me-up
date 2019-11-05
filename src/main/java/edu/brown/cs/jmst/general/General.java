@@ -9,11 +9,7 @@ import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 
 /**
- * General handles small logical methods that do not pertain to any specific
- * class.
- *
- * @author Samuel Oliphant
- *
+ * General provides helper functions useful for the project.
  */
 
 public final class General {

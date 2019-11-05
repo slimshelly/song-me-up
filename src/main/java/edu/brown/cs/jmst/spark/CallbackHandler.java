@@ -25,11 +25,9 @@ public class CallbackHandler implements TemplateViewRoute {
     String code = qm.value("code");
     String state = qm.value("state");
 
-    // String storedState = req.cookie(SpotifyAuthentication.STATE_KEY);
     General.printInfo("State: " + state);
-    // General.printInfo("Stored: " + storedState);
+
     SparkErrorEnum err = null;
-    // if (state == null || !state.equals(storedState)) {
     if (!SpotifyAuthentication.hasState(state)) {
       err = SparkErrorEnum.STATE_MISMATCH;
     } else {
@@ -52,11 +50,10 @@ public class CallbackHandler implements TemplateViewRoute {
     if (err != null) {
       List<BasicNameValuePair> pair = new ArrayList<>();
       pair.add(new BasicNameValuePair("error", err.toString()));
-      // res.redirect("../error?" + URLEncodedUtils.format(pair, "UTF-8"));
+
       res.redirect(SpotifyAuthentication.getRootUri() + "/error?"
           + URLEncodedUtils.format(pair, "UTF-8"));
     } else {
-      // res.redirect("../main");
       res.redirect(SpotifyAuthentication.getRootUri() + "/main");
     }
     return null;

@@ -12,9 +12,6 @@ import com.google.gson.JsonObject;
 import edu.brown.cs.jmst.music.AudioFeaturesSimple;
 import edu.brown.cs.jmst.music.Track;
 
-/**
- * @author tvanderm
- */
 public class Suggestion implements Comparable<Suggestion> {
 
   private Track song;
@@ -28,7 +25,7 @@ public class Suggestion implements Comparable<Suggestion> {
   private Float danceability;
   private Float energy;
 
-  // private Boolean votedOn;
+
 
   private Map<String, Integer> userVoteMap;
   private Set<String> userSubmittedSet;
@@ -38,7 +35,7 @@ public class Suggestion implements Comparable<Suggestion> {
 
   Suggestion(Track song, String userId, AudioFeaturesSimple features,
              Integer order) {
-	// I NEED name, artist, album, duration, score, album art
+
     this.song = song;
     this.age = 0;
     this.score = UP_VOTE_WEIGHT;
@@ -282,12 +279,7 @@ public class Suggestion implements Comparable<Suggestion> {
     //TODO: consider weighting the different things! (like multiply vDif squared by 2)
     Float sum = (vDif * vDif) + (dDif * dDif) + (eDif * eDif);
     return Math.sqrt(sum);
-//    Double toReturn = Math.sqrt(sum);
-//    if (vDif + dDif + eDif > 0) {
-//      return toReturn;
-//    } else {
-//      return -1 * toReturn;
-//    }
+
   }
 
   /**

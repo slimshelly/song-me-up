@@ -23,9 +23,6 @@ import edu.brown.cs.jmst.general.General;
 /**
  * A class for raw JSON queries from Spotify. Not yet turning them into backend
  * objects.
- *
- * @author maddiebecker
- *
  */
 public class SpotifyQueryRaw {
 
@@ -56,7 +53,6 @@ public class SpotifyQueryRaw {
       pairs.add(new BasicNameValuePair("type", "track"));
       pairs.add(new BasicNameValuePair("market", "from_token"));
       pairs.add(new BasicNameValuePair("limit", "10"));
-      // want to add limit of 10! HELP
 
       HttpGet get = new HttpGet("https://api.spotify.com/v1/search?"
           + URLEncodedUtils.format(pairs, "UTF-8"));

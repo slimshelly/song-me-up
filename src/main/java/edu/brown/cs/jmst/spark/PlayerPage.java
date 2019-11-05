@@ -11,9 +11,6 @@ import spark.TemplateViewRoute;
 
 /**
  * Handles routing of sign in page.
- *
- * @author Shell Yang
- *
  */
 public class PlayerPage implements TemplateViewRoute {
   @Override

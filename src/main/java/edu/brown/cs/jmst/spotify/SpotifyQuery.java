@@ -33,9 +33,6 @@ import edu.brown.cs.jmst.music.TrackBean;
 
 /**
  * A class for converting spotify queries into BACKEND objects.
- *
- * @author maddiebecker
- *
  */
 public class SpotifyQuery {
 

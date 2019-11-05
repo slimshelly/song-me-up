@@ -16,8 +16,6 @@ import edu.brown.cs.jmst.spotify.SpotifyException;
 /**
  * Storage class for references to all active parties, party hosts, etc.
  *
- * @author Samuel Oliphant
- *
  */
 public class SmuState {
 

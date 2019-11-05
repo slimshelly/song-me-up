@@ -27,9 +27,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 /**
  * Root class for the project. Initializes the state and handler, then starts
  * the REPL to handle user input.
- *
- * @author Samuel Oliphant
- *
  */
 public final class Main {
 
@@ -65,8 +62,7 @@ public final class Main {
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
         .defaultsTo(DEFAULT_PORT);
-    // parser.accepts("ip").withRequiredArg().ofType(String.class)
-    // .defaultsTo(DEFAULT_IP);
+
     parser.accepts("web");
     OptionSet options = parser.parse(args);
 
@@ -113,7 +109,7 @@ public final class Main {
   private void runSparkServer(int port, String rootUri, boolean web)
       throws Exception {
     Spark.port(port);
-    // Spark.ipAddress(ip);
+    
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 

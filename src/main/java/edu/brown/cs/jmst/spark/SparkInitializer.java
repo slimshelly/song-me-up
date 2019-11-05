@@ -15,8 +15,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 /**
  * Adds all of the various spark handlers.
  *
- * @author Samuel Oliphant
- *
  */
 public class SparkInitializer {
 
